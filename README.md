@@ -13,7 +13,7 @@
 * Install **Postgres SQL**
 * Clone this repository locally.
 * Open repository folder and execute `bundle install`.
-* Run `rails server` and open https://localhost:3000 in a browser or `heroku local` and open https://localhost:5000 in a browser.
+* Run `rails server` and open http://localhost:3000 in a browser or `heroku local` and open http://localhost:5000 in a browser.
 * Heroku version is in https://unthesis.herokuapp.com/.
 
 ## App configuration
