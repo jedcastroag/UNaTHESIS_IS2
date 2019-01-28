@@ -24,6 +24,12 @@
 
 * Configuration
 
+** React 
+
+[Install React-Rails](https://github.com/reactjs/react-rails)
+
+[Install Semantic UI](https://github.com/ashtonthomas/sample-rails-react-semantic-ui-app)
+
 * Database creation
 
 * Database initialization
