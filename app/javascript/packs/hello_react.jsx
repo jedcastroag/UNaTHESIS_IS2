@@ -6,21 +6,28 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
+import { Button } from 'semantic-ui-react'
+
+import '../../../dist/semantic.min.css';
+
 const Hello = props => (
-  <div>Hello {props.name}!</div>
-)
+	<div>Hello {props.name}!</div>
+	)
 
-Hello.defaultProps = {
-  name: 'David'
-}
+	Hello.defaultProps = {
+		name: 'David'
+	}
 
-Hello.propTypes = {
-  name: PropTypes.string
-}
+	Hello.propTypes = {
+		name: PropTypes.string
+	}
 
-document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(
-    <Hello name="React" />,
-    document.body.appendChild(document.createElement('div')),
-  )
-})
+	document.addEventListener('DOMContentLoaded', () => {
+		ReactDOM.render(
+		<Button onClick={() => console.log("Click!") }>
+		The Button Here
+		</Button>
+		,
+		document.body.appendChild(document.createElement('div')),
+		)
+		})
