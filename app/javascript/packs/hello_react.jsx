@@ -6,49 +6,41 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
-import { Button, Input, Checkbox, Form } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react'
 import '../../../dist/semantic.min.css';
 
 const FormLogin = () => (
-	<div class="ui cards">
-		<div className="card-form" class="card">
-			<div class="content">
-				<div class="header">Sign in!</div>
-				<div class="description">
-					<Form>
-						<Form.Field>
-							<label>Username</label>
-							<input placeholder='Username' />
-						</Form.Field>
-						<Form.Field>
-							<label>Password</label>
-							<input placeholder='Password' type="password" />
-						</Form.Field>
-						<Button type='submit'>Login</Button>
-					</Form>
-				</div>
-			</div>
-		</div>
+	<div className="login-form">
+	<style>{`
+      body > div,
+      body > div > div,
+      body > div > div > div.login-form {
+        height: 100%;
+      }
+    `}</style>
+		<Grid style={{ height: '100%' }} textAlign="center" verticalAlign="middle">
+			<Grid.Column style={{ maxWidth: 450 }}>
+				<Header as="h2" color="green" textAlign="center">
+					Ingresa a tu cuenta
+				</Header>
+				<Form size="large">
+					<Segment stacked>
+						<Form.Input fluid icon="user" iconPosition="left" placeholder="Usuario"/>
+						<Form.Input fluid icon="lock" iconPosition="left" placeholder="Contraseña" type="password"/>
+
+						<Button color="green" fluid size="large" type='submit'>Login</Button>
+					</Segment>
+				</Form>
+			</Grid.Column>
+		</Grid>
 	</div>
 );
 
 export default FormLogin
 
-class Login extends React.Component {
-	render() {
-		return(
-			<div className="full-login" class="ui middle aligned center aligned grid">
-				<FormLogin />
-			</div>
-			);
-		}
-}
-
 document.addEventListener('DOMContentLoaded', () => {
 	ReactDOM.render(
-	<div>
-		<Login />
-	</div> ,
+		<FormLogin />,
 	document.body.appendChild(document.createElement('div')),
 	)
 	})
