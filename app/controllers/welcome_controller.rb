@@ -12,3 +12,4 @@ class WelcomeController < ApplicationController
 			return ldap.bind
 		end
 	end
+end
