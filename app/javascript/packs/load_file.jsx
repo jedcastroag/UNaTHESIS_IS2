@@ -4,39 +4,37 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
 import { Button, Input, Checkbox, Form } from 'semantic-ui-react'
 import '../../../dist/semantic.min.css';
-import { runInThisContext } from 'vm';
 
 const FormTutor = props => (
     <div className="formTutor">
         <Form.Group inline>
             <Form.Field>
                 <label>Dni</label>
-                <input placeholder='Dni' name={'dni_'+props.number} />
+                <input placeholder='Dni' name={'dni_' + props.number} />
             </Form.Field>
             <Form.Field>
                 <label>Nombres</label>
-                <input placeholder='Nombres' name={'nombres_'+props.number} />
+                <input placeholder='Nombres' name={'nombres_' + props.number} />
             </Form.Field>
             <Form.Field>
                 <label>Apellidos</label>
-                <input placeholder='Apellidos' name={'apellidos_'+props.number} />
+                <input placeholder='Apellidos' name={'apellidos_' + props.number} />
             </Form.Field>
         </Form.Group>
         <Form.Group inline>
             <Form.Field>
                 <label>Institución</label>
-                <input placeholder='Institución' name={'institucion_'+props.number} />
+                <input placeholder='Institución' name={'institucion_' + props.number} />
             </Form.Field>
             <Form.Field>
                 <label>País</label>
-                <input placeholder='País' name={'pais_'+props.number} />
+                <input placeholder='País' name={'pais_' + props.number} />
             </Form.Field>
             <Form.Field>
                 <label>Rol</label>
-                <select name={'rol_'+props.number}>
+                <select name={'rol_' + props.number}>
                     <option>Director</option>
                     <option>Tutor</option>
                     <option>Asesor</option>
@@ -49,61 +47,82 @@ const FormTutor = props => (
 
 
 class LoadFile extends React.Component {
-    tutorForm = [<FormTutor number={0} />];
-
-    
-    onAddTutor = () => {
-        this.tutorForm.push(<FormTutor number={this.tutorForm.length} />)
+    constructor(props) {
+        super(props)
+        this.state =
+            {
+                tutors: [<FormTutor number={0} />]
+            }
+        this.tutorsNumber = 0;
     }
 
+    onAddTutor = () => {
+        this.tutorsNumber += 1;
+        console.log(this.state);
+        this.setState(prevState => ({
+            tutors: [...prevState.tutors, <FormTutor number={this.tutorsNumber} />]
+        }))
+    }
 
+    submitForm = (event) => {
+        event.preventDefault();
+        var formData = $('#formProject').serialize();
+        fetch($(form).attr('action'), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: formData
+        })
+    }
     render() {
         return (
-                <div class="ui raised very padded text container segment">
-                    <div class="content">
-                        <h2 class="ui header">Cargar archivo</h2>
-                        <div class="description">
-                            <Form>
-                                <Form.Field>
-                                    <label>Titulo</label>
-                                    <input placeholder='Titulo' name='titulo' />
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>Descripción</label>
-                                    <textarea placeholder='Descripción' name="descripcion" ></textarea>
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>Información directores, tutores y asesores</label>
+            <div class="ui raised very padded text container segment">
+                <div class="content">
+                    <h2 class="ui header">Cargar archivo</h2>
+                    <div class="description">
+                        <Form id="formProject" action='/file/load' method='POST' enctype="multipart/form-data" onSubmit={this.doSomething}>
+                            <Form.Field>
+                                <label>Titulo</label>
+                                <input placeholder='Titulo' name='titulo' />
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Descripción</label>
+                                <textarea placeholder='Descripción' name="descripcion" ></textarea>
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Información directores, tutores y asesores</label>
 
-                                </Form.Field>
-                                {this.tutorForm}
+                            </Form.Field>
+                            {this.state.tutors}
 
 
-                                <Form.Field>
-                                    <Button onClick={this.onAddTutor} >Añadir</Button>
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>Documentos</label>
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>Propuesta</label>
-                                    <input type='file' />
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>Documento de soporte</label>
-                                    <input type='file' />
-                                </Form.Field>
-                                <Form.Field>
-                                    <label>Comentarios adicionales</label>
-                                    <textarea placeholder='Comentarios adicionales' name="descripcion" ></textarea>
-                                </Form.Field>
-                                <Form.Field>
-                                    <Button type='submit'>Cargar proyecto</Button>
-                                </Form.Field>
-                            </Form>
-                        </div>
+                            <Form.Field>
+                                <Button onClick={this.onAddTutor} type='button'>Añadir</Button>
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Documentos</label>
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Propuesta</label>
+                                <input type='file' name="file" />
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Documento de soporte</label>
+                                <input type='file' name="supportFile" />
+                            </Form.Field>
+                            <Form.Field>
+                                <label>Comentarios adicionales</label>
+                                <textarea placeholder='Comentarios adicionales' name="descripcion" ></textarea>
+                            </Form.Field>
+                            <Form.Field>
+                                <Button type='submit'>Cargar proyecto</Button>
+                            </Form.Field>
+                        </Form>
                     </div>
                 </div>
+            </div>
         );
     }
 }
@@ -115,4 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>,
         document.body.appendChild(document.createElement('div')),
     )
+
+
 })
+
+
