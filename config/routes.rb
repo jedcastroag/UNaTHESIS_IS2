@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
   get 'project/load_project'
-   root 'welcome#index'
+	get 'welcome/login'
+	root 'welcome#login'
 end

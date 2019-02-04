@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.3'
+ruby '2.6.0'
 
 # REACT!
 gem 'webpacker'
@@ -58,6 +58,9 @@ group :development do
 end
 
 group :test do
+  gem 'rails-controller-testing', '1.0.2'
+  gem 'minitest',                 '5.11.3'
+  gem 'minitest-reporters',       '1.1.14'
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
@@ -67,6 +70,3 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
-gem 'cowsay'
-gem 'ruby_cowsay'
