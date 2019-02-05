@@ -20,4 +20,6 @@
 * Heroku version is in https://unthesis.herokuapp.com/.
 * [Install React-Rails](https://github.com/reactjs/react-rails)
 * [Install Semantic UI](https://github.com/ashtonthomas/sample-rails-react-semantic-ui-app)
-* Run `foreman start`
+* Run `bundle install`
+* Run `yarn install`
+* Run `foreman start` or `rails server`
