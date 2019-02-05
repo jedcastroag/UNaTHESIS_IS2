@@ -13,7 +13,7 @@ class LoginForm extends React.Component {
         body > div,
         body > div > div,
         body > div > div > div.login-form {
-          height: 100%;
+          height: 80%;
         }
         `}</style>
         <Grid style={{ height: '100%' }} textAlign="center" verticalAlign="middle">
