@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Redirect } from 'react-router-dom';
 
 import PropTypes from 'prop-types'
-import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Segment, Message } from 'semantic-ui-react'
 
 import auth from '../services/auth';
 
@@ -13,7 +13,9 @@ export default class LoginForm extends React.Component {
 
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      emailError: null,
+      passwordError: null
     }
   }
 
@@ -24,7 +26,7 @@ export default class LoginForm extends React.Component {
         body > div,
         body > div > div,
         body > div > div > div.login-form {
-          height: 80%;
+          height: 100%;
         }
         `}</style>
         <Grid style={{ height: '100%' }} textAlign="center" verticalAlign="middle">
@@ -32,10 +34,12 @@ export default class LoginForm extends React.Component {
         <Header as="h2" color="green" textAlign="center">
         Ingresa a tu cuenta
         </Header>
-        <Form size="large">
+        <Form size="large" error>
         <Segment stacked>
-        <Form.Input fluid icon="user" iconPosition="left" placeholder="Usuario" onChange={ this.updateEmail.bind(this) } value={ this.state.email }  />
-        <Form.Input fluid icon="lock" iconPosition="left" placeholder="Contraseña" type="password" onChange={ this.updatePassword.bind(this) } value={ this.state.password }/>
+        <Form.Input fluid icon="user" iconPosition="left" placeholder="Usuario" onChange={ this.updateEmail.bind(this) } value={ this.state.email } error={ this.state.emailError }/>
+        <Form.Input fluid icon="lock" iconPosition="left" placeholder="Contraseña" type="password" onChange={ this.updatePassword.bind(this) } value={ this.state.password } error={ this.state.passwordError }/>
+
+        { this.state.passwordError ? <Message id="message" error header='Error en la autenticación' content='El usuario y/o contraseña ingresados no son correctos' /> : null }
 
         <Button color="green" fluid size="large" type='submit' onClick={ this.login.bind(this) }>Login</Button>
         </Segment>
@@ -57,9 +61,11 @@ export default class LoginForm extends React.Component {
   login() {
     auth.login(this.state.email, this.state.password)
     .then((response) => {
-      this.props.updateAuth();
+      this.setState({passwordError: false, emailError: false});
+      // this.props.updateAuth();
     }).catch((error) => {
       console.log("Bad credentials " + error.message);
+      this.setState({passwordError: true, emailError: true});
     });
   }
 }
