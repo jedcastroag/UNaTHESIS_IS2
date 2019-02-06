@@ -64,25 +64,15 @@ class LoadFile extends React.Component {
         }))
     }
 
-    submitForm = (event) => {
-        event.preventDefault();
-        var formData = $('#formProject').serialize();
-        fetch($(form).attr('action'), {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: formData
-        })
-    }
+    
+    
     render() {
         return (
             <div class="ui raised very padded text container segment">
                 <div class="content">
                     <h2 class="ui header">Cargar archivo</h2>
                     <div class="description">
-                        <Form id="formProject" action='/file/load' method='POST' enctype="multipart/form-data" onSubmit={this.doSomething}>
+                        <Form id="formProject" action='/file/load_post' method='POST' enctype="multipart/form-data">
                             <Form.Field>
                                 <label>Titulo</label>
                                 <input placeholder='Titulo' name='titulo' />

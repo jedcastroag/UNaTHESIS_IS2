@@ -6,9 +6,12 @@
     "babel-preset-react": "^6.24.1",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
+    "react-bootstrap": "^0.32.4",
     "react-dom": "^16.7.0",
     "react-grid-system": "^4.4.2",
+    "react-rasta": "^1.0.4",
     "react_ujs": "^2.4.4",
+    "styled-components": "^4.1.3",
     "semantic-ui-react": "^0.84.0"
   },
   "devDependencies": {
