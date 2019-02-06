@@ -3,10 +3,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.0'
 
-# REACT!
-gem 'webpacker'
-gem 'react-rails'
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.1'
 # Use postgresql as the database for Active Record
@@ -19,8 +15,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'mini_racer', platforms: :ruby
-
-gem 'bcrypt','3.1.12'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
@@ -41,6 +35,20 @@ gem 'jbuilder', '~> 2.5'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
+
+# REACT!
+gem 'webpacker'
+gem 'react-rails'
+# Bcrypth algorith
+gem 'bcrypt','3.1.12'
+# LDAP library
+gem 'net-ldap', '~> 0.16.1'
+# JSON WebTokens
+gem 'jwt'
+# Serializar JSON
+gem 'active_model_serializers', '~> 0.10.0'
+# Habiliar Cross-Origin Resource Sharing (CORS)
+gem 'rack-cors'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

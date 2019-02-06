@@ -1,11 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Redirect } from 'react-router-dom';
+
 import PropTypes from 'prop-types'
-
 import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react'
-import '../../../dist/semantic.min.css';
 
-class LoginForm extends React.Component {
+import auth from '../services/auth';
+
+export default class LoginForm extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: "",
+      password: ""
+    }
+  }
+
   render () {
     return (
       <div className="login-form">
@@ -23,10 +34,10 @@ class LoginForm extends React.Component {
         </Header>
         <Form size="large">
         <Segment stacked>
-        <Form.Input fluid icon="user" iconPosition="left" placeholder="Usuario"/>
-        <Form.Input fluid icon="lock" iconPosition="left" placeholder="Contraseña" type="password"/>
+        <Form.Input fluid icon="user" iconPosition="left" placeholder="Usuario" onChange={ this.updateEmail.bind(this) } value={ this.state.email }  />
+        <Form.Input fluid icon="lock" iconPosition="left" placeholder="Contraseña" type="password" onChange={ this.updatePassword.bind(this) } value={ this.state.password }/>
 
-        <Button color="green" fluid size="large" type='submit'>Login</Button>
+        <Button color="green" fluid size="large" type='submit' onClick={ this.login.bind(this) }>Login</Button>
         </Segment>
         </Form>
         </Grid.Column>
@@ -34,11 +45,21 @@ class LoginForm extends React.Component {
         </div>
         );
   }
+
+  updateEmail(e) {
+    this.setState({ email: e.target.value });
+  }
+
+  updatePassword(e) {
+    this.setState({ password: e.target.value });
+  }
+
+  login() {
+    auth.login(this.state.email, this.state.password)
+    .then((response) => {
+      this.props.updateAuth();
+    }).catch((error) => {
+      console.log("Bad credentials " + error.message);
+    });
+  }
 }
-
-LoginForm.propTypes = {
-  username: PropTypes.string,
-  password: PropTypes.string
-};
-
-export default LoginForm
