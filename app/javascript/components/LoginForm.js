@@ -39,7 +39,8 @@ export default class LoginForm extends React.Component {
         <Form.Input fluid icon="user" iconPosition="left" placeholder="Usuario" onChange={ this.updateEmail.bind(this) } value={ this.state.email } error={ this.state.emailError }/>
         <Form.Input fluid icon="lock" iconPosition="left" placeholder="Contraseña" type="password" onChange={ this.updatePassword.bind(this) } value={ this.state.password } error={ this.state.passwordError }/>
 
-        { this.state.passwordError ? <Message id="message" error header='Error en la autenticación' content='El usuario y/o contraseña ingresados no son correctos' /> : null }
+        { this.state.passwordError === true ? <Message id="message" error header='Error en la autenticación' content='El usuario y/o contraseña ingresados no son correctos' /> : null }
+        { this.state.passwordError === false ? <Message positive header='Autenticación exitosa' content='En breve será redirigido a la página de inicio' /> : null }
 
         <Button color="green" fluid size="large" type='submit' onClick={ this.login.bind(this) }>Login</Button>
         </Segment>
