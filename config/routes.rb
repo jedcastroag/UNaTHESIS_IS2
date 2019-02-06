@@ -7,4 +7,8 @@ Rails.application.routes.draw do
 	post '/login', to: 'sessions#create'
 
 	resources :users
+
+	get 'file/load'
+	get 'file/view'
+	match "file/load_post" => "file#load_post", via: [:post]
 end
