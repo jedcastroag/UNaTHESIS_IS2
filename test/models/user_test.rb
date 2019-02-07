@@ -4,6 +4,7 @@ class UserTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
+<<<<<<< HEAD
   
   def setup
   	@user = User.new(name: "Fabio", email: "f@test.com", 
@@ -91,4 +92,6 @@ class UserTest < ActiveSupport::TestCase
   	@user.save
   	assert_equal mixed_case_email.downcase, @user.reload.email
   end
+=======
+>>>>>>> 1981407990fb9522121d524f9851cda60ccb63e7
 end
