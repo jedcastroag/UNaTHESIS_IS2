@@ -1,10 +1,11 @@
 # frozen_string_literal: true
-
 require 'digest/md5'
 require 'fileutils'
+
 # FileController
 class FileController < ApplicationController
   skip_before_action :verify_authenticity_token
+  
   def load_post
     file_path = process_file(
       params[:file],

@@ -6,9 +6,14 @@ class SessionsController < ApplicationController
 
 	# POST method
 	def create
-		if user_params[:email].end_with? "unal.edu.co"
-			render json: { error: "Unal email" }, status: :unauthorized
+		if user_params[:email].end_with? "unal.edu.c"
+			user_params[:email].slice! "@unal.edu.co"
 			#ans = ldap_validation user_params[:email], user_params[:password]
+			if(ans)
+				render json: { error: "Unal email #{ans}"  }
+			else
+				render json: { error: "Bad credentials" }, status: :unauthorized
+			end
 		else
 			user = User.find_by(email: user_params[:email].downcase)
 			if user && user.authenticate(user_params[:password])
@@ -29,12 +34,10 @@ class SessionsController < ApplicationController
 	end
 
 	def ldap_validation(username, password)
-
 		ldap = Net::LDAP.new
 		ldap.host = "ldaprbog.unal.edu.co"
 		ldap.port = 389
 		ldap.authenticate "uid=#{username},ou=people,o=bogota,o=unal.edu.co", password
-
 		return ldap.bind
 	end
 

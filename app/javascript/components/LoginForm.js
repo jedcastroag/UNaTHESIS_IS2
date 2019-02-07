@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Redirect } from 'react-router-dom';
 
 import PropTypes from 'prop-types'
-import { Button, Form, Grid, Header, Segment, Message } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Segment, Message, Container } from 'semantic-ui-react'
 
 import auth from '../services/auth';
 
@@ -21,7 +21,7 @@ export default class LoginForm extends React.Component {
 
   render () {
     return (
-      <div className="login-form">
+      <Container fluid style={{ lineHeight: '32px' }}>
       <style>{`
         body > div,
         body > div > div,
@@ -47,7 +47,7 @@ export default class LoginForm extends React.Component {
         </Form>
         </Grid.Column>
         </Grid>
-        </div>
+        </Container>
         );
   }
 
@@ -65,7 +65,7 @@ export default class LoginForm extends React.Component {
       this.setState({passwordError: false, emailError: false});
       // this.props.updateAuth();
     }).catch((error) => {
-      console.log("Bad credentials " + error.message);
+      // console.log("Bad credentials " + error.message);
       this.setState({passwordError: true, emailError: true});
     });
   }

@@ -44,8 +44,6 @@ const FormTutor = props => (
     </div>
 )
 
-
-
 class LoadFile extends React.Component {
     constructor(props) {
         super(props)
@@ -64,8 +62,6 @@ class LoadFile extends React.Component {
         }))
     }
 
-    
-    
     render() {
         return (
             <div class="ui raised very padded text container segment">
@@ -85,8 +81,8 @@ class LoadFile extends React.Component {
                                 <label>Información directores, tutores y asesores</label>
 
                             </Form.Field>
+                            
                             {this.state.tutors}
-
 
                             <Form.Field>
                                 <Button onClick={this.onAddTutor} type='button'>Añadir</Button>
@@ -124,8 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>,
         document.body.appendChild(document.createElement('div')),
     )
-
-
 })
 
 
