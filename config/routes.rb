@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-	root 'sessions#new'
+	root 'users#new'
 	
 	#get '/login', to: 'sessions#new'	
 	#get '/signup', to: 'users#new'
@@ -11,5 +11,5 @@ Rails.application.routes.draw do
 	#get 'file/view'
 	#match "file/load_post" => "file#load_post", via: [:post]
 	
-	get '*path', to: "sessions#new"
+	get '*path', to: "users#new"
 end

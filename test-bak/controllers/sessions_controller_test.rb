@@ -2,7 +2,7 @@ require 'test_helper'
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
 	def setup
-		@user = { name: "Fabio", surname:"Tovar", email: "ft@test.edu.co", password: "password" }
+		@user = { name: "Fabio", email: "fstovarr@test.edu.co", password: "password" }
 	end
 	test "should get login page" do
 		#get login_url

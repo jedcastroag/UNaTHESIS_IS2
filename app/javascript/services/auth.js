@@ -4,7 +4,7 @@ let jwt = window.localStorage.getItem("token");
 
 export default {
 	isAuthenticated() {
-		return jwt != null;
+		return jwt !== null;
 	},
 
 	getToken() {
