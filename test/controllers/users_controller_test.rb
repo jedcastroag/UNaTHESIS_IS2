@@ -7,7 +7,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 	end
 
 	test "should create new user" do
-		puts @user.as_json
 		post users_path, as: :json, params: { user: @user.as_json }
 		assert_response :success
 	end
