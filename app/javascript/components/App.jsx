@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 
 import auth from '../services/auth'
 import LoginForm from './LoginForm'
@@ -18,10 +18,12 @@ import ProtectedRoute from './ProtectedRoute'
  *                                be restricted (only authenticated users can access), False.
  * @property {Map} componentParams Parameters of the component
  *
+ * More properties (https://reacttraining.com/react-router/web/api/Route)
  */
  const routes = [
  { path: "/project/load", exact: null, component: LoadProjectForm},
- { path: "/project/view", exact: null, component: ViewProject }
+ { path: "/project/view", exact: null, component: ViewProject },
+ { path: "/404.html", exact:null, restricted: false }
  ];
 
  class App extends React.Component {
@@ -43,8 +45,6 @@ import ProtectedRoute from './ProtectedRoute'
  	}
 
  	updateAuth() {
- 		console.log("Update auth");
- 		
  		this.setState({
  			isAuthenticated: auth.isAuthenticated()
  		});
@@ -58,17 +58,18 @@ import ProtectedRoute from './ProtectedRoute'
 
  	render () {
  		return (
- 			<BrowserRouter>
  			<div>
+ 			<BrowserRouter>
  			<Switch>
  			{
  				this.routes.map(function(route, index) {
  					return <ProtectedRoute { ...route } key={ index } />;
  				}, this)
  			}
+ 			<Route exact render={() => {window.location.href="404.html"}} />
  			</Switch>
- 			</div>
  			</BrowserRouter>
+ 			</div>
  			);	
  	}
  }

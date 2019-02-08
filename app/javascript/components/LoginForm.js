@@ -20,7 +20,7 @@ class OnlyLoginForm extends React.Component {
   }
 
   render() {
-    console.log("Render child");
+    //console.log("Render child");
 
     return (
       <Form size="large" error>
@@ -65,7 +65,7 @@ export default class LoginForm extends React.Component {
   render () {    
     let authenticated = this.checkIfIsAuthenticated();
 
-    console.log("Render parent");
+    //console.log("Render parent");
 
     if(authenticated === false) {
       return (
