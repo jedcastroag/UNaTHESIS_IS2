@@ -1,0 +1,20 @@
+<%menu = [["Inicio",root_path], ["Buscar Proceso", root_path],
+    ["Nuevo Proceso", root_path], ["Notificaciones",root_path],
+    ["Cerrar Sesión", root_path]]%>
+
+<div class="ui inverted Segment">
+    <header>
+        <nav>
+            <ul>
+                <% style = "list-style-type: none" %>
+                <%menu.each do |item|%>
+                    <%= react_component "header/LiTag",
+                    props = {linkTitle: item[0], path: item[1]},
+                    html_options = {tag: "li", style: style}
+                    %>
+                <% end %>
+
+            </ul>
+        </nav>
+    </header>
+</div>
