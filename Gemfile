@@ -7,7 +7,18 @@ ruby '2.6.0'
 gem 'webpacker'
 gem 'react-rails'
 gem 'devise'
-
+# gem 'mini_racer', platforms: :ruby
+gem 'os', '~> 0.9.6'
+# Bcrypth algorith
+gem 'bcrypt','3.1.12'
+# LDAP library
+gem 'net-ldap', '~> 0.16.1'
+# JSON WebTokens
+gem 'jwt'
+# Serializar JSON
+gem 'active_model_serializers', '~> 0.10.0'
+# Habiliar Cross-Origin Resource Sharing (CORS)
+gem 'rack-cors'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.1'
 # Use postgresql as the database for Active Record

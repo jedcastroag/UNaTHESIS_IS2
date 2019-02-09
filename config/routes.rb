@@ -3,8 +3,8 @@ Rails.application.routes.draw do
     resources :users
 
     scope module: 'admin' do
-    	resources :process
-	end
+        post '/new_process', to: "process#create"
+    end
 
     get 'welcome/login'
     root 'welcome#login'
