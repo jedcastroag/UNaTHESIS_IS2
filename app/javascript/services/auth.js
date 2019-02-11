@@ -13,11 +13,16 @@ export default {
 
 	login(email, password) {
 		return axios.post('/login', {
-			email: email,
-			password: password
+			data: {
+				email: email,
+				password: password
+			},
+			timeout: 1000
 		}).then((response) => {
 			jwt = response.data.token;
 			window.localStorage.setItem("token", jwt);
+		}).catch(err => {
+			console.log("Error " + err.message);
 		});
 	},
 

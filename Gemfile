@@ -45,10 +45,13 @@ gem 'bcrypt','3.1.12'
 gem 'net-ldap', '~> 0.16.1'
 # JSON WebTokens
 gem 'jwt'
-# Serializar JSON
+# JSON Serializer
 gem 'active_model_serializers', '~> 0.10.0'
-# Habiliar Cross-Origin Resource Sharing (CORS)
+# Enable Cross-Origin Resource Sharing (CORS)
 gem 'rack-cors'
+# Meta tags handler
+gem 'meta-tags-helpers', '~> 0.2.0'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

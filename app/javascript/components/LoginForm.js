@@ -69,24 +69,29 @@ export default class LoginForm extends React.Component {
 
     if(authenticated === false) {
       return (
-      <Container fluid style={{ lineHeight: '32px' }}>
-      <style>{`
-        body > div,
-        body > div > div,
-        body > div > div > div.login-form {
-          height: 100%;
-        }
-        `}</style>
-        <Grid style={{ height: '100%' }} textAlign="center" verticalAlign="middle">
-        <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as="h2" color="green" textAlign="center">
-        Ingresa a tu cuenta
-        </Header>
-        <OnlyLoginForm updateAuth={ this.checkIfIsAuthenticated }/>
-        </Grid.Column>
-        </Grid>
-        </Container>
-        );
+        <div class="login-form">
+        
+        <Container fluid style={{ lineHeight: '32px' }} style={{height: '100%'}}>
+        <style>{`
+          body > div,
+          body > div > div,
+          body > div > div > div.login-form {
+            height: 100%;
+          }
+          `}</style>
+
+          <Grid style={{ height: '100%' }} textAlign="center" verticalAlign="middle">
+          <Grid.Column style={{ maxWidth: 450 }}>
+          <Header as="h2" color="green" textAlign="center">
+          Ingresa a tu cuenta
+          </Header>
+          <OnlyLoginForm updateAuth={ this.checkIfIsAuthenticated }/>
+          </Grid.Column>
+          </Grid>
+
+          </Container>
+          </div>
+          );
     } else {
       return authenticated;
     }

@@ -5,6 +5,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 
 import auth from '../services/auth'
 import LoginForm from './LoginForm'
+import MainMenu from './MainMenu'
 import LoadProjectForm from './LoadProjectForm'
 import ViewProject from './ViewProject'
 import ProtectedRoute from './ProtectedRoute'
@@ -21,6 +22,7 @@ import ProtectedRoute from './ProtectedRoute'
  * More properties (https://reacttraining.com/react-router/web/api/Route)
  */
  const routes = [
+ { path: "/", exact: null, component: Home},
  { path: "/project/load", exact: null, component: LoadProjectForm},
  { path: "/project/view", exact: null, component: ViewProject },
  { path: "/404.html", exact:null, restricted: false }
@@ -41,12 +43,16 @@ import ProtectedRoute from './ProtectedRoute'
  			restricted: false
  		});
 
- 		this.state = { isAuthenticated: auth.isAuthenticated() }
+ 		this.state = { 
+ 			isAuthenticated: auth.isAuthenticated(),
+ 			userType: auth.getUserType() 
+ 		}
  	}
 
  	updateAuth() {
  		this.setState({
- 			isAuthenticated: auth.isAuthenticated()
+ 			isAuthenticated: auth.isAuthenticated(),
+ 			userType: auth.getUserType()
  		});
  	}
 
@@ -56,9 +62,18 @@ import ProtectedRoute from './ProtectedRoute'
  		this.updateAuth();
  	}
 
+ 	renderHeader() {
+ 		if(this.state.isAuthenticated)
+ 			return <MainMenu userType={ this.state.userType } />;
+ 		return null;
+ 	}
+
  	render () {
  		return (
  			<div>
+
+ 			{ this.renderHeader() }
+
  			<BrowserRouter>
  			<Switch>
  			{
