@@ -5,7 +5,7 @@ import ProtectedRoute from './ProtectedRoute'
 
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
 
-import add_student from '../services/add_user'
+import AddUser from '../services/AddUser'
 
 /**
  * All the application's paths must be declarated this.
@@ -25,7 +25,7 @@ class App extends React.Component {
         super();
 
         this.routes = routes;
-        this.routes.push({path: "/new_process", exact: null, component: NewProcess, restricted: false});
+        this.routes.push({path: "/process/new", exact: null, component: NewProcess, restricted: false});
     }
     render() {
         return (<div>

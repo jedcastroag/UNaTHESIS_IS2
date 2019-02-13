@@ -1,11 +1,10 @@
 Rails.application.routes.draw do
-    devise_for :users
-    resources :users
-
+    root 'welcome#login'
+    
     scope module: 'admin' do
-        post '/new_process', to: "process#create"
+        resources :process
     end
 
     get 'welcome/login'
-    root 'welcome#login'
+
 end
