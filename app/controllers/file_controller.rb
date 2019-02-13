@@ -19,7 +19,7 @@ class FileController < ApplicationController
   end
 
   private
-
+  
   def process_file(file, name)
     create_file_folder_of_user(1)
     return move_file_to_user_folder(1,

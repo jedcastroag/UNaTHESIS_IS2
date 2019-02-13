@@ -12,34 +12,35 @@ const FormTutor = props => (
         <Form.Group inline>
             <Form.Field>
                 <label>Dni</label>
-                <input placeholder='Dni' name={'dni_' + props.number} />
+                <input placeholder='Dni' name={'dni_additional_' + props.number} />
             </Form.Field>
             <Form.Field>
                 <label>Nombres</label>
-                <input placeholder='Nombres' name={'nombres_' + props.number} />
+                <input placeholder='Nombres' name={'name_additional_' + props.number} />
             </Form.Field>
             <Form.Field>
                 <label>Apellidos</label>
-                <input placeholder='Apellidos' name={'apellidos_' + props.number} />
+                <input placeholder='Apellidos' name={'lastname_additional_' + props.number} />
             </Form.Field>
         </Form.Group>
         <Form.Group inline>
             <Form.Field>
                 <label>Institución</label>
-                <input placeholder='Institución' name={'institucion_' + props.number} />
+                <input placeholder='Institución' name={'institution_aditional_' + props.number} />
             </Form.Field>
             <Form.Field>
                 <label>País</label>
-                <input placeholder='País' name={'pais_' + props.number} />
+                <input placeholder='País' name={'country_aditional_' + props.number} />
             </Form.Field>
             <Form.Field>
                 <label>Rol</label>
-                <select name={'rol_' + props.number}>
-                    <option>Director</option>
-                    <option>Tutor</option>
-                    <option>Asesor</option>
+                <select name={'rol_aditional_' + props.number}>
+                    <option value='0'>Director</option>
+                    <option value='1'>Tutor</option>
+                    <option value='2'>Asesor</option>
                 </select>
             </Form.Field>
+            <hr></hr>
         </Form.Group>
     </div>
 )
