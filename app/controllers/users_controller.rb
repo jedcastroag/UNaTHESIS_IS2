@@ -19,6 +19,22 @@ class UsersController < ApplicationController
 		end
 	end
 
+	def home
+		user = User.find_by(id: 3)
+		
+		data = {}
+
+		if(user.user_type_id == 1)
+			thesisProjectUser = ThesisProjectsUser.find_by(user_id: user.id)
+			data[:thesis_info] = ThesisProject.find_by(id: thesisProjectUser.id)
+		end
+
+		render json: {
+			user_type_id: 1,
+			data: headers
+		}
+	end
+
 	private
 	def user_params
 		params.require(:user).permit(:email, :password, :name, :surname)

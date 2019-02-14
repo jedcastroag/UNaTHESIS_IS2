@@ -9,6 +9,7 @@ import MainMenu from './MainMenu'
 import LoadProjectForm from './LoadProjectForm'
 import ViewProject from './ViewProject'
 import ProtectedRoute from './ProtectedRoute'
+import Home from './Home'
 
 /** 
  * All the application's paths must be declarated this.
@@ -31,7 +32,6 @@ import ProtectedRoute from './ProtectedRoute'
  class App extends React.Component {
  	constructor() {
  		super();
-
  		this.routes = routes;
  		this.routes.push({ 
  			path: "/login", 
@@ -44,15 +44,15 @@ import ProtectedRoute from './ProtectedRoute'
  		});
 
  		this.state = { 
- 			isAuthenticated: auth.isAuthenticated(),
- 			userType: auth.getUserType() 
+ 			isAuthenticated: auth.isAuthenticated()
+ 			//, userType: auth.getUserType() 
  		}
  	}
 
  	updateAuth() {
  		this.setState({
- 			isAuthenticated: auth.isAuthenticated(),
- 			userType: auth.getUserType()
+ 			isAuthenticated: auth.isAuthenticated()
+ 			//, userType: auth.getUserType()
  		});
  	}
 
@@ -70,11 +70,11 @@ import ProtectedRoute from './ProtectedRoute'
 
  	render () {
  		return (
+ 			<BrowserRouter>
  			<div>
 
  			{ this.renderHeader() }
 
- 			<BrowserRouter>
  			<Switch>
  			{
  				this.routes.map(function(route, index) {
@@ -83,8 +83,9 @@ import ProtectedRoute from './ProtectedRoute'
  			}
  			<Route exact render={() => {window.location.href="404.html"}} />
  			</Switch>
- 			</BrowserRouter>
+ 		
  			</div>
+ 			</BrowserRouter>
  			);	
  	}
  }

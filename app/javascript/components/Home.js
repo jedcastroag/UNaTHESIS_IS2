@@ -1,24 +1,32 @@
 import React from "react"
 import PropTypes from "prop-types"
+import Redirect from 'react-router-dom'
+
 import Http from '../services/restservices'
+
 import HomeJury from './HomeJury'
 import HomeStudent from './HomeStudent'
 import HomeTutor from './HomeTutor'
 import HomeAdmin from './HomeAdmin'
 
-const DATA_URL = '/tesis/view';
+const DATA_URL = '/home';
 
 class Home extends React.Component {
 	constructor(props) {
 		super(props);
+		
 		this.state = {
 			user_type_id: null,
 			response: null
 		};
-		Http.get(DATA_URL).then(response => this.setState({
-			user_type_id: response['user_id'],
-			response: response
-		}));
+
+		Http.get('/home').then(response => {
+			this.setState({
+				user_type_id: response['data']['user_type_id'],
+				response: response['data']['data']
+			});
+			// console.log(response);
+		});
 	}
 
 	renderUserHome() {
@@ -32,7 +40,7 @@ class Home extends React.Component {
 			case 4:
 			return <HomeJury data={this.state.response}/>;
 			default:
-			return <Redirect to="/404.html"/>;
+			return <HomeStudent data={this.setState.response} />;
 		}
 	}
 

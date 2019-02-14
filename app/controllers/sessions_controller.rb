@@ -29,6 +29,11 @@ class SessionsController < ApplicationController
 	end
 
 	private
+	def generateToken(user)
+		payload = { user_id: user.id }
+		TokenService.instance.encode payload
+	end
+
 	def user_params
 		params.require(:session).permit(:email, :password)
 	end

@@ -1,10 +1,10 @@
 import React from "react"
 import PropTypes from "prop-types"
+
 class HomeAdmin extends React.Component {
   render () {
     return (
-      <React.Fragment>
-      </React.Fragment>
+      <h1>Home admin</h1>
     );
   }
 }

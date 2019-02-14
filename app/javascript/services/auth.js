@@ -12,18 +12,24 @@ export default {
 	},
 
 	login(email, password) {
-		return axios.post('/login', {
-			data: {
-				email: email,
-				password: password
-			},
-			timeout: 1000
-		}).then((response) => {
-			jwt = response.data.token;
-			window.localStorage.setItem("token", jwt);
-		}).catch(err => {
-			console.log("Error " + err.message);
+		let promise = new Promise((resolve, reject) => {
+			axios.post('/login', {
+				session: {
+					email: email,
+					password: password
+				},
+				timeout: 1000
+			}).then((response) => {
+				jwt = response.data.token;
+				window.localStorage.setItem("token", jwt);
+				resolve(response);
+			}).catch(err => {
+				console.log("Error " + err.message);
+				reject(err);
+			})
 		});
+
+		return promise;
 	},
 
 	logout() {

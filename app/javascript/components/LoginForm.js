@@ -48,10 +48,10 @@ class OnlyLoginForm extends React.Component {
   login() {
     auth.login(this.state.email, this.state.password)
     .then((response) => {
-      this.setState({passwordError: false, emailError: false});
+      this.setState({ passwordError: false, emailError: false });
       this.props.updateAuth();
     }).catch((error) => {
-      this.setState({passwordError: true, emailError: true});
+      this.setState({ passwordError: true, emailError: true });
     });
   }
 }
