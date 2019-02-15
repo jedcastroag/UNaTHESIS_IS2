@@ -3,6 +3,8 @@ class HomeController < ApplicationController
 	def view
 		authenticate_request!
 
-		@current_user
+		if @current_user != nil
+			render json: { user: @current_user }
+		end
 	end
 end

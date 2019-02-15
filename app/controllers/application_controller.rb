@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
 		decoded = payload
 		
 		return invalid_authentication unless decoded
-		puts decoded
 
 		load_user decoded
 		invalid_authentication unless @current_user
@@ -15,6 +14,7 @@ class ApplicationController < ActionController::Base
 		payload = request.headers['Authorization'].split().last
 		TokenService.instance.validate payload
 	rescue Exception => error
+		logger.fatal error
 		false
 	end
 

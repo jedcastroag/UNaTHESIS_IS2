@@ -2,7 +2,8 @@ require 'test_helper'
 
 class FileControllerTest < ActionDispatch::IntegrationTest
 	def setup
-		@user = { name: "Fabio", surname:"Tovar", email: "ft@test.edu.co", password: "password" }
+		@user = { name: "Fabio", surname: "Tovar", email: "ft@test.edu.co", 
+			password: "password", user_type_id: 1 }
 
 		post users_path, as: :json, params: { user: @user.as_json }
 		assert_response :success, "Problem with user creation"
@@ -14,16 +15,20 @@ class FileControllerTest < ActionDispatch::IntegrationTest
 	end
 
 	test 'should be validate an identified user' do
+		get home_path, params: {}, headers: { 
+			'Authorization' => "Bearer 666" 
+		}
 
+		body = JSON.parse(response.body)
+		assert_response :unauthorized
 	end
 
-	test 'should be retrieve the home information' do 
-		@request.headers.merge!({'Authorization' => "Bearer #{@token}"})
+	test 'should be retrieve the home information' do
+		get '/home', params: {}, headers: { 
+			'Authorization' => "Bearer #{@token}" 
+		}
 
-		get home_path
-		
 		body = JSON.parse(response.body)
-		puts @token
 		assert_response :success
 	end
 end

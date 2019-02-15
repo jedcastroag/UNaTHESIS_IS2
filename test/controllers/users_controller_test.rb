@@ -3,7 +3,7 @@ require 'test_helper'
 class UsersControllerTest < ActionDispatch::IntegrationTest
 	def setup
 		@user = { name: "Tester", surname: "Testercito", email: "f@test.com", 
-			password: "mypassword", password_confirmation: "mypassword" }
+			password: "mypassword", password_confirmation: "mypassword", user_type_id: 3 }
 	end
 
 	test "should create new user" do
