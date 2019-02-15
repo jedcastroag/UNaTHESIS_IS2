@@ -14,7 +14,7 @@ class FileController < ApplicationController
     thesis_project = ThesisProject.create(document: file_path,
                                           approbation_state: 0,
                                           activation_state: 0)
-    ThesisProjectsUser.create(id_user:1,
+    ThesisProjectUser.create(id_user:1,
                              id_thesis_project: thesis_project.id,
                              id_thesis_project_rol:0)
   end

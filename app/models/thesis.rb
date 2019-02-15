@@ -1,2 +1,3 @@
 class Thesis < ApplicationRecord
+	
 end
