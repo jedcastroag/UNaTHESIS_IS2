@@ -5,7 +5,7 @@ import { Menu, Image } from 'semantic-ui-react'
 
 class MainMenu extends React.Component {
 	constructor(props) {
-		super();
+		super(props);
 	}
 
 	render () {
@@ -19,7 +19,7 @@ class MainMenu extends React.Component {
 
 			<Menu.Menu position="right">
 
-			<Menu.Item as="a" content="Home" key="Testing" />
+			<Menu.Item as="a" content="Logout" key="logout" onClick={ this.props.logout } />
 
 			</Menu.Menu>
 			</Menu>

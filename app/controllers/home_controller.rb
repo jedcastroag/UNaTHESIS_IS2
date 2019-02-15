@@ -22,7 +22,7 @@ class HomeController < ApplicationController
 		end
 
 		render json: body
-	rescue Error => error
+	rescue => error
 		render json: { error: error }, status: :unauthorized
 	end
 end

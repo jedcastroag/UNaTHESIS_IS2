@@ -3,7 +3,8 @@ import PropTypes from "prop-types"
 import { Container, Row, Col } from 'react-grid-system';
 
 import { Button, Input, Checkbox, Form } from 'semantic-ui-react'
-import '../../../dist/semantic.min.css';
+
+import Http from '../services/restservices'
 
 const FormTutor = props => (
   <div className="formTutor">
@@ -60,69 +61,81 @@ class LoadFile extends React.Component {
     }))
   }
 
-  render() {
-    return (
-      <div class="ui raised very padded text container segment">
-      <div class="content">
-      <h2 class="ui header">Cargar archivo</h2>
-      <div class="description">
-      <Form id="formProject" action='/file/load_post' method='POST' enctype="multipart/form-data">
-      <Form.Field>
-      <label>Titulo</label>
-      <input placeholder='Titulo' name='titulo' />
-      </Form.Field>
-      <Form.Field>
-      <label>Descripción</label>
-      <textarea placeholder='Descripción' name="descripcion" ></textarea>
-      </Form.Field>
-      <Form.Field>
-      <label>Información directores, tutores y asesores</label>
+  submitForm(event) {
+    event.preventDefault();
+    const data = new FormData(event.target);
 
-      </Form.Field>
-
-      {this.state.tutors}
-
-      <Form.Field>
-      <Button onClick={this.onAddTutor} type='button'>Añadir</Button>
-      </Form.Field>
-      <Form.Field>
-      <label>Documentos</label>
-      </Form.Field>
-      <Form.Field>
-      <label>Propuesta</label>
-      <input type='file' name="file" />
-      </Form.Field>
-      <Form.Field>
-      <label>Documento de soporte</label>
-      <input type='file' name="supportFile" />
-      </Form.Field>
-      <Form.Field>
-      <label>Comentarios adicionales</label>
-      <textarea placeholder='Comentarios adicionales' name="descripcion" ></textarea>
-      </Form.Field>
-      <Form.Field>
-      <Button type='submit'>Cargar proyecto</Button>
-      </Form.Field>
-      </Form>
-      </div>
-      </div>
-      </div>
+    Http.post('/file/load_post', data).then(response =>
+      console.log(response)
+      ).catch( error => 
+      console.log("ERROR " + error)
       );
+    }
+
+    render() {
+      return (
+        <div class="ui raised very padded text container segment">
+        <div class="content">
+        <h2 class="ui header">Cargar archivo</h2>
+        <div class="description">
+
+        <Form id="formProject" onSubmit={ this.submitForm }>
+        <Form.Field>
+        <label>Titulo</label>
+        <input placeholder='Titulo' name='titulo' />
+        </Form.Field>
+        <Form.Field>
+        <label>Descripción</label>
+        <textarea placeholder='Descripción' name="descripcion" ></textarea>
+        </Form.Field>
+        <Form.Field>
+        <label>Información directores, tutores y asesores</label>
+
+        </Form.Field>
+
+        {this.state.tutors}
+
+        <Form.Field>
+        <Button onClick={this.onAddTutor} type='button'>Añadir</Button>
+        </Form.Field>
+        <Form.Field>
+        <label>Documentos</label>
+        </Form.Field>
+        <Form.Field>
+        <label>Propuesta</label>
+        <input type='file' name="file" />
+        </Form.Field>
+        <Form.Field>
+        <label>Documento de soporte</label>
+        <input type='file' name="supportFile" />
+        </Form.Field>
+        <Form.Field>
+        <label>Comentarios adicionales</label>
+        <textarea placeholder='Comentarios adicionales' name="descripcion" ></textarea>
+        </Form.Field>
+        <Form.Field>
+        <Button type='submit'>Cargar proyecto</Button>
+        </Form.Field>
+        </Form>
+        </div>
+        </div>
+        </div>
+        );
+    }
   }
-}
 
-class LoadProjectForm extends React.Component {
-  render () {
-    return (
-      <div>
-      <LoadFile />
-      </div>
-      )
+  class LoadProjectForm extends React.Component {
+    render () {
+      return (
+        <div>
+        <LoadFile />
+        </div>
+        )
+    }
   }
-}
 
-LoadProjectForm.propTypes = {
-  greeting: PropTypes.string
-};
+  LoadProjectForm.propTypes = {
+    greeting: PropTypes.string
+  };
 
-export default LoadProjectForm
+  export default LoadProjectForm

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Http from '../services/restservices';
 
 let jwt = window.localStorage.getItem("token");
 
@@ -13,13 +14,13 @@ export default {
 
 	login(email, password) {
 		let promise = new Promise((resolve, reject) => {
-			axios.post('/login', {
+			Http.post('/login', {
 				session: {
 					email: email,
 					password: password
 				},
 				timeout: 1000
-			}).then((response) => {
+			}, false).then((response) => {
 				jwt = response.data.token;
 				window.localStorage.setItem("token", jwt);
 				resolve(response);

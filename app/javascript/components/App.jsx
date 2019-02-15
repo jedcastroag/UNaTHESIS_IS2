@@ -45,8 +45,9 @@ import Home from './Home'
 
  		this.state = { 
  			isAuthenticated: auth.isAuthenticated()
- 			//, userType: auth.getUserType() 
- 		}
+ 		};
+
+ 		this.logout = this.logout.bind(this);
  	}
 
  	updateAuth() {
@@ -64,7 +65,8 @@ import Home from './Home'
 
  	renderHeader() {
  		if(this.state.isAuthenticated)
- 			return <MainMenu userType={ this.state.userType } />;
+ 			return <MainMenu userType={ this.state.userType } 
+ 			logout={ this.logout } updateAuth={ this.updateAuth } />;
  		return null;
  	}
 

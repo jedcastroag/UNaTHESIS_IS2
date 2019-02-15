@@ -3,11 +3,8 @@ require 'json'
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
 	def setup
-		@user = { name: "Fabio", surname:"Tovar", email: "ft@test.edu.co", password: "password" }
-	end
-	test "should get login page" do
-		#get login_url
-		#assert_response :success
+		@user = { name: "Fabio", surname:"Tovar", email: "ft@test.edu.co", 
+			password: "password", user_type_id: 2 }
 	end
 
 	test "should authenticate successfully" do

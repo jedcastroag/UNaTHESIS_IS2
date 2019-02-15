@@ -5,27 +5,33 @@ require 'fileutils'
 # FileController
 class FileController < ApplicationController
   skip_before_action :verify_authenticity_token
-  
   def load_post
+    authenticate_request!
+
     file_path = process_file(
       params[:file],
       Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'
-    )
+      )
+    
     thesis_project = ThesisProject.create(document: file_path,
-                                          approbation_state: 0,
-                                          activation_state: 0)
-    ThesisProjectUser.create(id_user:1,
-                             id_thesis_project: thesis_project.id,
-                             id_thesis_project_rol:0)
+      approbation_state: 0,
+      activation_state: 0)
+
+    @current_user.thesis_projects << thesis_project
+    @current_user.save
+  rescue => error
+    if Rails.env.production?
+      render json: { error: error }, status: :unauthorized
+    else
+      render json: { error: error }, status: :unauthorized
+    end
   end
 
   private
 
   def process_file(file, name)
     create_file_folder_of_user(1)
-    return move_file_to_user_folder(1,
-                             file.path,
-                             name)
+    return move_file_to_user_folder(1, file.path, name)
   end
 
   def create_file_folder_of_user(user_id)
@@ -37,7 +43,9 @@ class FileController < ApplicationController
   end
 
   def move_file_to_user_folder(user_id, file_path, file_name)
-    destiny_dir = 'files/' + Digest::MD5.hexdigest(user_id.to_s) + '/' + file_name
+    destiny_dir = 'files/' + Digest::MD5.hexdigest(user_id.to_s) 
+    + '/' + file_name
+
     FileUtils.mv(file_path, destiny_dir)
     return destiny_dir
   end
