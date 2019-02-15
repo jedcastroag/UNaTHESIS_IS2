@@ -4,12 +4,14 @@ import auth from './auth'
 const headers = { headers: { Authorization: "Bearer " + auth.getToken() } }
 
 export default {
-	get(url) {
-		return axios.get(url, {headers:headers});
+	get(url, withCredentials = true) {
+		if(withCredentials)
+			return axios.get(url, headers);
+		return axios.get(url);
 	},
-	post(url) {
-		return axios.post(url, {
-			headers: headers
-		});
+	post(url, withCredentials = true) {
+		if(withCredentials)
+			return axios.post(url, headers);
+		return axios.post(url);
 	}
 }

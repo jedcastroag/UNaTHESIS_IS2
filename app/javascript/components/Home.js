@@ -9,7 +9,7 @@ import HomeStudent from './HomeStudent'
 import HomeTutor from './HomeTutor'
 import HomeAdmin from './HomeAdmin'
 
-const DATA_URL = '/home';
+const HOME_PATH = '/home';
 
 class Home extends React.Component {
 	constructor(props) {
@@ -20,13 +20,13 @@ class Home extends React.Component {
 			response: null
 		};
 
-		Http.get('/home').then(response => {
+		Http.get(HOME_PATH).then(response => {
 			this.setState({
 				user_type_id: response['data']['user_type_id'],
 				response: response['data']['data']
 			});
-			// console.log(response);
-		});
+			console.log(response.data);
+		}).catch(error => console.log("Error " + error));
 	}
 
 	renderUserHome() {

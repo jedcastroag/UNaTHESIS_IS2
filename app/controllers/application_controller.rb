@@ -3,7 +3,9 @@ class ApplicationController < ActionController::Base
 	def authenticate_request!
 		decoded = payload
 		
-		return invalid_authentication unless decoded
+		unless decoded
+			raise 'Invalid Request'
+		end
 
 		load_user decoded
 		invalid_authentication unless @current_user
@@ -20,9 +22,5 @@ class ApplicationController < ActionController::Base
 
 	def load_user(payload)
 		@current_user = User.find_by(id: payload['user_id'])
-	end
-
-	def invalid_authentication
-		render json: { error: 'Invalid Request' }, status: :unauthorized
 	end
 end

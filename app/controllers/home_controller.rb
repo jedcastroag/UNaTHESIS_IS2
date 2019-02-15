@@ -3,8 +3,26 @@ class HomeController < ApplicationController
 	def view
 		authenticate_request!
 
-		if @current_user != nil
-			render json: { user: @current_user }
+		body = {
+			:user_type_id => @current_user.user_type_id
+		}
+
+		case @current_user.user_type_id
+		when 1 # Administrator
+
+		when 2 # Student
+			student = { :example => 'Is a Student' }
+			body.merge! student
+		when 3 # Tutor
+
+		when 4 # Jury
+
+		else
+			raise 'Invalid Request'
 		end
+
+		render json: body
+	rescue Error => error
+		render json: { error: error }, status: :unauthorized
 	end
 end

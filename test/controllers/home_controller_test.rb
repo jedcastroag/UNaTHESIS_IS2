@@ -14,7 +14,7 @@ class FileControllerTest < ActionDispatch::IntegrationTest
 		@token = JSON.parse(response.body)['token']
 	end
 
-	test 'should be validate an identified user' do
+	test 'should be detect an identified user' do
 		get home_path, params: {}, headers: { 
 			'Authorization' => "Bearer 666" 
 		}
