@@ -16,11 +16,11 @@ ActiveRecord::Schema.define(version: 2019_02_15_052219) do
   enable_extension "plpgsql"
 
   create_table "comments", force: :cascade do |t|
-    t.bigint "thesis_project_user_id"
+    t.bigint "thesis_project_id"
     t.string "content", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["thesis_project_user_id"], name: "index_comments_on_thesis_project_user_id"
+    t.index ["thesis_project_id"], name: "index_comments_on_thesis_project_id"
   end
 
   create_table "event_logs", force: :cascade do |t|
@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_052219) do
     t.index ["user_type_id"], name: "index_users_on_user_type_id"
   end
 
-  add_foreign_key "comments", "thesis_projects_users", column: "thesis_project_user_id"
+  add_foreign_key "comments", "thesis_projects"
   add_foreign_key "event_logs", "thesis_projects_users"
   add_foreign_key "thesis", "thesis_projects", column: "thesis_project_associated_id"
   add_foreign_key "thesis", "thesis_projects", column: "thesis_project_father_id"

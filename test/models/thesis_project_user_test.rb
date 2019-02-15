@@ -2,9 +2,9 @@ require 'test_helper'
 
 class ThesisProjectUserTest < ActiveSupport::TestCase
 	def setup
-		@user = User.new name: "Fabio", surname: "Tovar", email: "f@test.com", 
+		@user = User.new name: "Fabio", surname: "Tovar", email: "tete@test.com", 
   		password: "mypassword", password_confirmation: "mypassword", user_type_id: 2
-  		@user2 = User.new name: "Fabio2", surname: "Tovar", email: "f2@test.com", 
+  		@user2 = User.new name: "Fabio2", surname: "Tovar", email: "tata@test.com", 
   		password: "mypassword", password_confirmation: "mypassword", user_type_id: 2
   		@thesis_project = ThesisProject.create document: "/doc", 
   		approbation_state: true, activation_state: true
@@ -37,5 +37,12 @@ class ThesisProjectUserTest < ActiveSupport::TestCase
   		@user2.thesis_projects << new_thesis
 
   		assert @user.save && @user2.save
+	end
+
+	test "should be retreive the users related to project" do
+		@user.save
+		@user2.save
+		assert @thesis_project.users.count == 2, 
+		"COUNT: #{@thesis_project.users}"
 	end
 end

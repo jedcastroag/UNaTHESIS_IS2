@@ -11,7 +11,12 @@ class HomeController < ApplicationController
 		when 1 # Administrator
 
 		when 2 # Student
-			student = { :example => 'Is a Student' }
+			thesis_project = @current_user.thesis_projects.last
+			student = { 
+				:thesis => thesis_project, 
+				:comments => thesis_project&.comments,
+				:users => thesis_project.users
+			}
 			body.merge! student
 		when 3 # Tutor
 
