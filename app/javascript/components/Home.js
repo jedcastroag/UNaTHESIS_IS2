@@ -23,9 +23,8 @@ class Home extends React.Component {
 		Http.get(HOME_PATH).then(response => {
 			this.setState({
 				user_type_id: response['data']['user_type_id'],
-				response: response['data']['data']
+				response: response['data']
 			});
-			console.log(response.data);
 		}).catch(error => console.log("Error " + error));
 	}
 
@@ -34,7 +33,7 @@ class Home extends React.Component {
 			case 1:
 			return <HomeAdmin data={this.state.response}/>;
 			case 2:
-			return <HomeStudent data={this.state.response}/>;
+			return <HomeStudent data={ this.state.response }/>;
 			case 3:
 			return <HomeTutor data={this.state.response}/>;
 			case 4:

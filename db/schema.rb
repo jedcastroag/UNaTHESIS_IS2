@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_052219) do
   end
 
   create_table "thesis_projects", force: :cascade do |t|
+    t.string "title", null: false
     t.string "document", null: false
     t.boolean "approbation_state", null: false
     t.boolean "activation_state", null: false

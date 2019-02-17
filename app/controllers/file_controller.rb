@@ -5,6 +5,7 @@ require 'fileutils'
 # FileController
 class FileController < ApplicationController
   skip_before_action :verify_authenticity_token
+
   def load_post
     authenticate_request!
 
@@ -15,13 +16,15 @@ class FileController < ApplicationController
     
     thesis_project = ThesisProject.create(document: file_path,
       approbation_state: 0,
-      activation_state: 0)
+      activation_state: 0, 
+      # description: params[:project_description],
+      title: params[:project_title])
 
     @current_user.thesis_projects << thesis_project
     @current_user.save
   rescue => error
     if Rails.env.production?
-      render json: { error: error }, status: :unauthorized
+      render json: { error: "Bad request" }, status: :unauthorized
     else
       render json: { error: error }, status: :unauthorized
     end
@@ -30,8 +33,8 @@ class FileController < ApplicationController
   private
 
   def process_file(file, name)
-    create_file_folder_of_user(1)
-    return move_file_to_user_folder(1, file.path, name)
+    create_file_folder_of_user(@current_user.id)
+    return move_file_to_user_folder(@current_user.id, file.path, name)
   end
 
   def create_file_folder_of_user(user_id)
