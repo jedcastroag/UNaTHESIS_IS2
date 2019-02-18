@@ -134,6 +134,7 @@ class PdfViewer extends React.Component {
 		this.state = {
 			projectUrl: null
 		};
+		
 		this.downloadPDF();
 		this.savePDF = this.savePDF.bind(this);
 	}
