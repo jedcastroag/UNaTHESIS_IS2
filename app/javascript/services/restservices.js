@@ -2,9 +2,9 @@ import axios from 'axios';
 import auth from './auth'
 
 export default {
-	get(url, withCredentials = true) {
+	get(url, params = {}, withCredentials = true) {
 		if(withCredentials)
-			return axios.get(url, { 
+			return axios.get(url, params, { 
 				headers: { Authorization: "Bearer " + auth.getToken() } });
 		return axios.get(url);
 	},

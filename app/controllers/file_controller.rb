@@ -6,6 +6,14 @@ require 'fileutils'
 class FileController < ApplicationController
   skip_before_action :verify_authenticity_token
 
+  def download_pdf
+    send_file(
+      "#{Rails.root}/files/c81e728d9d4c2f636f067f89cc14862c/test.pdf",
+      filename: "test.pdf",
+      type: "application/pdf"
+      )
+  end
+
   def load_post
     authenticate_request!
 

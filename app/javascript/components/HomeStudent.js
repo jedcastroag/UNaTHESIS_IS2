@@ -1,16 +1,119 @@
-import React from "react"
-import PropTypes from "prop-types"
+import React from 'react';
+import PropTypes from "prop-types";
+
+import { Document, Page, StyleSheet } from 'react-pdf/dist/entry.webpack';
+import PDFObject from 'pdfobject';
+
+import Http from '../services/restservices';
+
+import { Container, Header, Label, Button } from 'semantic-ui-react';
+
+class PDFViewer extends React.Component {
+	constructor(props){
+		super(props);
+	}
+
+	render() {
+		console.log("Render child: " + this.props.pageNumber);
+
+		return(
+			<div>
+			<Document file="file/download_pdf"
+			onLoadSuccess={ this.props.onDocumentLoadSuccess } >
+			<Page pageNumber={ this.props.pageNumber } />
+			</Document>
+			</div>
+			);
+	}
+}
+
+class PDFContainer extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			numPages: null,
+			pageNumber: 2,
+		}
+
+		this.onDocumentLoadSuccess = this.onDocumentLoadSuccess.bind(this);
+	}
+
+	onDocumentLoadSuccess = (document) => {
+		this.setState({
+			numPages: document.numPages
+		});
+	}
+
+	changePage = (offset) => this.setState(prevState => {
+		pageNumber: prevState.pageNumber + offset
+	});
+
+	previousPage = () => this.changePage(-1);
+
+	nextPage = () => {
+		console.log("Next Page");
+		this.changePage(1);
+	}
+
+	render() {
+		return(
+			<div>
+			<PDFViewer pageNumber={ this.state.pageNumber } onDocumentLoadSuccess={ this.onDocumentLoadSuccess } />
+			<Button primary onClick={ this.previousPage } >Previous</Button><Button secondary onClick={ this.nextPage }>Next</Button>
+			</div>
+			);
+	}
+}
+
+class PDFEmbedded extends React.Component {
+	componentDidMount() {
+		const { pdfBlob, containerId } = this.props;
+		Http.get('file/download_pdf', { responseType: 'blob' })
+		.then(response => {
+			const url = URL.createObjectURL(response.data);
+			PDFObject.embed(url, `#${containerId}`);
+		}).catch(error => console.log("Error fetching project " + error));		
+	}
+
+	render() {
+		const { width, height, containerId } = this.props;
+		return <div style={{ width, height }} id={ containerId } />;
+	}
+}
+
+PDFEmbedded.propTypes = {
+	width: PropTypes.string,
+	height: PropTypes.string,
+	containerId: PropTypes.string,
+};
+
+PDFEmbedded.defaultProps = {
+	width: '100%',
+	height: 500,
+	containerId: 'pdf-viewer',
+};
+
 class HomeStudent extends React.Component {
 	constructor(props) {
 		super(props);
 	}
 
+	renderPDF() {
+		if(PDFObject.supportsPDFs)
+			return <PDFEmbedded />;
+		return <PDFContainer />;
+	}
+
 	render () {
 		console.log(this.props);
 		return (
-			<h1>Home Student</h1>
-		);
+			<Container text>
+			<Header dividing as="h2">Titulo tesis <Label color="teal">Estado</Label> </Header>
+			<Header dividing as="h2">Titulo tesis <Label color="teal">Estado</Label> </Header>
+			{ this.renderPDF() }
+			</Container>
+			);
 	}
 }
 
-	export default HomeStudent
+export default HomeStudent
