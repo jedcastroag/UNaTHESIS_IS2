@@ -109,11 +109,7 @@ class LoadFile extends React.Component {
         </Form.Field>
         <Form.Field>
         <label>Comentarios adicionales</label>
-<<<<<<< HEAD
-        <textarea placeholder='Comentarios adicionales' name="comentarios" ></textarea>
-=======
         <textarea placeholder='Comentarios adicionales' name="description" ></textarea>
->>>>>>> remoteMaster/development
         </Form.Field>
         <Form.Field>
         <Button type='submit'>Cargar proyecto</Button>

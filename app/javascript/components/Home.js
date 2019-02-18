@@ -23,14 +23,8 @@ class Home extends React.Component {
 		Http.get(HOME_PATH).then(response => {
 			this.setState({
 				user_type_id: response['data']['user_type_id'],
-<<<<<<< HEAD
-				response: response['data']['data']
-			});			
-			console.log(response.data);
-=======
 				response: response['data']
 			});
->>>>>>> remoteMaster/development
 		}).catch(error => console.log("Error " + error));
 	}
 
