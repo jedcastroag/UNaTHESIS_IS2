@@ -7,7 +7,7 @@ class FileController < ApplicationController
   skip_before_action :verify_authenticity_token
   def load_post
     authenticate_request!
-
+    puts params
     file_path = process_file(
       params[:file],
       Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'
@@ -15,7 +15,9 @@ class FileController < ApplicationController
     
     thesis_project = ThesisProject.create(document: file_path,
       approbation_state: 0,
-      activation_state: 0)
+      activation_state: 0,
+      title: params[:titulo],
+      description: params[:descripcion])
 
     @current_user.thesis_projects << thesis_project
     @current_user.save

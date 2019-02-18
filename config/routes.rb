@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 	get '/home', to: 'home#view'
 	post '/login', to: 'sessions#create'
 	post 'file/load_post', to: 'file#load_post'
-	
+	get '/users/:id', to: 'users#find'
+	get '/getUserInfo', to: 'users#getActualUserInfo'
+	get '/project/find/:userId', to: 'project#getProjectForUser'
 	resources :users
 	
 	get '*path', to: "users#new"

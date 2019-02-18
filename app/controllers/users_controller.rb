@@ -5,6 +5,16 @@ class UsersController < ApplicationController
 		render json: User.all.to_json(only: [:email, :created_at])
 	end
 
+	def getActualUserInfo
+		authenticate_request!
+		render json: @current_user
+	end
+
+	def find			
+		user = User.find(params[:id])
+		render json: user.to_json
+	end
+
 	def create
 		user = User.new(user_params)
 

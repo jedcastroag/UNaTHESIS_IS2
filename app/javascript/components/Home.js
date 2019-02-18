@@ -24,7 +24,7 @@ class Home extends React.Component {
 			this.setState({
 				user_type_id: response['data']['user_type_id'],
 				response: response['data']['data']
-			});
+			});			
 			console.log(response.data);
 		}).catch(error => console.log("Error " + error));
 	}

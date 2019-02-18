@@ -13,7 +13,11 @@
 ActiveRecord::Schema.define(version: 2019_02_15_052219) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
+  enable_extension "postgis"
+  enable_extension "postgis_tiger_geocoder"
+  enable_extension "postgis_topology"
 
   create_table "comments", force: :cascade do |t|
     t.bigint "thesis_project_id"
@@ -29,6 +33,13 @@ ActiveRecord::Schema.define(version: 2019_02_15_052219) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["thesis_projects_user_id"], name: "index_event_logs_on_thesis_projects_user_id"
+  end
+
+  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
+    t.string "auth_name", limit: 256
+    t.integer "auth_srid"
+    t.string "srtext", limit: 2048
+    t.string "proj4text", limit: 2048
   end
 
   create_table "support_documents", force: :cascade do |t|
@@ -55,7 +66,9 @@ ActiveRecord::Schema.define(version: 2019_02_15_052219) do
   end
 
   create_table "thesis_projects", force: :cascade do |t|
+    t.string "title", null: false
     t.string "document", null: false
+    t.text "description", null: false
     t.boolean "approbation_state", null: false
     t.boolean "activation_state", null: false
     t.datetime "created_at", null: false

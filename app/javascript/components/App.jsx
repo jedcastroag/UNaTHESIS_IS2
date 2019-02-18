@@ -10,6 +10,7 @@ import LoadProjectForm from './LoadProjectForm'
 import ViewProject from './ViewProject'
 import ProtectedRoute from './ProtectedRoute'
 import Home from './Home'
+import UploadThesisConcept from './UploadThesisConcept'
 
 /** 
  * All the application's paths must be declarated this.
@@ -26,7 +27,8 @@ import Home from './Home'
  { path: "/", exact: null, component: Home},
  { path: "/project/load", exact: null, component: LoadProjectForm},
  { path: "/project/view", exact: null, component: ViewProject },
- { path: "/404.html", exact:null, restricted: false }
+ { path: "/404.html", exact:null, restricted: false },
+ { path: "/load/:id", exact:null, component: UploadThesisConcept}
  ];
 
  class App extends React.Component {
