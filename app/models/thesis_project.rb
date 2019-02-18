@@ -1,0 +1,2 @@
+class ThesisProject < ApplicationRecord
+end

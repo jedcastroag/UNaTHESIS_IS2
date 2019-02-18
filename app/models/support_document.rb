@@ -1,0 +1,2 @@
+class SupportDocument < ApplicationRecord
+end

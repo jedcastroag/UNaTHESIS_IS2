@@ -1,0 +1,3 @@
+<%= form_with(model: @post, local: true) do |form| %>
+    <%= react_component("LoadProjectForm", { greeting: "Hello from react-rails." }) %>
+<% end %>
