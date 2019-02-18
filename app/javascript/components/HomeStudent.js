@@ -82,7 +82,7 @@ class HomeStudent extends React.Component {
 			<Header dividing as="h2">{ this.props.data.thesis.title }
 			<Label color="teal">En revisión</Label> </Header>
 			
-			<PdfViewer />
+			<PdfViewer title={this.props.data.thesis.title} />
 
 			<Comments comments= { this.props['data']['comments'] }/>
 
