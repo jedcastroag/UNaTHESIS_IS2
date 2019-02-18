@@ -6,7 +6,7 @@ import PDFObject from 'pdfobject';
 
 import { Button } from 'semantic-ui-react';
 
-import Http from '../services/restservices';
+import Http from '../services/RestServices';
 
 const GET_PDF_PATH = 'file/download_project';
 
@@ -34,6 +34,8 @@ class PDFRenderizerContainer extends React.Component {
 		this.state = {
 			numPages: null,
 			pageNumber: 1,
+			prevEnabled: true,
+			nextEnabled: true
 		}
 
 		this.onDocumentLoadSuccess = this.onDocumentLoadSuccess.bind(this);
@@ -45,11 +47,21 @@ class PDFRenderizerContainer extends React.Component {
 		this.setState({
 			numPages: document.numPages
 		});
+		this.changePage(0);
 	}
 
 	changePage(offset) {
 		this.setState((state, props) => {
-			return {pageNumber: state.pageNumber + offset};
+			if(state.numPages == undefined) return {};
+
+			var nEnabled = !((state.pageNumber + offset + 1) > state.numPages);
+			var pEnabled = !((state.pageNumber + offset - 1) < 1);
+
+			return { 
+				pageNumber: state.pageNumber + offset, 
+				prevEnabled: pEnabled,
+				nextEnabled: nEnabled 
+			};
 		});
 	}
 
@@ -62,8 +74,10 @@ class PDFRenderizerContainer extends React.Component {
 	showButtons = () => {
 		if(this.state.numPages != null)
 			return <React.Fragment>
-		<Button primary onClick={ this.previousPage } >Anterior</Button>
-		<Button secondary onClick={ this.nextPage }>Siguiente</Button>
+		<Button.Group fluid compact>
+		<Button primary onClick={ this.previousPage } disabled={ !this.state.prevEnabled }>Anterior</Button>
+		<Button secondary onClick={ this.nextPage } disabled={ !this.state.nextEnabled }>Siguiente</Button>
+		</Button.Group>
 		</React.Fragment>;
 	}
 
@@ -157,7 +171,7 @@ class PdfViewer extends React.Component {
 		return (
 			<React.Fragment>
 			{ this.renderPDF() }
-			<Button primary onClick={ this.savePDF }>Descargar</Button>
+			<Button basic compact attached='bottom' onClick={ this.savePDF }>Descargar</Button>
 			</React.Fragment>
 			);
 	}

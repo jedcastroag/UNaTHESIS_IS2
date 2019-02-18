@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import { Button, Form, Grid, Header, Segment, Message, Container } from 'semantic-ui-react'
 
-import auth from '../services/auth';
+import auth from '../services/Auth';
 
 class OnlyLoginForm extends React.Component {
   constructor(props) {

@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import Redirect from 'react-router-dom'
 
-import Http from '../services/restservices'
+import Http from '../services/RestServices'
 
 import HomeJury from './HomeJury'
 import HomeStudent from './HomeStudent'
