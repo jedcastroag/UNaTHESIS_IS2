@@ -43,24 +43,20 @@ class Comments extends React.Component {
 		super(props);
 	}
 
-/*
-*/
-
-render () {
-	console.log(this.props.comments);
-	return (
-		<React.Fragment>
-		<Header dividing as='h4'>Comentarios</Header>
-		{
-			this.props.comments.map(function(comment, index) {
-				return <Comment key={ "comment_" + index } 
-				content={ comment.content } title={ comment.title } 
-				role={ comment.role } />;
-			})
-		}
-		</React.Fragment>
-		);
-}
+	render () {
+		return (
+			<React.Fragment>
+			<Header dividing as='h4'>Comentarios</Header>
+			{
+				this.props.comments.map(function(comment, index) {
+					return <Comment key={ "comment_" + index } 
+					content={ comment.content } title={ comment.title } 
+					role={ comment.role } />;
+				})
+			}
+			</React.Fragment>
+			);
+	}
 }
 
 Comments.defaultProps = {
