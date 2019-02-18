@@ -8,7 +8,8 @@ class ThesisProjectUserTest < ActiveSupport::TestCase
   		password: "mypassword", password_confirmation: "mypassword", user_type_id: 2
   		@thesis_project = ThesisProject.create document: "/doc", 
   		approbation_state: true, activation_state: true, 
-  		title: "Aplicaciones de la Ingeniería de Software en la vida campesina"
+  		title: "Aplicaciones de la Ingeniería de Software en la vida campesina",
+  		description: "Here the description"
   		
   		@user.thesis_projects << @thesis_project
 		@user2.thesis_projects << @thesis_project
@@ -34,7 +35,8 @@ class ThesisProjectUserTest < ActiveSupport::TestCase
 	test "should be able to save a new thesis project" do
 		new_thesis = ThesisProject.create document: "/doc2", 
   		approbation_state: true, activation_state: true,
-  		title: "Aplicaciones de la Ingeniería de Software en la vida campesina"
+  		title: "Aplicaciones de la Ingeniería de Software en la vida campesina",
+  		description: "Here the description"
   		@user.thesis_projects << new_thesis
   		@user2.thesis_projects << new_thesis
 

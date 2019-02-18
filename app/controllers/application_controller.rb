@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
 		decoded = payload
 		
 		unless decoded
-			puts "DECODED: #{decoded}"
 			raise 'Invalid Request'
 		end
 
@@ -17,7 +16,6 @@ class ApplicationController < ActionController::Base
 		payload = request.headers['Authorization'].split().last
 		TokenService.instance.validate payload
 	rescue Exception => error
-		puts "ERROR: #{error}"
 		false
 	end
 

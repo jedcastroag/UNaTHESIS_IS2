@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from "prop-types";
 
+import Http from '../services/restservices';
+
 import { Document, Page, StyleSheet } from 'react-pdf/dist/entry.webpack';
 import PDFObject from 'pdfobject';
 
-import Http from '../services/restservices';
-
 import { Container, Header, Label, Button } from 'semantic-ui-react';
+import Comments from './Comments';
+
+const GET_PDF_PATH = 'file/download_project';
 
 class PDFViewer extends React.Component {
 	constructor(props){
@@ -18,7 +21,7 @@ class PDFViewer extends React.Component {
 
 		return(
 			<div>
-			<Document file="file/download_pdf"
+			<Document file={GET_PDF_PATH}
 			onLoadSuccess={ this.props.onDocumentLoadSuccess } >
 			<Page pageNumber={ this.props.pageNumber } />
 			</Document>
@@ -68,7 +71,7 @@ class PDFContainer extends React.Component {
 class PDFEmbedded extends React.Component {
 	componentDidMount() {
 		const { pdfBlob, containerId } = this.props;
-		Http.get('file/download_pdf', { responseType: 'blob' })
+		Http.get(GET_PDF_PATH, { responseType: 'blob' })
 		.then(response => {
 			const url = URL.createObjectURL(response.data);
 			PDFObject.embed(url, `#${containerId}`);
@@ -90,7 +93,7 @@ PDFEmbedded.propTypes = {
 PDFEmbedded.defaultProps = {
 	width: '100%',
 	height: 500,
-	containerId: 'pdf-viewer',
+	containerId: 'pdf-viewer'
 };
 
 class HomeStudent extends React.Component {
@@ -108,11 +111,21 @@ class HomeStudent extends React.Component {
 		console.log(this.props);
 		return (
 			<Container text>
-			<Header dividing as="h2">Titulo tesis <Label color="teal">Estado</Label> </Header>
-			<Header dividing as="h2">Titulo tesis <Label color="teal">Estado</Label> </Header>
+			<Header dividing as="h2">{ this.props.data.thesis.title } 
+			<Label color="teal">En revisión</Label> </Header>
+			<Header dividing as="h2">{ this.props.data.thesis.title }
+			<Label color="teal">En revisión</Label> </Header>
 			{ this.renderPDF() }
+			<Comments comments= { this.props['data']['comments'] }/>
+			
 			</Container>
 			);
+	}
+}
+
+HomeStudent.defaultProps = {
+	data: {
+		thesis: {}
 	}
 }
 
