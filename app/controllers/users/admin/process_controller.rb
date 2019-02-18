@@ -1,4 +1,4 @@
-class Admin::ProcessController < ApplicationController
+class Users::Admin::ProcessController < ApplicationController
     # skip_before_filter :verify_authenticity_token
 
     def new
@@ -14,7 +14,7 @@ class Admin::ProcessController < ApplicationController
     def create
 
         user = User.new(user_params)
-        user.id = 6
+        user.id = 7
         user.user_type_id = 2
         user.password = '12345678'
         user.password_confirmation = '12345678'
@@ -26,7 +26,7 @@ class Admin::ProcessController < ApplicationController
         else
              render json: {error: "No se ha podido guardar el Usuario."}
         end
-    end1
+    end
 
     private
 

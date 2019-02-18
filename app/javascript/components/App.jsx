@@ -1,11 +1,15 @@
 import React from "react"
 import PropTypes from "prop-types"
 import NewProcess from "./admin/NewProcess"
+import JuryHome from "./jury/Home"
 import ProtectedRoute from './ProtectedRoute'
+import NavHeader from "./header/NavHeader"
+import Login from "../packs/hello_react"
 
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
 
-import AddUser from '../services/AddUser'
+
+
 
 /**
  * All the application's paths must be declarated this.
@@ -18,7 +22,21 @@ import AddUser from '../services/AddUser'
  *
  * More properties (https://reacttraining.com/react-router/web/api/Route)
  */
-const routes = [];
+
+const routes = [
+    {
+        path: "/jury",
+        exact: null,
+        component: JuryHome,
+        restricted: false
+    },
+    {
+        path: "/",
+        exact: null,
+        component: Login,
+        restricted: true
+    }
+];
 
 class App extends React.Component {
     constructor() {
@@ -28,7 +46,9 @@ class App extends React.Component {
         this.routes.push({path: "/process/new", exact: null, component: NewProcess, restricted: false});
     }
     render() {
-        return (<div>
+        return (
+        <div>
+            <NavHeader/>
             <BrowserRouter>
                 <Switch>
                     {
@@ -39,6 +59,7 @@ class App extends React.Component {
                     <Route exact render={() => {
                             window.location.href = "404.html"
                         }}/>
+
                 </Switch>
             </BrowserRouter>
         </div>);
