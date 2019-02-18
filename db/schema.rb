@@ -21,10 +21,13 @@ ActiveRecord::Schema.define(version: 2019_02_15_052219) do
 
   create_table "comments", force: :cascade do |t|
     t.bigint "thesis_project_id"
+    t.bigint "users_id"
+    t.string "title", null: false
     t.string "content", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["thesis_project_id"], name: "index_comments_on_thesis_project_id"
+    t.index ["users_id"], name: "index_comments_on_users_id"
   end
 
   create_table "event_logs", force: :cascade do |t|
@@ -103,6 +106,7 @@ ActiveRecord::Schema.define(version: 2019_02_15_052219) do
   end
 
   add_foreign_key "comments", "thesis_projects"
+  add_foreign_key "comments", "users", column: "users_id"
   add_foreign_key "event_logs", "thesis_projects_users"
   add_foreign_key "thesis", "thesis_projects", column: "thesis_project_associated_id"
   add_foreign_key "thesis", "thesis_projects", column: "thesis_project_father_id"

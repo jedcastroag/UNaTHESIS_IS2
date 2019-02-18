@@ -4,36 +4,36 @@ import { Container, Row, Col } from 'react-grid-system';
 
 import { Button, Input, Checkbox, Form } from 'semantic-ui-react'
 
-import Http from '../services/restservices'
+import Http from '../services/RestServices'
 
 const FormTutor = props => (
   <div className="formTutor">
   <Form.Group inline>
   <Form.Field>
   <label>Dni</label>
-  <input placeholder='Dni' name={'dni_' + props.number} />
+  <input placeholder='DNI' name={ 'dni_' + props.number } />
   </Form.Field>
   <Form.Field>
   <label>Nombres</label>
-  <input placeholder='Nombres' name={'nombres_' + props.number} />
+  <input placeholder='Nombres' name={ 'name_' + props.number } />
   </Form.Field>
   <Form.Field>
   <label>Apellidos</label>
-  <input placeholder='Apellidos' name={'apellidos_' + props.number} />
+  <input placeholder='Apellidos' name={ 'surname_' + props.number } />
   </Form.Field>
   </Form.Group>
   <Form.Group inline>
   <Form.Field>
   <label>Institución</label>
-  <input placeholder='Institución' name={'institucion_' + props.number} />
+  <input placeholder='Institución' name={ 'institution_' + props.number } />
   </Form.Field>
   <Form.Field>
   <label>País</label>
-  <input placeholder='País' name={'pais_' + props.number} />
+  <input placeholder='País' name={ 'country_' + props.number } />
   </Form.Field>
   <Form.Field>
   <label>Rol</label>
-  <select name={'rol_' + props.number}>
+  <select name={ 'role_' + props.number }>
   <option>Director</option>
   <option>Tutor</option>
   <option>Asesor</option>
@@ -65,9 +65,7 @@ class LoadFile extends React.Component {
     event.preventDefault();
     const data = new FormData(event.target);
 
-    Http.post('/file/load_post', data).then(response =>
-      console.log(response)
-      ).catch( error => 
+    Http.post('/file/load_post', data).then().catch( error => 
       console.log("ERROR " + error)
       );
     }
@@ -82,11 +80,11 @@ class LoadFile extends React.Component {
         <Form id="formProject" onSubmit={ this.submitForm }>
         <Form.Field>
         <label>Titulo</label>
-        <input placeholder='Titulo' name='titulo' />
+        <input placeholder='Titulo' name='project_title' />
         </Form.Field>
         <Form.Field>
         <label>Descripción</label>
-        <textarea placeholder='Descripción' name="descripcion" ></textarea>
+        <textarea placeholder='Descripción' name="project_description" ></textarea>
         </Form.Field>
         <Form.Field>
         <label>Información directores, tutores y asesores</label>
@@ -111,7 +109,11 @@ class LoadFile extends React.Component {
         </Form.Field>
         <Form.Field>
         <label>Comentarios adicionales</label>
+<<<<<<< HEAD
         <textarea placeholder='Comentarios adicionales' name="comentarios" ></textarea>
+=======
+        <textarea placeholder='Comentarios adicionales' name="description" ></textarea>
+>>>>>>> remoteMaster/development
         </Form.Field>
         <Form.Field>
         <Button type='submit'>Cargar proyecto</Button>

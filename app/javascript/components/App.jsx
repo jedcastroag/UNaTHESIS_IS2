@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 
-import auth from '../services/auth'
+import auth from '../services/Auth'
 import LoginForm from './LoginForm'
 import MainMenu from './MainMenu'
 import LoadProjectForm from './LoadProjectForm'

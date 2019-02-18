@@ -34,4 +34,4 @@ For testing purposes, was created four users by each rol (Admin, Student, Tutor,
 
 ## DEPLOY
 
-Remind change `config/master.key` before deployment.
+Remember change `config/master.key` before deployment and the `jwt.key` keys

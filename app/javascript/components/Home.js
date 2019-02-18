@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import Redirect from 'react-router-dom'
 
-import Http from '../services/restservices'
+import Http from '../services/RestServices'
 
 import HomeJury from './HomeJury'
 import HomeStudent from './HomeStudent'
@@ -23,9 +23,14 @@ class Home extends React.Component {
 		Http.get(HOME_PATH).then(response => {
 			this.setState({
 				user_type_id: response['data']['user_type_id'],
+<<<<<<< HEAD
 				response: response['data']['data']
 			});			
 			console.log(response.data);
+=======
+				response: response['data']
+			});
+>>>>>>> remoteMaster/development
 		}).catch(error => console.log("Error " + error));
 	}
 
@@ -34,7 +39,7 @@ class Home extends React.Component {
 			case 1:
 			return <HomeAdmin data={this.state.response}/>;
 			case 2:
-			return <HomeStudent data={this.state.response}/>;
+			return <HomeStudent data={ this.state.response }/>;
 			case 3:
 			return <HomeTutor data={this.state.response}/>;
 			case 4:
