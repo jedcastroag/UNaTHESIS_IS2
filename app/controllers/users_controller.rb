@@ -5,6 +5,16 @@ class UsersController < ApplicationController
 		render json: User.all.to_json(only: [:email, :created_at])
 	end
 
+	def getActualUserInfo
+		authenticate_request!
+		render json: @current_user
+	end
+
+	def find			
+		user = User.find(params[:id])
+		render json: user.to_json
+	end
+
 	def create
 		user = User.new(user_params)
 
@@ -19,8 +29,25 @@ class UsersController < ApplicationController
 		end
 	end
 
+	def home
+		user = User.find_by(id: 3)
+		
+		data = {}
+
+		if(user.user_type_id == 1)
+			thesisProjectUser = ThesisProjectsUser.find_by(user_id: user.id)
+			data[:thesis_info] = ThesisProject.find_by(id: thesisProjectUser.id)
+		end
+
+		render json: {
+			user_type_id: 1,
+			data: headers
+		}
+	end
+
 	private
 	def user_params
-		params.require(:user).permit(:email, :password, :name, :surname)
+		params.require(:user).permit(:email, :password, 
+			:name, :surname, :user_type_id)
 	end
 end

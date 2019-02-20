@@ -14,12 +14,21 @@ class FileControllerTest < ActionDispatch::IntegrationTest
 		@token = JSON.parse(response.body)['token']
 	end
 
-	test 'should be block an attempt to identified user to download a project' do
-		get '/file/download_project', params: {}, headers: { 
+	test 'should be detect an identified user' do
+		get home_path, params: {}, headers: { 
 			'Authorization' => "Bearer 666" 
 		}
 
 		body = JSON.parse(response.body)
 		assert_response :unauthorized
+	end
+
+	test 'should be retrieve the home information' do
+		get '/home', params: {}, headers: { 
+			'Authorization' => "Bearer #{@token}" 
+		}
+
+		body = JSON.parse(response.body)
+		assert_response :success
 	end
 end

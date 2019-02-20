@@ -20,8 +20,8 @@
 * [Install Semantic UI](https://github.com/ashtonthomas/sample-rails-react-semantic-ui-app)
 * Run `bundle install`
 * Run `yarn install`
-* Run `foreman start` or `rails server`
 * Run rails `db:migrate` and rails `db:seed`
+* Run `foreman start` or `rails server`
 * Heroku version is in https://unthesis.herokuapp.com/.
 
 ## Unit testing
@@ -31,3 +31,7 @@ After git clone or pull, run `rails test` to run the test suit and verify that t
 ## Testing Credentials
 
 For testing purposes, was created four users by each rol (Admin, Student, Tutor, Jury). The credentials for access at the platform will be the type user name followed by '@test.com', eg. admin@test.com. The password is 12345678
+
+## DEPLOY
+
+Remember change `config/master.key` before deployment and the `jwt.key` keys

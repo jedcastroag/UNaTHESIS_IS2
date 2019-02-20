@@ -1,15 +1,15 @@
 Rails.application.routes.draw do
 	root 'users#new'
-	
-	#get '/login', to: 'sessions#new'	
-	#get '/signup', to: 'users#new'
 
+	get '/home', to: 'home#view'
 	post '/login', to: 'sessions#create'
+	post 'file/load_post', to: 'file#load_post'
+	get '/users/:id', to: 'users#find'
+	get '/getUserInfo', to: 'users#getActualUserInfo'
+	get '/project/find/:userId', to: 'project#getProjectForUser'
+	get 'file/download_project', to: 'file#download_pdf'
+	
 	resources :users
-
-	#get 'file/load'
-	#get 'file/view'
-	#match "file/load_post" => "file#load_post", via: [:post]
 	
 	get '*path', to: "users#new"
 end

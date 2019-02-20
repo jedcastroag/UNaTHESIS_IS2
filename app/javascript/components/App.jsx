@@ -3,11 +3,14 @@ import PropTypes from "prop-types"
 
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 
-import auth from '../services/auth'
+import auth from '../services/Auth'
 import LoginForm from './LoginForm'
+import MainMenu from './MainMenu'
 import LoadProjectForm from './LoadProjectForm'
 import ViewProject from './ViewProject'
 import ProtectedRoute from './ProtectedRoute'
+import Home from './Home'
+import UploadThesisConcept from './UploadThesisConcept'
 
 /** 
  * All the application's paths must be declarated this.
@@ -21,15 +24,16 @@ import ProtectedRoute from './ProtectedRoute'
  * More properties (https://reacttraining.com/react-router/web/api/Route)
  */
  const routes = [
+ { path: "/", exact: null, component: Home},
  { path: "/project/load", exact: null, component: LoadProjectForm},
  { path: "/project/view", exact: null, component: ViewProject },
- { path: "/404.html", exact:null, restricted: false }
+ { path: "/404.html", exact:null, restricted: false },
+ { path: "/load/:id", exact:null, component: UploadThesisConcept}
  ];
 
  class App extends React.Component {
  	constructor() {
  		super();
-
  		this.routes = routes;
  		this.routes.push({ 
  			path: "/login", 
@@ -41,12 +45,17 @@ import ProtectedRoute from './ProtectedRoute'
  			restricted: false
  		});
 
- 		this.state = { isAuthenticated: auth.isAuthenticated() }
+ 		this.state = { 
+ 			isAuthenticated: auth.isAuthenticated()
+ 		};
+
+ 		this.logout = this.logout.bind(this);
  	}
 
  	updateAuth() {
  		this.setState({
  			isAuthenticated: auth.isAuthenticated()
+ 			//, userType: auth.getUserType()
  		});
  	}
 
@@ -56,10 +65,20 @@ import ProtectedRoute from './ProtectedRoute'
  		this.updateAuth();
  	}
 
+ 	renderHeader() {
+ 		if(this.state.isAuthenticated)
+ 			return <MainMenu userType={ this.state.userType } 
+ 			logout={ this.logout } updateAuth={ this.updateAuth } />;
+ 		return null;
+ 	}
+
  	render () {
  		return (
- 			<div>
  			<BrowserRouter>
+ 			<div>
+
+ 			{ this.renderHeader() }
+
  			<Switch>
  			{
  				this.routes.map(function(route, index) {
@@ -68,8 +87,9 @@ import ProtectedRoute from './ProtectedRoute'
  			}
  			<Route exact render={() => {window.location.href="404.html"}} />
  			</Switch>
- 			</BrowserRouter>
+ 		
  			</div>
+ 			</BrowserRouter>
  			);	
  	}
  }
