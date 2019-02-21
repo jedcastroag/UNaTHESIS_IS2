@@ -12,7 +12,7 @@ import ProtectedRoute from './ProtectedRoute'
 import Home from './Home'
 import UploadThesisConcept from './UploadThesisConcept'
 import UsersAdmin from './UsersAdmin'
-import UsersAdminEdit from './UsersAdminEdit'
+import UsersAdminAdd from './UsersAdminAdd'
 /** 
  * All the application's paths must be declarated this.
  * 
@@ -31,7 +31,7 @@ const routes = [
 	{ path: "/404.html", exact: null, restricted: false },
 	{ path: "/load/:id", exact: null, component: UploadThesisConcept },
 	{ path: "/admin/users", exact: null, component: UsersAdmin },
-	{ path: "/admin/users/edit", exact: null, component: UsersAdminEdit }
+	{ path: "/admin/users/add", exact: null, component: UsersAdminAdd }
 
 ];
 

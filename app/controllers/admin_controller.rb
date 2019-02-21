@@ -20,6 +20,7 @@ class AdminController < ApplicationController
   end
 
   def delete_user
-    User.find(params[:id]).destroy
+    User.find(params[:user_id]).destroy
+    render json: 200
   end
 end

@@ -28,7 +28,7 @@ const RowUser = props => (
 )
 
 
-class UsersAdmin extends React.Component {
+class ProjectsAdmin extends React.Component {
     constructor(props) {
         super(props)
         this.state =
@@ -65,24 +65,24 @@ class UsersAdmin extends React.Component {
                         </Col>
                     </Row>
                     <Row>
-                            <Table celled>
-                                <Table.Header>
-                                    <Table.Row>
-                                        <Table.HeaderCell>Nombres</Table.HeaderCell>
-                                        <Table.HeaderCell>Apellidos</Table.HeaderCell>
-                                        <Table.HeaderCell>Email</Table.HeaderCell>
-                                        <Table.HeaderCell>Eliminar</Table.HeaderCell>
-                                    </Table.Row>
-                                </Table.Header>
+                        <Table celled>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell>Nombres</Table.HeaderCell>
+                                    <Table.HeaderCell>Apellidos</Table.HeaderCell>
+                                    <Table.HeaderCell>Email</Table.HeaderCell>
+                                    <Table.HeaderCell>Eliminar</Table.HeaderCell>
+                                </Table.Row>
+                            </Table.Header>
 
-                                <Table.Body>
-                                    {this.state.user_rows}
+                            <Table.Body>
+                                {this.state.user_rows}
 
-                                </Table.Body>
-                            </Table>
-                        
+                            </Table.Body>
+                        </Table>
+
                     </Row>
-                    
+
                 </Container>
             </div>
         );
@@ -90,4 +90,4 @@ class UsersAdmin extends React.Component {
 }
 
 
-export default UsersAdmin
+export default ProjectsAdmin
