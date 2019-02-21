@@ -25,8 +25,7 @@ class FileController < ApplicationController
   end
 
   def load_post
-    authenticate_request!
-
+    authenticate_request!    
     file_path = process_file(
       params[:file],
       Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'

@@ -134,6 +134,7 @@ class PdfViewer extends React.Component {
 		this.state = {
 			projectUrl: null
 		};
+		
 		this.downloadPDF();
 		this.savePDF = this.savePDF.bind(this);
 	}
@@ -152,7 +153,7 @@ class PdfViewer extends React.Component {
 			var anchorElem = document.createElement("a");
 			anchorElem.style = "display: none";
 			anchorElem.href = url;
-			anchorElem.download = this.props.data.thesis.title;
+			anchorElem.download = this.props.title;
 
 			document.body.appendChild(anchorElem);
 			anchorElem.click();
