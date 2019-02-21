@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= full_title(yield(:title)) %></title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<head>
+  <title><%= full_title(yield(:title)) %></title>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application' %>
+  <%= meta_tags(
+    :title => "UnThesis",
+    :viewport => "width=device-width, initial-scale=1.0, maximum-scale=1.0",
+    :description => "Tesis manager for Universidad Nacional de Colombia",
+    :og => {
+      :type => "website"
+    }) 
+    %>
 
-  </head>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-  <body>
-    <%= yield %>
-  </body>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+  <%= javascript_pack_tag 'application' %>
+  <%= stylesheet_pack_tag 'application' %>  
+</head>
+
+<body>
+  <%= yield %>
+</body>
 </html>

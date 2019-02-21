@@ -27,3 +27,7 @@
 /node_modules
 yarn-debug.log*
 .yarn-integrity
+/config/database.
+/files/*
+/config/jwt*
+/config/master.key

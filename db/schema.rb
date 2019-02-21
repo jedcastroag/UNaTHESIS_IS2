@@ -16,11 +16,14 @@ ActiveRecord::Schema.define(version: 2018_11_09_015133) do
   enable_extension "plpgsql"
 
   create_table "comments", force: :cascade do |t|
-    t.bigint "thesis_project_user_id"
+    t.bigint "thesis_project_id"
+    t.bigint "users_id"
+    t.string "title", null: false
     t.string "content", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["thesis_project_user_id"], name: "index_comments_on_thesis_project_user_id"
+    t.index ["thesis_project_id"], name: "index_comments_on_thesis_project_id"
+    t.index ["users_id"], name: "index_comments_on_users_id"
   end
 
   create_table "event_logs", force: :cascade do |t|
@@ -39,13 +42,13 @@ ActiveRecord::Schema.define(version: 2018_11_09_015133) do
     t.index ["thesis_project_log_id"], name: "index_support_documents_on_thesis_project_log_id"
   end
 
-  create_table "theses", force: :cascade do |t|
+  create_table "thesis", force: :cascade do |t|
     t.bigint "thesis_project_father_id"
     t.bigint "thesis_project_associated_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["thesis_project_associated_id"], name: "index_theses_on_thesis_project_associated_id"
-    t.index ["thesis_project_father_id"], name: "index_theses_on_thesis_project_father_id"
+    t.index ["thesis_project_associated_id"], name: "index_thesis_on_thesis_project_associated_id"
+    t.index ["thesis_project_father_id"], name: "index_thesis_on_thesis_project_father_id"
   end
 
   create_table "thesis_project_rols", force: :cascade do |t|
@@ -55,7 +58,9 @@ ActiveRecord::Schema.define(version: 2018_11_09_015133) do
   end
 
   create_table "thesis_projects", force: :cascade do |t|
+    t.string "title", null: false
     t.string "document", null: false
+    t.text "description", null: false
     t.boolean "approbation_state", null: false
     t.boolean "activation_state", null: false
     t.datetime "created_at", null: false
@@ -66,9 +71,9 @@ ActiveRecord::Schema.define(version: 2018_11_09_015133) do
     t.bigint "thesis_project_id", null: false
     t.bigint "user_id", null: false
     t.bigint "thesis_project_rol_id"
-    t.index ["thesis_project_id", "user_id"], name: "index_thesis_projects_users_on_thesis_project_id_and_user_id"
+    t.index ["thesis_project_id", "user_id"], name: "index_thesis_projects_users_on_thesis_project_id_and_user_id", unique: true
     t.index ["thesis_project_rol_id"], name: "index_thesis_projects_users_on_thesis_project_rol_id"
-    t.index ["user_id", "thesis_project_id"], name: "index_thesis_projects_users_on_user_id_and_thesis_project_id"
+    t.index ["user_id", "thesis_project_id"], name: "index_thesis_projects_users_on_user_id_and_thesis_project_id", unique: true
   end
 
   create_table "user_types", force: :cascade do |t|
@@ -82,17 +87,21 @@ ActiveRecord::Schema.define(version: 2018_11_09_015133) do
     t.string "name", null: false
     t.string "surname", null: false
     t.string "email", null: false
+    t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email"
     t.index ["user_type_id"], name: "index_users_on_user_type_id"
   end
 
-  add_foreign_key "comments", "thesis_projects_users", column: "thesis_project_user_id"
+  add_foreign_key "comments", "thesis_projects"
+  add_foreign_key "comments", "users", column: "users_id"
   add_foreign_key "event_logs", "thesis_projects_users"
-  add_foreign_key "theses", "thesis_projects", column: "thesis_project_associated_id"
-  add_foreign_key "theses", "thesis_projects", column: "thesis_project_father_id"
+  add_foreign_key "thesis", "thesis_projects", column: "thesis_project_associated_id"
+  add_foreign_key "thesis", "thesis_projects", column: "thesis_project_father_id"
   add_foreign_key "thesis_projects_users", "thesis_project_rols"
   add_foreign_key "users", "user_types"
+<<<<<<< HEAD
   create_table "rol_proyecto_teses", force: :cascade do |t|
     t.integer "id_rol_proyecto_tesis"
     t.string "nombre_rol_proyecto_tesis"
@@ -100,4 +109,6 @@ ActiveRecord::Schema.define(version: 2018_11_09_015133) do
     t.datetime "updated_at", null: false
   end
 
+=======
+>>>>>>> c83b1b7f0243efdfc1d7ef58334bdede64111252
 end
