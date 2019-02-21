@@ -7,22 +7,8 @@ import PdfViewer from "../PdfViewer"
 class Home extends React.Component {
     render() {
         return (<Container>
-            <Grid columns={3}>
-                <Grid.Row>
-                    <Grid.Column width={2}/>
-                    <Grid.Column width={12}>
-                    <PdfViewer/>
-                    </Grid.Column>
-                    <Grid.Column width={2}/>
-                </Grid.Row>
-                <Grid.Row>
-                    <Grid.Column width={2}/>
-                    <Grid.Column width={12}>
+                    <PdfViewer title="agadgf"/>
                     <Comment />
-                    </Grid.Column>
-                    <Grid.Column width={2}/>
-                </Grid.Row>
-            </Grid>
         </Container>);
     }
 }

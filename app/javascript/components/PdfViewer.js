@@ -124,7 +124,7 @@ PDFEmbedded.propTypes = {
 
 PDFEmbedded.defaultProps = {
 	width: '100%',
-	height: '500',
+	height: '500px',
 	containerId: 'pdf-viewer'
 };
 
@@ -152,7 +152,8 @@ class PdfViewer extends React.Component {
 			var anchorElem = document.createElement("a");
 			anchorElem.style = "display: none";
 			anchorElem.href = url;
-			anchorElem.download = this.props.data.thesis.title;
+			// console.log(this.props.data);
+			anchorElem.download = this.props.title;
 
 			document.body.appendChild(anchorElem);
 			anchorElem.click();

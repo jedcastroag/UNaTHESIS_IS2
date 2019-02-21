@@ -14,7 +14,7 @@ const HOME_PATH = '/home';
 class Home extends React.Component {
 	constructor(props) {
 		super(props);
-		
+
 		this.state = {
 			user_type_id: null,
 			response: null
