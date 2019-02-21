@@ -11,7 +11,8 @@ import ViewProject from './ViewProject'
 import ProtectedRoute from './ProtectedRoute'
 import Home from './Home'
 import UploadThesisConcept from './UploadThesisConcept'
-
+import UsersAdmin from './UsersAdmin'
+import UsersAdminEdit from './UsersAdminEdit'
 /** 
  * All the application's paths must be declarated this.
  * 
@@ -23,75 +24,78 @@ import UploadThesisConcept from './UploadThesisConcept'
  *
  * More properties (https://reacttraining.com/react-router/web/api/Route)
  */
- const routes = [
- { path: "/", exact: null, component: Home},
- { path: "/project/load", exact: null, component: LoadProjectForm},
- { path: "/project/view", exact: null, component: ViewProject },
- { path: "/404.html", exact:null, restricted: false },
- { path: "/load/:id", exact:null, component: UploadThesisConcept}
- ];
+const routes = [
+	{ path: "/", exact: null, component: Home },
+	{ path: "/project/load", exact: null, component: LoadProjectForm },
+	{ path: "/project/view", exact: null, component: ViewProject },
+	{ path: "/404.html", exact: null, restricted: false },
+	{ path: "/load/:id", exact: null, component: UploadThesisConcept },
+	{ path: "/admin/users", exact: null, component: UsersAdmin },
+	{ path: "/admin/users/edit", exact: null, component: UsersAdminEdit }
 
- class App extends React.Component {
- 	constructor() {
- 		super();
- 		this.routes = routes;
- 		this.routes.push({ 
- 			path: "/login", 
- 			exact: null, 
- 			componentProps: {
- 				updateAuth: this.updateAuth.bind(this)
- 			},
- 			component: LoginForm,
- 			restricted: false
- 		});
+];
 
- 		this.state = { 
- 			isAuthenticated: auth.isAuthenticated()
- 		};
+class App extends React.Component {
+	constructor() {
+		super();
+		this.routes = routes;
+		this.routes.push({
+			path: "/login",
+			exact: null,
+			componentProps: {
+				updateAuth: this.updateAuth.bind(this)
+			},
+			component: LoginForm,
+			restricted: false
+		});
 
- 		this.logout = this.logout.bind(this);
- 	}
+		this.state = {
+			isAuthenticated: auth.isAuthenticated()
+		};
 
- 	updateAuth() {
- 		this.setState({
- 			isAuthenticated: auth.isAuthenticated()
- 			//, userType: auth.getUserType()
- 		});
- 	}
+		this.logout = this.logout.bind(this);
+	}
 
- 	logout(e) {
- 		e.preventDefault();
- 		auth.logout();
- 		this.updateAuth();
- 	}
+	updateAuth() {
+		this.setState({
+			isAuthenticated: auth.isAuthenticated()
+			//, userType: auth.getUserType()
+		});
+	}
 
- 	renderHeader() {
- 		if(this.state.isAuthenticated)
- 			return <MainMenu userType={ this.state.userType } 
- 			logout={ this.logout } updateAuth={ this.updateAuth } />;
- 		return null;
- 	}
+	logout(e) {
+		e.preventDefault();
+		auth.logout();
+		this.updateAuth();
+	}
 
- 	render () {
- 		return (
- 			<BrowserRouter>
- 			<div>
+	renderHeader() {
+		if (this.state.isAuthenticated)
+			return <MainMenu userType={this.state.userType}
+				logout={this.logout} updateAuth={this.updateAuth} />;
+		return null;
+	}
 
- 			{ this.renderHeader() }
+	render() {
+		return (
+			<BrowserRouter>
+				<div>
 
- 			<Switch>
- 			{
- 				this.routes.map(function(route, index) {
- 					return <ProtectedRoute { ...route } key={ index } />;
- 				}, this)
- 			}
- 			<Route exact render={() => {window.location.href="404.html"}} />
- 			</Switch>
- 		
- 			</div>
- 			</BrowserRouter>
- 			);	
- 	}
- }
+					{this.renderHeader()}
 
- export default App
+					<Switch>
+						{
+							this.routes.map(function (route, index) {
+								return <ProtectedRoute {...route} key={index} />;
+							}, this)
+						}
+						<Route exact render={() => { window.location.href = "404.html" }} />
+					</Switch>
+
+				</div>
+			</BrowserRouter>
+		);
+	}
+}
+
+export default App
