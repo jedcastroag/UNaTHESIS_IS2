@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 	get 'admin/fetch_users_data', to: 'admin#fetch_users_data'
 	get 'admin/fetch_user_data', to: 'admin#fetch_user_data'
 	match 'admin/delete_user', to: 'admin#delete_user', via: [:post]
+	match 'admin/add_user', to: 'admin#add_user', via: [:post]
 
 	resources :users
 	

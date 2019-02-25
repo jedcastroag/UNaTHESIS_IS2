@@ -61,7 +61,7 @@ class UsersAdmin extends React.Component {
                             <h1>Usuarios</h1>
                         </Col>
                         <Col>
-                            <Button class="ui right floated button" href="/admin/users/add"><Link to="/admin/users/add">Añadir usuario</Link></Button>
+                            <Button class="ui right floated button"><Link to="/admin/users/add">Añadir usuario</Link></Button>
                         </Col>
                     </Row>
                     <Row>

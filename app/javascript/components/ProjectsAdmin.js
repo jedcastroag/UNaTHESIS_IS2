@@ -71,7 +71,7 @@ class ProjectsAdmin extends React.Component {
                                     <Table.HeaderCell>Nombres</Table.HeaderCell>
                                     <Table.HeaderCell>Apellidos</Table.HeaderCell>
                                     <Table.HeaderCell>Email</Table.HeaderCell>
-                                    <Table.HeaderCell>Eliminar</Table.HeaderCell>
+                                    <Table.HeaderCell>Asignar roles</Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>
 

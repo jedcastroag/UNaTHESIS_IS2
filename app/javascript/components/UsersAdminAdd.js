@@ -18,10 +18,10 @@ class UsersAdminAdd extends React.Component {
     submitForm(event) {
         event.preventDefault();
         const data = new FormData(event.target);
-
-        Http.post('/admin/add_user', data).then().catch(error =>
-            console.log("ERROR " + error)
-        );
+        
+        Http.post('/admin/add_user', data).then().then(res => {
+            window.location.reload()
+        })
     }
 
 

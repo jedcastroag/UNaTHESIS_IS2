@@ -1,3 +1,5 @@
+require 'securerandom'
+
 class AdminController < ApplicationController
     skip_before_action :verify_authenticity_token
 
@@ -21,6 +23,15 @@ class AdminController < ApplicationController
 
   def delete_user
     User.find(params[:user_id]).destroy
+    render json: 200
+  end
+
+  def add_user
+    pass = SecureRandom.hex(10)
+    user = User.create(email: params[:email], name: params[:name], surname: params[:surname],
+                user_type_id: params[:user_type], password: pass)
+    
+    NewUserMailer.new_user(user, pass).deliver_now
     render json: 200
   end
 end

@@ -32,7 +32,6 @@ const routes = [
 	{ path: "/load/:id", exact: null, component: UploadThesisConcept },
 	{ path: "/admin/users", exact: null, component: UsersAdmin },
 	{ path: "/admin/users/add", exact: null, component: UsersAdminAdd }
-
 ];
 
 class App extends React.Component {
@@ -89,7 +88,7 @@ class App extends React.Component {
 								return <ProtectedRoute {...route} key={index} />;
 							}, this)
 						}
-						<Route exact render={() => { window.location.href = "404.html" }} />
+						<Route exact render={() => { window.location.href = "/404.html" }} />
 					</Switch>
 
 				</div>
