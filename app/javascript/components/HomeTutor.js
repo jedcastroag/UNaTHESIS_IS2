@@ -5,9 +5,7 @@ import { Redirect, BrowserRouter } from 'react-router-dom'
 import { Button, Input, Checkbox, Form, Grid, Segment, Container } from 'semantic-ui-react'
 import '../../../dist/semantic.min.css'
 
-
 class ProjectRow extends React.Component {
-
     state = {
         redirect:false,
     }

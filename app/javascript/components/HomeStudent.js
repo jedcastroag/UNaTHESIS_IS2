@@ -10,6 +10,8 @@ import PdfViewer from './PdfViewer';
 
 import defaultIcon from '../../assets/images/jury.jpg';
 
+const GET_PDF_PATH = 'student/download_project';
+
 class Details extends React.Component {
 	render () {
 		return(<h1>Details</h1>);
@@ -79,10 +81,8 @@ class HomeStudent extends React.Component {
 			<Container text>
 			<Header dividing as="h2">{ this.props.data.thesis.title } 
 			<Label color="teal">En revisión</Label> </Header>
-			<Header dividing as="h2">{ this.props.data.thesis.title }
-			<Label color="teal">En revisión</Label> </Header>
 			
-			<PdfViewer title={this.props.data.thesis.title} />
+			<PdfViewer url={ GET_PDF_PATH } title={this.props.data.thesis.title} />
 
 			<Comments comments= { this.props['data']['comments'] }/>
 

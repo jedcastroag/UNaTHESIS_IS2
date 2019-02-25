@@ -67,8 +67,11 @@ import UploadThesisConcept from './UploadThesisConcept'
 
  	renderHeader() {
  		if(this.state.isAuthenticated)
- 			return <MainMenu userType={ this.state.userType } 
+ 			return <div>
+ 			<div style={{ height: 80 }}></div>
+ 			<MainMenu userType={ this.state.userType } 
  			logout={ this.logout } updateAuth={ this.updateAuth } />;
+ 			</div>;
  		return null;
  	}
 
@@ -85,7 +88,7 @@ import UploadThesisConcept from './UploadThesisConcept'
  					return <ProtectedRoute { ...route } key={ index } />;
  				}, this)
  			}
- 			<Route exact render={() => {window.location.href="404.html"}} />
+ 			<Route exact render={() => { window.location.href="404.html" }} />
  			</Switch>
  		
  			</div>

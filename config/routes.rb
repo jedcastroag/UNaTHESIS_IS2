@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 	get '/users/:id', to: 'users#find'
 	get '/getUserInfo', to: 'users#getActualUserInfo'
 	get '/project/find/:userId', to: 'project#getProjectForUser'
-	get 'file/download_project', to: 'file#download_pdf'
+	get 'student/download_project', to: 'student#download_pdf'
 	
 	resources :users
 	
