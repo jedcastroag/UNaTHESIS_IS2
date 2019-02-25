@@ -24,6 +24,22 @@ class FileController < ApplicationController
     end
   end
 
+  def downloadPdfTutor
+    thesis_project = ThesisProject.find(params[:id])
+    
+    send_file(
+      "#{Rails.root}/#{thesis_project.document}",
+      filename: "#{ thesis_project.title }.pdf",
+      type: "application/pdf"
+    )
+  rescue => error
+    if Rails.env.production?
+      render json: { error: "Bad request" }, status: :unauthorized
+    else
+      render json: { error: error }, status: :unauthorized
+    end
+  end
+
   def load_post
     authenticate_request!    
     file_path = process_file(

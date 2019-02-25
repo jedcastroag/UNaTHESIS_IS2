@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import Http from '../services/restservices'
+import Http from '../services/RestServices'
 
 import { Button, Input, Checkbox, Form, Grid, Segment, Container } from 'semantic-ui-react'
 import '../../../dist/semantic.min.css';
@@ -9,21 +9,25 @@ import { fromByteArray } from "ipaddr.js";
 
 class CheckThesis extends React.Component {
     
-
-    componentDidMount() {                     
+    componentDidMount() {       
         Http.get(`/users/${this.state.studentId}`)        
         .then(res => {            
             this.setState({
                 nombres: res.data.name,
                 apellidos: res.data.surname,
-                correo: res.data.email     
+                correo: res.data.email,                    
             })            
         })
-        Http.get(`/project/find/${this.state.id}`)
-        .then(res => {            
+        Http.get(`/project/find/${this.state.studentId}`)
+        .then(res => { 
+            
+            Http.get(`/tutor/download/${res.data[0].thesis_project_id}`, { responseType: 'blob' })
+            .then(response => {
+                this.setState({ projectUrl: URL.createObjectURL(response.data) });
+            })                  
             this.setState({                
-                titulo: res.data.title,
-                descripcion: res.data.description
+                titulo: res.data[0].title,
+                descripcion: res.data[0].description
             })
         })
     }
@@ -36,8 +40,25 @@ class CheckThesis extends React.Component {
             correo: '',
             studentId: this.props.id,
             titulo: '',
-            descripcion: ''
-        }
+            descripcion: '',  
+            projectUrl: null          
+        }       
+        this.savePdf = this.savePdf.bind(this);
+         
+    }
+
+    savePdf(){
+        var url = this.state.projectUrl;
+
+        var anchorElem = document.createElement("a");
+        anchorElem.style = "display: none";
+        anchorElem.href = url;
+        anchorElem.download = this.state.titulo;
+
+        document.body.appendChild(anchorElem);
+        anchorElem.click();
+
+        document.body.removeChild(anchorElem);
     }
 
     render () {            
@@ -112,7 +133,9 @@ class CheckThesis extends React.Component {
             </Grid.Column>
             <Grid.Column>
                 <label>Documento tesis</label>
-                <Segment>Mostrar Documento</Segment>
+                <Segment>
+                    <Button onClick={ this.savePdf }>Descargar</Button>
+                </Segment>
                 <Form.Field>
                     <label>Revision</label>
                     <input type='file' name="file" />
@@ -131,7 +154,7 @@ class CheckThesis extends React.Component {
 }
 
 class UpdloadThesisConcept extends React.Component {
-    render () {
+    render () {        
         return (
             <div>            
             <CheckThesis id = {this.props.match.params.id}/>            

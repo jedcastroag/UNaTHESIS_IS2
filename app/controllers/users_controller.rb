@@ -15,6 +15,20 @@ class UsersController < ApplicationController
 		render json: user.to_json
 	end
 
+	def getProjectsForTutor		
+		authenticate_request!
+		tutor = @current_user
+		tutorId = tutor.id.to_s		
+		sql = "SELECT thesis_projects.*, t_users.user_id AS id_tutor, t_users_2.user_id AS id_estudiante
+		FROM  thesis_projects_users t_users 
+		INNER JOIN thesis_projects ON t_users.thesis_project_id = thesis_projects.id
+		INNER JOIN  thesis_projects_users t_users_2 ON t_users_2.thesis_project_id = thesis_projects.id
+		WHERE t_users.thesis_project_rol_id = 2 AND t_users.user_id = " + tutorId + " AND t_users_2.thesis_project_rol_id = 1;"
+		
+		projects = ActiveRecord::Base.connection.exec_query(sql)		
+		render	json: projects.to_json
+	end
+
 	def create
 		user = User.new(user_params)
 
