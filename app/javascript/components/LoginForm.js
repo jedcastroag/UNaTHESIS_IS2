@@ -47,7 +47,7 @@ class OnlyLoginForm extends React.Component {
 
   login() {
     auth.login(this.state.email, this.state.password)
-    .then((response) => {
+    .then((response) => {console.log(response);
       this.setState({ passwordError: false, emailError: false });
       this.props.updateAuth();
     }).catch((error) => {
@@ -102,6 +102,7 @@ export default class LoginForm extends React.Component {
       this.props.updateAuth();
 
       const { referrer } = this.props.location.state || { referrer: { pathname: "/" }};
+
       return <Redirect to={ referrer } />;
     }
 

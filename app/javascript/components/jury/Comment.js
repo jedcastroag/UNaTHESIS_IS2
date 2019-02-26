@@ -28,8 +28,8 @@ class Comment extends React.Component {
     render() {
 
         return (<Form onSubmit={this.sendComment.bind(this)}>
-            <Form.Input placeholder="Título del Comentario" onChange={this.titleOnChange.bind(this)} name="comment_title"/>
-            <Form.TextArea placeholder="Comentario" style={{
+            <Form.Input label="Título del Concepto" placeholder="Título del Comentario" onChange={this.titleOnChange.bind(this)} name="comment_title"/>
+            <Form.TextArea  label="Concepto" placeholder="Descripción" style={{
                     height: "100px"
                 }} onChange={this.contentOnChange.bind(this)} name="comment_content"/>
             <Button type="submit">Enviar</Button>

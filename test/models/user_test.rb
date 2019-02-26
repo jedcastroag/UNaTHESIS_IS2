@@ -3,7 +3,7 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   def setup
   	@user = User.new(name: "Fabio", surname: "Tovar", email: "f@test.com", 
-  		password: "mypassword", password_confirmation: "mypassword", 
+  		password: "mypassword", password_confirmation: "mypassword",
       user_type_id: 3)
   end
 
@@ -32,7 +32,7 @@ class UserTest < ActiveSupport::TestCase
   	assert_not @user.valid?
   end
 
-  def setPassword(pass)	
+  def setPassword(pass)
   	@user.password = pass
   	@user.password_confirmation = pass
   end
@@ -47,7 +47,7 @@ class UserTest < ActiveSupport::TestCase
   	# Minimum password length: 8
   	setPassword("g" * 7)
   	assert_not @user.valid?
-  	
+
   	# Maximum password length: 30
   	setPassword("g" * 31)
   	assert_not @user.valid?

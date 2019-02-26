@@ -6,7 +6,6 @@ class SessionsController < ApplicationController
 
 	# POST method
 	def create
-		# render json: params
 		if user_params[:email].end_with? "unal.edu.c"
 			user_params[:email].slice! "@unal.edu.co"
 			#ans = ldap_validation user_params[:email], user_params[:password]

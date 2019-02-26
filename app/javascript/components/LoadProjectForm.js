@@ -3,7 +3,6 @@ import PropTypes from "prop-types"
 import { Container, Row, Col } from 'react-grid-system';
 
 import { Button, Input, Checkbox, Form } from 'semantic-ui-react'
-
 import Http from '../services/RestServices'
 
 const FormTutor = props => (
@@ -65,7 +64,7 @@ class LoadFile extends React.Component {
     event.preventDefault();
     const data = new FormData(event.target);
 
-    Http.post('/file/load_post', data).then().catch( error => 
+    Http.post('/file/load_post', data).then().catch( error =>
       console.log("ERROR " + error)
       );
     }
@@ -136,4 +135,4 @@ class LoadFile extends React.Component {
     greeting: PropTypes.string
   };
 
-  export default LoadProjectForm
+  export default LoadProjectForm;

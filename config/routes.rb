@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 	post '/login', to: 'sessions#create'
 	post 'file/load_post', to: 'file#load_post'
 	get 'file/download_project', to: 'file#download_pdf'
-	get 'jury/projects', to: 'jury#search_project'
+	get 'jury_projects', to: 'jury#search_projects'
 	resources :users
 
 	get '*path', to: "users#new"

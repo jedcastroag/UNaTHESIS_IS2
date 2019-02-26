@@ -21,7 +21,7 @@ class UsersController < ApplicationController
 
 	def home
 		user = User.find_by(id: 3)
-		
+
 		data = {}
 
 		if(user.user_type_id == 1)
@@ -37,7 +37,7 @@ class UsersController < ApplicationController
 
 	private
 	def user_params
-		params.require(:user).permit(:email, :password, 
+		params.require(:user).permit(:email, :password,
 			:name, :surname, :user_type_id)
 	end
 end

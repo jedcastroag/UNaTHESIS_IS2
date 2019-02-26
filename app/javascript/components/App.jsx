@@ -11,12 +11,12 @@ import ViewProject from './ViewProject'
 import ProtectedRoute from './ProtectedRoute'
 import Home from './Home'
 
-/** 
+/**
  * All the application's paths must be declarated this.
- * 
+ *
  * @type {Array}
  * @property {string} path Route to be driven.
- * @property {boolean} restricted True or not define for indicate that the path will 
+ * @property {boolean} restricted True or not define for indicate that the path will
  *                                be restricted (only authenticated users can access), False.
  * @property {Map} componentParams Parameters of the component
  *
@@ -33,9 +33,9 @@ import Home from './Home'
  	constructor() {
  		super();
  		this.routes = routes;
- 		this.routes.push({ 
- 			path: "/login", 
- 			exact: null, 
+ 		this.routes.push({
+ 			path: "/login",
+ 			exact: null,
  			componentProps: {
  				updateAuth: this.updateAuth.bind(this)
  			},
@@ -43,7 +43,7 @@ import Home from './Home'
  			restricted: false
  		});
 
- 		this.state = { 
+ 		this.state = {
  			isAuthenticated: auth.isAuthenticated()
  		};
 
@@ -53,7 +53,6 @@ import Home from './Home'
  	updateAuth() {
  		this.setState({
  			isAuthenticated: auth.isAuthenticated()
- 			//, userType: auth.getUserType()
  		});
  	}
 
@@ -62,10 +61,9 @@ import Home from './Home'
  		auth.logout();
  		this.updateAuth();
  	}
-
  	renderHeader() {
  		if(this.state.isAuthenticated)
- 			return <MainMenu userType={ this.state.userType } 
+ 			return <MainMenu userType={ this.state.userType }
  			logout={ this.logout } updateAuth={ this.updateAuth } />;
  		return null;
  	}
@@ -85,10 +83,10 @@ import Home from './Home'
  			}
  			<Route exact render={() => {window.location.href="404.html"}} />
  			</Switch>
- 		
- 			</div>
+
+        </div>
  			</BrowserRouter>
- 			);	
+        );
  	}
  }
 

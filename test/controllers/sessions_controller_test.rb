@@ -3,7 +3,7 @@ require 'json'
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
 	def setup
-		@user = { name: "Fabio", surname:"Tovar", email: "ft@test.edu.co", 
+		@user = { name: "Fabio", surname:"Tovar", email: "ft@test.edu.co",
 			password: "password", user_type_id: 2 }
 	end
 
@@ -20,7 +20,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 		assert_response :success, "User creation"
 
 		@user[:password].upcase!
-		
+
 		post login_url, as: :json, params: { session: @user.as_json }
 		assert_response :unauthorized
 	end
@@ -39,5 +39,4 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
 		assert_includes JSON.parse(response.body), 'token'
 	end
-
 end

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class FileControllerTest < ActionDispatch::IntegrationTest
 	def setup
-		@user = { name: "Fabio", surname: "Tovar", email: "ft@test.edu.co", 
+		@user = { name: "Fabio", surname: "Tovar", email: "ft@test.edu.co",
 			password: "password", user_type_id: 1 }
 
 		post users_path, as: :json, params: { user: @user.as_json }
@@ -15,8 +15,8 @@ class FileControllerTest < ActionDispatch::IntegrationTest
 	end
 
 	test 'should be block an attempt to identified user to download a project' do
-		get '/file/download_project', params: {}, headers: { 
-			'Authorization' => "Bearer 666" 
+		get '/file/download_project', params: {}, headers: {
+			'Authorization' => "Bearer 666"
 		}
 
 		body = JSON.parse(response.body)

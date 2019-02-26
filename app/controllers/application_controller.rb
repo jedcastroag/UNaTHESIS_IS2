@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
 	protected
 	def authenticate_request!
 		decoded = payload
-		
+
 		unless decoded
 			raise 'Invalid Request'
 		end

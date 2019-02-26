@@ -12,8 +12,8 @@ class HomeController < ApplicationController
 
 		when 2 # Student
 			thesis_project = @current_user.thesis_projects.last
-			student = { 
-				:thesis => thesis_project, 
+			student = {
+				:thesis => thesis_project,
 				:comments => thesis_project&.comments,
 				:users => thesis_project.users
 			}

@@ -31,11 +31,11 @@ class FileController < ApplicationController
       params[:file],
       Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'
       )
-    
+
     thesis_project = ThesisProject.create(
       document: file_path,
       approbation_state: 0,
-      activation_state: 0, 
+      activation_state: 0,
       description: params[:project_description],
       title: params[:project_title]
       )
@@ -60,7 +60,6 @@ class FileController < ApplicationController
   def create_file_folder_of_user(user_id)
     directory = 'files'
     FileUtils.mkdir_p directory unless File.exist?(directory)
-    
     id_md5 = Digest::MD5.hexdigest(user_id.to_s)
     directory = directory + '/' + id_md5
     FileUtils.mkdir_p directory unless File.exist?(directory)
