@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import {Container, Header, List, Accordion} from "semantic-ui-react"
+import {Container, Header, List, Grid, Segment} from "semantic-ui-react"
 import Comment from "./Comment"
 import PdfViewer from "../PdfViewer"
 import Http from "../../services/RestServices"
@@ -25,16 +25,18 @@ class ShowProjects extends React.Component {
             let list_items = this.state.response.map((title) => 
             <List.Item key={title} >
                 <List.Content>
-                    <List.Header>
-                        {title}
-                    </List.Header>
+                    <Segment textAlign="center" raised>
+                        <List.Header>
+                            {title}
+                        </List.Header>
+                    </Segment>                    
                 </List.Content>
             </List.Item>
             );
             console.log(list_items);
             return list_items;
         }
-        return 'Loading';
+        return (<Segment loading></Segment>);
     }
 
     render() {
@@ -56,11 +58,19 @@ class Home extends React.Component {
 
     render() {
         return (<Container>
-                    <ShowProjects/>
-                    {this.renderSpace()}
-                    <PdfViewer title="agadgf"/>
-                    {this.renderSpace()}
-                    <Comment />
+
+            <Grid>
+                <Grid.Row>
+                    <Grid.Column width="12">
+                        <PdfViewer title="agadgf"/>
+                        {this.renderSpace()}
+                        <Comment />
+                    </Grid.Column>
+                    <Grid.Column width="4">
+                        <ShowProjects/>
+                    </Grid.Column>
+                </Grid.Row>
+            </Grid>  
         </Container>);
     }
 }
