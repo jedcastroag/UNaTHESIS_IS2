@@ -5,20 +5,25 @@ class JuryController < ApplicationController
         projects = User.find_by(email: "jury@test.com").thesis_projects
         titles = []
         projects.each do |project|
-            titles << project.title
+            titles << {title: project.title, id: project.id}
         end
         
         render json: titles
     end
-    # 
-    # def get_project
-    #     project = ThesisProject.find(params)
-    # end
-    #
-    # private
-    #
-    # def jury_params
-    #
-    # end
+    
+    def get_project
+        project = ThesisProject.find(jury_params)
+        if project
+            render json: project            
+        else
+            
+        end
+    end
+    
+    private
+    
+    def jury_params
+        params.require(:jury).permit(:id)
+    end
 
 end

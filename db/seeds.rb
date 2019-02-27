@@ -21,3 +21,5 @@ User.create({ name: "Tutor", surname: "Testercito", email: "tutor@test.com",
 			password: "12345678", password_confirmation: "12345678", user_type_id: tutor_type.id })
 User.create({ name: "Jury", surname: "Testercito", email: "jury@test.com",
 			password: "12345678", password_confirmation: "12345678", user_type_id: jury_type.id })
+User.create({ name: "Student2", surname: "Testercito", email: "student2Thesis@test.com",
+			password: "12345678", password_confirmation: "12345678", user_type_id: student_type.id })

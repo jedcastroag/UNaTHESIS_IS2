@@ -132,14 +132,16 @@ class PdfViewer extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			projectUrl: null
+			projectUrl: null,
+			project_id: this.props.project_id
 		};
 		this.downloadPDF();
 		this.savePDF = this.savePDF.bind(this);
 	}
 
 	downloadPDF() {
-		Http.get(GET_PDF_PATH, { responseType: 'blob' })
+		const params = {responseType: 'blob', file: {id: this.state.project_id}};
+		Http.get(GET_PDF_PATH, params)
 		.then(response => {
 			this.setState({ projectUrl: URL.createObjectURL(response.data) });
 		}).catch(error => console.log("Error fetching project " + error));

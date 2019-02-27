@@ -10,24 +10,32 @@ const GET_PROJECTS_PATH = "/jury_projects";
 class ShowProjects extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {response: null};         
+        this.state = {
+            response: null,
+            changeProject: this.props.changeProject
+        };         
         this.getProjects();
     }  
 
     getProjects() {
         Http.get(GET_PROJECTS_PATH).then( response => {
             this.setState({response: response['data']});
+            console.log(response.data);
         }).catch(error => console.log(error));
+    }
+
+    onClick (e, num) {
+        console.log(e.target);
     }
 
     renderProjects() {
         if (this.state.response != null) {
-            let list_items = this.state.response.map((title) => 
-            <List.Item key={title} >
+            let list_items = this.state.response.map((project) => 
+            <List.Item key={project.id} onClick={this.onClick} >
                 <List.Content>
                     <Segment textAlign="center" raised>
                         <List.Header>
-                            {title}
+                            {project.title}
                         </List.Header>
                     </Segment>                    
                 </List.Content>
@@ -52,22 +60,34 @@ class ShowProjects extends React.Component {
     
 class Home extends React.Component {
 
+    constructor (props) {
+        super(props);
+        this.state = {
+            id_project_pdf: null,
+            changeProject: null
+        };
+        this.setState({changeProject: this.getPDF.bind(this)});
+    }
+
     renderSpace () {
         return <div style={{height: "100px"}}></div>;
     }
 
+    getPDF(id_project_pdf) {
+        this.setState({id_project_pdf: id_project_pdf});
+    }
+
     render() {
         return (<Container>
-
             <Grid>
                 <Grid.Row>
                     <Grid.Column width="12">
-                        <PdfViewer title="agadgf"/>
+                        <PdfViewer title="agadgf" id={this.state.id_project_pdf} />
                         {this.renderSpace()}
                         <Comment />
                     </Grid.Column>
                     <Grid.Column width="4">
-                        <ShowProjects/>
+                        <ShowProjects changeProject={this.state.changeProject}/>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>  

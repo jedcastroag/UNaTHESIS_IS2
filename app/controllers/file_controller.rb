@@ -8,9 +8,16 @@ class FileController < ApplicationController
 
   def download_pdf
     authenticate_request!
-
-    thesis_project = @current_user.thesis_projects.last
-
+    thesis_project = ""
+    
+    case @current_user.id
+    when 2 #Student
+      thesis_project = @current_user.thesis_projects.last
+    when 4 #Jury
+      thesis_project = @current_user.thesis_projects.find(file_params[:id])
+    else
+      raise 'Invalid Request'
+    end
     send_file(
       "#{Rails.root}/#{thesis_project.document}",
       filename: "#{ thesis_project.title }.pdf",
@@ -70,4 +77,9 @@ class FileController < ApplicationController
     FileUtils.mv(file_path, destiny_dir)
     return destiny_dir
   end
+
+  def file_params
+    params.require(:file).permit(:id_project)
+  end
+
 end
