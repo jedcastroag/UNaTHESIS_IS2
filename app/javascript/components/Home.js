@@ -21,7 +21,6 @@ class Home extends React.Component {
 		};
 
 		Http.get(HOME_PATH).then(response => {
-			console.log(response);
 			this.setState({
 				user_type_id: response['data']['user_type_id'],
 				response: response['data']
