@@ -9,7 +9,8 @@ class User < ApplicationRecord
 	format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
 
 	# Relationships
-	has_and_belongs_to_many :thesis_projects
+	has_many :thesis_project_users
+	has_many :thesis_projects, through: :thesis_project_users
 	
 	has_secure_password
 end

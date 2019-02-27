@@ -25,7 +25,7 @@ class MainMenu extends React.Component {
 		return (
 			<Menu fixed="top">
 			<Menu.Item>
-			<Image size="mini" src="https://react.semantic-ui.com/logo.png" />
+			<Image size="mini" src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Escudo_unal_2016.png" />
 			</Menu.Item>
 
 			<Menu.Item as="a" content="UnThesis" key="home" />

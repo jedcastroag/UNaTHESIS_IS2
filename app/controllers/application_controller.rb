@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
 		decoded = payload
 		
 		unless decoded
-			raise 'Invalid Request'
+			raise 'Invalid Request (Bad API Token)'
 		end
 
 		load_user decoded

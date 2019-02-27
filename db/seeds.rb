@@ -1,8 +1,8 @@
 # Create user types
-admin_type = UserType.create({name: "Administrator"})
-student_type = UserType.create({name: "Student"})
-tutor_type = UserType.create({name: "Tutor"})
-jury_type = UserType.create({name: "Jury"})
+admin_type = UserType.create(name: "Administrator")
+student_type = UserType.create(name: "Student")
+tutor_type = UserType.create(name: "Tutor")
+jury_type = UserType.create(name: "Jury")
 
 # Create user rols
 author_rol = ThesisProjectRol.create(name: "Author")

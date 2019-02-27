@@ -70,7 +70,7 @@ import UploadThesisConcept from './UploadThesisConcept'
  			return <div>
  			<div style={{ height: 80 }}></div>
  			<MainMenu userType={ this.state.userType } 
- 			logout={ this.logout } updateAuth={ this.updateAuth } />;
+ 			logout={ this.logout } updateAuth={ this.updateAuth } />
  			</div>;
  		return null;
  	}
@@ -93,7 +93,7 @@ import UploadThesisConcept from './UploadThesisConcept'
  		
  			</div>
  			</BrowserRouter>
- 			);	
+ 		);	
  	}
  }
 
