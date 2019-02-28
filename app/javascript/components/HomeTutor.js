@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 
 import Http from '../services/RestServices'
 import { Redirect, BrowserRouter } from 'react-router-dom'
-import { Button, Input, Checkbox, Form, Grid, Segment, Container } from 'semantic-ui-react'
+import { Button, Input, Checkbox, Form, Grid, Segment, Container, Header } from 'semantic-ui-react'
 
 class ProjectRow extends React.Component {
     state = {
@@ -34,7 +34,7 @@ class ProjectRow extends React.Component {
             <p>Hola</p>
             </Grid.Column>
             <Grid.Column>
-            <Button onClick ={this.handleClick.bind(this)}>See Project</Button>
+            <Button onClick ={ this.handleClick.bind(this) }>Ver proyecto</Button>
             </Grid.Column>
             </Grid>
             </Grid>
@@ -44,37 +44,36 @@ class ProjectRow extends React.Component {
     
     class TutorInfo extends React.Component {        
         constructor(props) {        
-            super(props)
+            super(props);
         }
         
         render() {
-            return (
+            return ( 
                 <div>
                 <h3 className="ui header">Tu Información Personal</h3>
                 <Grid container columns ={3} stackable>
                 <Grid.Column>                
                 <label>Nombre</label>                
                 <Segment>
-                <p>{this.props.name}</p>
+                <p>{ this.props.data.name }</p>
                 </Segment>   
                 </Grid.Column>
                 <Grid.Column>
                 <label>Apellidos</label>                
                 <Segment>
-                <p >{this.props.surname}</p>
+                <p >{this.props.data.surname}</p>
                 </Segment>
                 </Grid.Column>
                 <Grid.Column>
                 <label>Correo</label>  
                 <Segment>
-                <p>{this.props.email}</p>    
+                <p>{this.props.data.email}</p>    
                 </Segment>              
                 </Grid.Column>
                 </Grid>
                 </div>
                 )
             }
-            
         }
         
         class TutorHomeView extends React.Component {
@@ -91,11 +90,12 @@ class ProjectRow extends React.Component {
             
             render () {                
                 return (
-                    <div>
-                    <div className="ui raised container segment"> 
-                    <h2 className="ui center aligned header">Bienvenido {this.state.nombre}</h2>
-                    <TutorInfo />
+                    <Container>
+                    <Segment raised compact> 
+                    <Header as='h2' textAlign='center'>Bienvenido {this.state.nombre}</Header>
+                    <TutorInfo data={ this.props.data }/>
                     <h3>Proyectos actuales</h3>
+                    
                     <Grid container columns = {4} stackable>
                     <Grid.Column>
                     <h4>Nombre Estudiante</h4>
@@ -107,19 +107,22 @@ class ProjectRow extends React.Component {
                     <h4>Nombre Proyecto</h4>
                     </Grid.Column>                        
                     </Grid>
-                    
+
                     <Grid container row>
                     {this.state.rows} 
                     </Grid>                   
-                    </div>
-                    </div>
+                    </Segment>
+                    </Container>
                     )
                 }
             }
             
             class HomeTutor extends React.Component {
+                constructor(props) {
+                    super(props);
+                }
                 render () {
-                    return <TutorHomeView />;
+                    return <TutorHomeView data={ this.props.data }/>;
                 }
             }
             
