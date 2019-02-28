@@ -2,7 +2,7 @@ require 'rubygems'
 require 'net/ldap'
 
 class SessionsController < ApplicationController
-	skip_before_action :verify_authenticity_token#, except: [:create]
+	skip_before_action :verify_authenticity_token, :verify_authentication_request!
 
 	# POST method
 	def create

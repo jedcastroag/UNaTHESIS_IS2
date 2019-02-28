@@ -64,7 +64,7 @@ class ThesisProjectUserTest < ActiveSupport::TestCase
 		description: "Here the description"
 		
 		thesis_project_user = ThesisProjectUser.create user: @user, 
-		thesis_project_id: new_thesis.id, thesis_project_rols_id: 1
+		thesis_project: new_thesis, thesis_project_rols_id: "author"
 
 		assert @user.thesis_projects.size == 2 && @user.thesis_projects.last.id == thesis_project_user.thesis_project_id
 

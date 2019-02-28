@@ -2,15 +2,19 @@ require 'test_helper'
 
 class FileControllerTest < ActionDispatch::IntegrationTest
 	def setup
-		@user = { name: "Fabio", surname: "Tovar", email: "ft@test.edu.co", 
-			password: "password", user_type_id: 1 }
+		@student = { email: "student@test.com", password: "12345678" }
 
-		post users_path, as: :json, params: { user: @user.as_json }
-		assert_response :success, "Problem with user creation"
-
-		post login_url, as: :json, params: { session: @user.as_json }
+		post login_url, as: :json, params: { session: @student.as_json }
 		assert_response :success, "Problem with login"
 
-		@token = JSON.parse(response.body)['token']
+		@header = { 'Authorization' => "Bearer #{ JSON.parse(response.body)['token'] }" }
+	end
+
+	test "a student should be able to upload a project" do
+		# post file_load_post_path, as: :json
+	end
+
+	test "a tutor/jury should not be able to upload a project" do
+
 	end
 end

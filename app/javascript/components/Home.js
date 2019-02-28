@@ -35,11 +35,11 @@ class Home extends React.Component {
 			case 2:
 			return <HomeStudent data={ this.state.response }/>;
 			case 3:
-			return <HomeTutor data={this.state.response}/>;
+			return <HomeTutor data={this.state.response }/>;
 			case 4:
-			return <HomeJury data={this.state.response}/>;
+			return <HomeJury data={this.state.response }/>;
 			default:
-			return <HomeStudent data={this.setState.response} />;
+			return <HomeStudent data={this.setState.response } />;
 		}
 	}
 

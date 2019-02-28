@@ -24,8 +24,8 @@ import UploadThesisConcept from './UploadThesisConcept'
  * More properties (https://reacttraining.com/react-router/web/api/Route)
  */
  const routes = [
- { path: "/", exact: null, component: Home},
- { path: "/project/load", exact: null, component: LoadProjectForm},
+ { path: "/", exact: null, component: Home },
+ { path: "/project/load", exact: null, component: LoadProjectForm },
  { path: "/project/view", exact: null, component: ViewProject },
  { path: "/404.html", exact:null, restricted: false },
  { path: "/load/:id", exact:null, component: UploadThesisConcept}

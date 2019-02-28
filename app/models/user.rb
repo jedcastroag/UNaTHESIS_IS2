@@ -1,5 +1,7 @@
 class User < ApplicationRecord
 	before_save { email.downcase! }
+	enum user_type_id: { admin: 1, student: 2, jury_tutor: 3 }
+
 	validates :name, presence:true, length: { maximum: 60 }
 	validates :password, presence:true, length: { minimum: 8, maximum: 30 }
 	validates :user_type_id, presence:true

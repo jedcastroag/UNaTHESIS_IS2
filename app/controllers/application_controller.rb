@@ -1,14 +1,21 @@
 class ApplicationController < ActionController::Base
+	before_action :verify_authentication_request! 
+
+	def initialize (allowed_users = {})
+		@allowed_users = User.user_type_ids.slice('admin').merge! allowed_users
+	end
+
 	protected
-	def authenticate_request!
+	def verify_authentication_request!
 		decoded = payload
-		
-		unless decoded
-			raise 'Invalid Request (Bad API Token)'
-		end
+		raise 'Invalid Request (Bad API Token)' unless decoded
 
 		load_user decoded
-		invalid_authentication unless @current_user
+		raise 'User not found' unless @current_user
+
+		raise 'Unauthorized user' unless @allowed_users.include? @current_user.user_type_id
+	rescue => error
+		render json: { error: error }, status: :unauthorized
 	end
 
 	private

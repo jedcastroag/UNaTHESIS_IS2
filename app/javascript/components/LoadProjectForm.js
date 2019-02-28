@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import { Container, Row, Col } from 'react-grid-system';
 
-import { Button, Input, Checkbox, Form } from 'semantic-ui-react'
+import { Button, Input, Checkbox, Form, Divider } from 'semantic-ui-react'
 
 import Http from '../services/RestServices'
 
@@ -40,15 +40,16 @@ const FormTutor = props => (
   </select>
   </Form.Field>
   </Form.Group>
+
+  <Divider section />
   </div>
   )
 
 class LoadFile extends React.Component {
   constructor(props) {
     super(props)
-    this.state =
-    {
-      tutors: [<FormTutor number={0} />]
+    this.state = {
+      tutors: [ <FormTutor number={0} /> ]
     }
     this.tutorsNumber = 0;
   }
@@ -57,7 +58,7 @@ class LoadFile extends React.Component {
     this.tutorsNumber += 1;
     console.log(this.state);
     this.setState(prevState => ({
-      tutors: [...prevState.tutors, <FormTutor number={this.tutorsNumber} />]
+      tutors: [...prevState.tutors, <FormTutor number={ this.tutorsNumber } />]
     }))
   }
 

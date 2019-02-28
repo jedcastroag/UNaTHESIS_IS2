@@ -1,11 +1,13 @@
-# frozen_string_literal: true
 require 'digest/md5'
 require 'fileutils'
 
 # FileController
 class FileController < ApplicationController
-  skip_before_action :verify_authenticity_token
   
+  def initialize
+    super User.user_type_ids.slice 'student'
+  end
+
   def load_post
     authenticate_request!
 
@@ -16,12 +18,12 @@ class FileController < ApplicationController
     title: params[:project_title]
     
     thesis_project_user = ThesisProjectUser.new user: @current_user,
-    thesis_project: thesis_project, thesis_project_rols_id: 1
+    thesis_project: thesis_project, thesis_project_rols_id: "author"
 
     if thesis_project_user.save
       file_path = process_file params[:file], file_name
     else
-      thesis_project.delete
+      thesis_project.delete 
       raise 'Thesis project user not valid'
     end
   rescue => error
