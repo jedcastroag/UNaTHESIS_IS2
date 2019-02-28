@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
 	before_action :verify_authentication_request! 
 
 	def initialize (allowed_users = {})
+		super()
 		@allowed_users = User.user_type_ids.slice('admin').merge! allowed_users
 	end
 
