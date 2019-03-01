@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import {Container, Header, List, Grid, Segment} from "semantic-ui-react"
+import {Container, Header, List, Grid, Icon, Segment} from "semantic-ui-react"
 import Comment from "./Comment"
 import PdfViewer from "../PdfViewer"
 import Http from "../../services/RestServices"
@@ -14,24 +14,24 @@ class ShowProjects extends React.Component {
             response: null,
             changeProject: this.props.changeProject
         };         
-        this.getProjects();
+        this.onClick = this.onClick.bind(this);
     }  
 
-    getProjects() {
+    componentDidMount() {
         Http.get(GET_PROJECTS_PATH).then( response => {
             this.setState({response: response['data']});
-            console.log(response.data);
+            this.onClick(this.state.response[0].id.toString());
         }).catch(error => console.log(error));
     }
 
-    onClick (e, num) {
-        console.log(e.target);
+    onClick = (id, title) => () => {
+        this.props.changeProject(id, title);
     }
 
     renderProjects() {
         if (this.state.response != null) {
             let list_items = this.state.response.map((project) => 
-            <List.Item key={project.id} onClick={this.onClick} >
+            <List.Item key={project.id} onClick={this.onClick(project.id.toString(), project.title)} >
                 <List.Content>
                     <Segment textAlign="center" raised>
                         <List.Header>
@@ -41,7 +41,6 @@ class ShowProjects extends React.Component {
                 </List.Content>
             </List.Item>
             );
-            console.log(list_items);
             return list_items;
         }
         return (<Segment loading></Segment>);
@@ -63,31 +62,50 @@ class Home extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            id_project_pdf: null,
+            id_project: null,
+            title_project: null,
             changeProject: null
         };
-        this.setState({changeProject: this.getPDF.bind(this)});
+        this.getPDF = this.getPDF.bind(this);
     }
 
     renderSpace () {
         return <div style={{height: "100px"}}></div>;
     }
 
-    getPDF(id_project_pdf) {
-        this.setState({id_project_pdf: id_project_pdf});
+    getPDF(id_project_pdf, title) {
+        this.setState({
+            id_project: id_project_pdf,
+            title_project: title
+        });
+    }
+
+    renderPdf () {
+        if (this.state.title_project != null && this.state.id_project != null) {
+            console.log(this.state);
+            return <PdfViewer title={this.state.title_project} 
+                project_id={this.state.id_project} 
+                key = {this.state.project_id} />
+        }
+        return <Segment placeholder>
+            <Header icon>
+                <Icon name="pdf file outline" />
+                No Project selected
+            </Header>
+        </Segment>
     }
 
     render() {
         return (<Container>
             <Grid>
                 <Grid.Row>
-                    <Grid.Column width="12">
-                        <PdfViewer title="agadgf" id={this.state.id_project_pdf} />
+                    <Grid.Column width="12">  
+                        {this.renderPdf()}
                         {this.renderSpace()}
                         <Comment />
                     </Grid.Column>
                     <Grid.Column width="4">
-                        <ShowProjects changeProject={this.state.changeProject}/>
+                        <ShowProjects changeProject={this.getPDF}/>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>  

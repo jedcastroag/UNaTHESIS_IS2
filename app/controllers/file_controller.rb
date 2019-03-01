@@ -14,10 +14,11 @@ class FileController < ApplicationController
     when 2 #Student
       thesis_project = @current_user.thesis_projects.last
     when 4 #Jury
-      thesis_project = @current_user.thesis_projects.find(file_params[:id])
+      thesis_project = @current_user.thesis_projects.find(params[:id])
     else
       raise 'Invalid Request'
     end
+
     send_file(
       "#{Rails.root}/#{thesis_project.document}",
       filename: "#{ thesis_project.title }.pdf",
@@ -76,10 +77,6 @@ class FileController < ApplicationController
     destiny_dir = "files/#{Digest::MD5.hexdigest(user_id.to_s)}/#{file_name}"
     FileUtils.mv(file_path, destiny_dir)
     return destiny_dir
-  end
-
-  def file_params
-    params.require(:file).permit(:id_project)
   end
 
 end

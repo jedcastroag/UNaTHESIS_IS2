@@ -131,16 +131,21 @@ PDFEmbedded.defaultProps = {
 class PdfViewer extends React.Component {
 	constructor(props){
 		super(props);
+		console.log("PdfViewer props", this.props);
 		this.state = {
-			projectUrl: null,
-			project_id: this.props.project_id
+			projectUrl: null
 		};
 		this.downloadPDF();
 		this.savePDF = this.savePDF.bind(this);
 	}
+	componentDidUpdate(prevProps) {
+		if (this.props.project_id != prevProps.project_id) {
+			this.downloadPDF();			
+		}
+	}
 
 	downloadPDF() {
-		const params = {responseType: 'blob', file: {id: this.state.project_id}};
+		const params = {responseType: 'blob', params:{id: this.props.project_id}};
 		Http.get(GET_PDF_PATH, params)
 		.then(response => {
 			this.setState({ projectUrl: URL.createObjectURL(response.data) });
