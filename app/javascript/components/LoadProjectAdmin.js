@@ -117,7 +117,7 @@ class LoadProjectAdmin extends React.Component {
                                 </Form.Field>
                                 
                                 <Form.Field>
-                                    <Button type='submit'>Cargar proyecto</Button>
+                                    <Button type='submit'>Crear proyecto</Button>
                                 </Form.Field>
                             </Form>
                         </Col>

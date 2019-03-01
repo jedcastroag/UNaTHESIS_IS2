@@ -7,19 +7,31 @@ import { Container, Row, Col } from 'react-grid-system';
 import UsersAdmin from "./UsersAdmin";
 
 const users = []
+const roles = []
 
 const FormRol = props => (
-    
+
     <div className="formTutor">
         <Form.Group widths='equal'>
-            <Form.Select label='Usuario' name={'user_' + props.number} options={users} value={props.user_id} placeholder='Usuario'/>
-            <Form.Select fluid label='Tipo de usuario' name={'user_type_' + props.number} options={
-                [{key:0, value:0, text:'Director'},
-                  {key:1, value:1, text:'Tutor'},
-                  {key:2, value:2, text:'Asesor'}
-                ]
-            } placeholder='Tipo de usuario' defaultValue={props.user_type}/>
+            <Form.Field>
+                <label>Usuario</label>
+                <select class="ui selection dropdown" name={'user_' + props.number} value={props.user_id} placeholder='Usuario'>
+                    {users.map((value, index) => {
+                        return <option value={value.value}>{value.text}</option>
+                    })}
+                </select>
+            </Form.Field>
+
+            <Form.Field>
+                <label>Roles</label>
+                <select class="ui selection dropdown" name={'rol_' + props.number} value={props.rol_id} placeholder='Roles'>
+                    {users.map((value, index) => {
+                        return <option value={value.value}>{value.text}</option>
+                    })}
+                </select>
+            </Form.Field>
         </Form.Group>
+        <hr></hr>
     </div>
 )
 
@@ -34,6 +46,7 @@ class ProjectsAdmin extends React.Component {
                 project_id: props.location.query.id,
                 user_roles: []
             }
+        this.tutorsNumber = 0;
     }
 
 
@@ -41,42 +54,75 @@ class ProjectsAdmin extends React.Component {
 
         Http.get(`/admin/fetch_users_data`)
             .then(res => {
-                
+
                 for (var i = 0; i < res['data'].length; i++) {
                     var user = res['data'][i]
                     var name = user.name + ' ' + user.surname
-                    users.push( {key: user.id, value: user.id, text: String(name)})
+                    users.push({ key: user.id, value: user.id, text: String(name) })
 
-                    
+
                 }
-                console.log(this.state.project_id)
-                Http.get('/admin/get_roles_project', { params: {id: this.state.project_id}}).then(res => {
+                Http.get('/admin/fetch_roles').then(res => {
                     for (var i = 0; i < res['data'].length; i++) {
-                        var user = res['data'][i]
-                        this.setState(prevState => ({
-                            user_roles: [...prevState.user_roles, <FormRol user_type={user.rol_id} rol_id={user.rol_id} />]
-                        }))
+                        var rol = res['data'][i]
+                        roles.push({ key: rol.id, value: rol.id, text: rol.name })
                     }
+
+                    Http.get('/admin/fetch_roles_project', { params: { id: this.state.project_id } }).then(res => {
+                        for (var i = 0; i < res['data'].length; i++) {
+                            var user = res['data'][i]
+                            this.setState(prevState => ({
+                                user_roles: [...prevState.user_roles, <FormRol user_id={user.id} rol_id={user.rol_id} number={this.tutorsNumber} />]
+                            }))
+                            this.tutorsNumber += 1;
+                        }
+                    })
+
                 })
-                
+
+
+
             })
 
-        
+
 
     }
+    onAddTutor = () => {
+        this.tutorsNumber += 1;
+        this.setState(prevState => ({
+            user_roles: [...prevState.user_roles, <FormRol user_id={0} rol_id={0} number={this.tutorsNumber} />],
+            count: prevState.count + 1
+        }))
 
+    }
 
     render() {
         return (
             <div>
+                <h2>a</h2>
                 <Container>
                     <Row>
-                        <Form>
-
-                            {this.state.user_roles}
-                        </Form>
+                        <Col>
+                            <h1>Roles</h1>
+                        </Col>
                     </Row>
-                    
+                    <Row>
+                        <Col>
+                            <Form>
+                                <Row>
+                                    <Col>
+                                        {this.state.user_roles}
+                                        <Form.Field>
+                                            <Button onClick={this.onAddTutor} type='button'>Añadir</Button>
+                                            <Button onClick={this.onAddTutor} type='button'>Enviar</Button>
+                                        </Form.Field>
+                                    </Col>
+                                </Row>
+
+                            </Form>
+                        </Col>
+                    </Row>
+
                 </Container>
             </div>
         );
