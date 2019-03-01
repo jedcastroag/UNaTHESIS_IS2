@@ -55,7 +55,6 @@ import UploadThesisConcept from './UploadThesisConcept'
  	updateAuth() {
  		this.setState({
  			isAuthenticated: auth.isAuthenticated()
- 			//, userType: auth.getUserType()
  		});
  	}
 

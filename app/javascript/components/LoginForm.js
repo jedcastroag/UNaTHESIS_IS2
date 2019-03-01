@@ -20,8 +20,6 @@ class OnlyLoginForm extends React.Component {
   }
 
   render() {
-    //console.log("Render child");
-
     return (
       <Form size="large" error>
       <Segment stacked>
@@ -65,11 +63,9 @@ export default class LoginForm extends React.Component {
   render () {    
     let authenticated = this.checkIfIsAuthenticated();
 
-    //console.log("Render parent");
-
     if(authenticated === false) {
       return (
-        <div class="login-form">
+        <div className="login-form">
         
         <Container fluid style={{ lineHeight: '32px' }} style={{height: '100%'}}>
         <style>{`

@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import Redirect from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 import Http from '../services/RestServices'
 
@@ -39,7 +39,7 @@ class Home extends React.Component {
 			case 'jury_tutor':
 			return <HomeJury data={ this.state.response }/>;
 			default:
-			return <HomeStudent data={ this.setState.response } />;
+			return null;
 		}
 	}
 

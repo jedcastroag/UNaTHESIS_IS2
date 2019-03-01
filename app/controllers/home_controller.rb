@@ -15,8 +15,8 @@ class HomeController < ApplicationController
 			thesis_project = @current_user.thesis_projects.last
 			student = { 
 				:thesis => thesis_project, 
-				:comments => thesis_project&.comments,
-				:users => thesis_project&.users
+				:comments => thesis_project&.comments || [],
+				:users => thesis_project&.users || []
 			}
 			body.merge! student
 		when 'jury_tutor'

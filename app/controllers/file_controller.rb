@@ -1,16 +1,16 @@
 require 'digest/md5'
 require 'fileutils'
+require 'json'
 
 # FileController
 class FileController < ApplicationController
-  
+  skip_before_action :verify_authenticity_token
+
   def initialize
     super User.user_type_ids.slice 'student'
   end
 
   def load_post
-    authenticate_request!
-
     file_name = Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'
     
     thesis_project = ThesisProject.create document: create_path(@current_user.id, file_name),
@@ -20,13 +20,30 @@ class FileController < ApplicationController
     thesis_project_user = ThesisProjectUser.new user: @current_user,
     thesis_project: thesis_project, thesis_project_rols_id: "author"
 
+    tutors_juries = JSON.parse params[:tutors_juries]
+
+    users = []
+    tutors_juries.each do | user |
+      unless User.find_by(email: user["email"])
+        users << User.create({ name: user["name"], surname: user["surname"], 
+          country: user["country"], institution: user["institution"], dni: user["dni"], 
+          email: user["email"], password: "12345678", password_confirmation: "12345678",
+          user_type_id: "jury_tutor"})
+      end
+    end
+    
     if thesis_project_user.save
       file_path = process_file params[:file], file_name
     else
-      thesis_project.delete 
       raise 'Thesis project user not valid'
     end
   rescue => error
+    users.each do | user |
+      user.destroy
+    end
+    
+    thesis_project.destroy
+
     if Rails.env.production?
       render json: { error: "Bad request" }, status: :unauthorized
     else

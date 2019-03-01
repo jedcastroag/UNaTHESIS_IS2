@@ -1,7 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import Http from '../services/RestServices'
 import { Redirect, BrowserRouter } from 'react-router-dom'
 import { Button, Input, Checkbox, Form, Grid, Segment, Container, Header } from 'semantic-ui-react'
 
@@ -23,7 +22,7 @@ class ProjectRow extends React.Component {
         }
         return (
             <Grid container row>
-            <Grid container columns ={4} stackable>
+            <Grid container columns={ 4 } stackable>
             <Grid.Column>
             <p>Juan Diego Moreno Mora</p>
             </Grid.Column>
@@ -50,7 +49,7 @@ class ProjectRow extends React.Component {
         render() {
             return ( 
                 <div>
-                <h3 className="ui header">Tu Información Personal</h3>
+                <Header as="h3">Tu Información Personal</Header>
                 <Grid container columns ={3} stackable>
                 <Grid.Column>                
                 <label>Nombre</label>                
@@ -61,13 +60,13 @@ class ProjectRow extends React.Component {
                 <Grid.Column>
                 <label>Apellidos</label>                
                 <Segment>
-                <p >{this.props.data.surname}</p>
+                <p >{ this.props.data.surname }</p>
                 </Segment>
                 </Grid.Column>
                 <Grid.Column>
                 <label>Correo</label>  
                 <Segment>
-                <p>{this.props.data.email}</p>    
+                <p>{ this.props.data.email }</p>    
                 </Segment>              
                 </Grid.Column>
                 </Grid>
@@ -92,7 +91,7 @@ class ProjectRow extends React.Component {
                 return (
                     <Container>
                     <Segment raised compact> 
-                    <Header as='h2' textAlign='center'>Bienvenido {this.state.nombre}</Header>
+                    <Header as='h2' textAlign='center'>Bienvenido { this.state.nombre }</Header>
                     <TutorInfo data={ this.props.data }/>
                     <h3>Proyectos actuales</h3>
                     
@@ -109,7 +108,7 @@ class ProjectRow extends React.Component {
                     </Grid>
 
                     <Grid container row>
-                    {this.state.rows} 
+                    { this.state.rows } 
                     </Grid>                   
                     </Segment>
                     </Container>
