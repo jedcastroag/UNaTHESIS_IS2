@@ -1,11 +1,14 @@
 import axios from 'axios';
 import auth from './Auth';
-import { resolve, reject } from 'when';
 
 export default {
-	validate_response(response) {
-		
+	process_error(error) {
+		if(error.response.status == 401) {
+			auth.notifyTokenInvalid();
+			console.log("Token verification failed");
+		}
 	},
+
 	get(url, params = {}, withCredentials = true) {
 		var response = new Promise((resolve, reject) => {
 			var headers = {}
@@ -15,7 +18,10 @@ export default {
 			
 			axios.get(url, { headers: headers, ...params })
 			.then(response => resolve(response))
-			.catch(error => reject(error));
+			.catch(error => {
+				this.process_error(error);
+				reject(error);
+			});
 		});
 		
 		return response;
@@ -30,7 +36,10 @@ export default {
 			
 			axios.post(url, body, { headers: headers })
 			.then(response => resolve(response))
-			.catch(error => reject(error));
+			.catch(error => {
+				this.process_error(error);
+				reject(error);
+			});
 		});
 		return response;
 	}

@@ -9,14 +9,15 @@ class ApplicationController < ActionController::Base
 	protected
 	def verify_authentication_request!
 		decoded = payload
-		raise 'Invalid Request (Bad API Token)' unless decoded
+		
+		return render json: { error: 'Invalid Request (Bad API Token)' }, status: :unauthorized unless decoded
 
 		load_user decoded
-		raise 'User not found' unless @current_user
+		return render json: { error: 'User not found' }, status: :bad_request unless @current_user
 
-		raise 'Unauthorized user' unless @allowed_users.include? @current_user.user_type_id
+		return render json: { error: 'Unauthorized user' }, status: :forbidden  unless @allowed_users.include? @current_user.user_type_id
 	rescue => error
-		render json: { error: error }, status: :unauthorized
+		render json: { error: error }, status: :bad_request
 	end
 
 	private

@@ -1,17 +1,26 @@
-import axios from 'axios';
 import Http from '../services/RestServices';
+import { Subject } from 'rxjs';
 
 let jwt = window.localStorage.getItem("token");
+let jwtObservable = new Subject();
 
 export default {
+	getObservable() {
+		return jwtObservable;
+	},
+
+	notifyTokenInvalid() {
+		this.logout();
+	},
+
 	isAuthenticated() {
 		return jwt !== null;
 	},
-
+	
 	getToken() {
 		return jwt;
 	},
-
+	
 	login(email, password) {
 		let promise = new Promise((resolve, reject) => {
 			Http.post('/login', {
@@ -29,12 +38,13 @@ export default {
 				reject(err);
 			})
 		});
-
+		
 		return promise;
 	},
-
+	
 	logout() {
 		jwt = null;
 		window.localStorage.removeItem("token");
+		jwtObservable.next(false);
 	}
-}
+};
