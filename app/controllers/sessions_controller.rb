@@ -29,6 +29,11 @@ class SessionsController < ApplicationController
 	end
 
 	private
+	def generateToken(user)
+		payload = { user_id: user.id }
+		TokenService.instance.encode payload
+	end
+
 	def user_params
 		params.require(:session).permit(:email, :password)
 	end
@@ -39,11 +44,5 @@ class SessionsController < ApplicationController
 		ldap.port = 389
 		ldap.authenticate "uid=#{username},ou=people,o=bogota,o=unal.edu.co", password
 		return ldap.bind
-	end
-
-	def generateToken(user)
-		payload = { id: user.id }
-		jwt = JWT.encode(payload, Rails.application.credentials.secret_key_base)
-		return jwt
 	end
 end

@@ -1,0 +1,40 @@
+import axios from 'axios';
+import Http from '../services/RestServices';
+
+let jwt = window.localStorage.getItem("token");
+
+export default {
+	isAuthenticated() {
+		return jwt !== null;
+	},
+
+	getToken() {
+		return jwt;
+	},
+
+	login(email, password) {
+		let promise = new Promise((resolve, reject) => {
+			Http.post('/login', {
+				session: {
+					email: email,
+					password: password
+				},
+				timeout: 1000
+			}, false).then((response) => {
+				jwt = response.data.token;
+				window.localStorage.setItem("token", jwt);
+				resolve(response);
+			}).catch(err => {
+				console.log("Error " + err.message);
+				reject(err);
+			})
+		});
+
+		return promise;
+	},
+
+	logout() {
+		jwt = null;
+		window.localStorage.removeItem("token");
+	}
+}
