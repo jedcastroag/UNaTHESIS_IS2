@@ -63,10 +63,10 @@ class Home extends React.Component {
         super(props);
         this.state = {
             id_project: null,
-            title_project: null,
-            changeProject: null
+            title_project: null
         };
         this.getPDF = this.getPDF.bind(this);
+        this.sendComment = this.sendComment.bind(this);
     }
 
     renderSpace () {
@@ -80,9 +80,23 @@ class Home extends React.Component {
         });
     }
 
+    sendComment (comment_content, comment_title, e) {        
+        if (this.state.id_project == null) {
+            alert("Choose a Project");
+        } else {
+            const concept = {
+            jury: {title: comment_title, 
+                thesis_project_id: this.state.id_project,
+                content: comment_content}
+            };
+            Http.post("/jury_comment", concept).then((response) => {
+                alert(response.data.message);
+            }).catch(error => console-log(error));
+        }
+    }
+
     renderPdf () {
         if (this.state.title_project != null && this.state.id_project != null) {
-            console.log(this.state);
             return <PdfViewer title={this.state.title_project} 
                 project_id={this.state.id_project} 
                 key = {this.state.project_id} />
@@ -102,7 +116,7 @@ class Home extends React.Component {
                     <Grid.Column width="12">  
                         {this.renderPdf()}
                         {this.renderSpace()}
-                        <Comment />
+                        <Comment sendComment={this.sendComment}/>
                     </Grid.Column>
                     <Grid.Column width="4">
                         <ShowProjects changeProject={this.getPDF}/>

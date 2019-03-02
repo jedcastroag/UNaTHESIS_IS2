@@ -11,6 +11,9 @@ class Comment extends React.Component {
             comment_title: "",
             comment_content: ""
         }
+        this.titleOnChange = this.titleOnChange.bind(this);
+        this.contentOnChange = this.contentOnChange.bind(this);
+        this.sendComment = this.sendComment.bind(this);
     }
 
     titleOnChange(e) {
@@ -21,17 +24,26 @@ class Comment extends React.Component {
         this.setState({comment_content: e.target.value});
     }
 
-    sendComment = () => {
-        AddComment.post("/jury",this.state).then((response) => console.log(response));
+    sendComment () {
+        if (this.state.comment_title != "" && this.state.comment_content != "") {
+            this.props.sendComment(this.state.comment_content, this.state.comment_title);
+        } else {
+            let msj = "The content of the concept can't be blank";
+            if (this.state.comment_title == null) {
+                msj = "The title can't be blank";
+            }
+            alert(msj);
+        }
+
     }
 
     render() {
 
-        return (<Form onSubmit={this.sendComment.bind(this)}>
-            <Form.Input label="Título del Concepto" placeholder="Título del Comentario" onChange={this.titleOnChange.bind(this)} name="comment_title"/>
+        return (<Form onSubmit={this.sendComment}>
+            <Form.Input label="Título del Concepto" placeholder="Título del Comentario" onChange={this.titleOnChange} name="comment_title"/>
             <Form.TextArea  label="Concepto" placeholder="Descripción" style={{
                     height: "100px"
-                }} onChange={this.contentOnChange.bind(this)} name="comment_content"/>
+                }} onChange={this.contentOnChange} name="comment_content"/>
             <Button type="submit">Enviar</Button>
         </Form>);
     }

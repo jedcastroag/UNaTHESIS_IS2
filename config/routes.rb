@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 	post 'file/load_post', to: 'file#load_post'
 	get 'file/download_project', to: 'file#download_pdf'
 	get 'jury_projects', to: 'jury#search_projects'
+	post 'jury_comment', to: 'jury#add_comment'
 	resources :users
 
 	get '*path', to: "users#new"

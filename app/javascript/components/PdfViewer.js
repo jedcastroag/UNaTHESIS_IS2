@@ -131,7 +131,6 @@ PDFEmbedded.defaultProps = {
 class PdfViewer extends React.Component {
 	constructor(props){
 		super(props);
-		console.log("PdfViewer props", this.props);
 		this.state = {
 			projectUrl: null
 		};
