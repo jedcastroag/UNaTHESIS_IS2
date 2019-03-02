@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_15_052219) do
+ActiveRecord::Schema.define(version: 2019_03_02_220728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,14 @@ ActiveRecord::Schema.define(version: 2019_02_15_052219) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["thesis_projects_user_id"], name: "index_event_logs_on_thesis_projects_user_id"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string "question"
+    t.bigint "user_id"
+    t.bigint "thesis_project_id"
+    t.index ["thesis_project_id"], name: "index_questions_on_thesis_project_id"
+    t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
   create_table "support_documents", force: :cascade do |t|
@@ -97,6 +105,8 @@ ActiveRecord::Schema.define(version: 2019_02_15_052219) do
   add_foreign_key "comments", "thesis_projects"
   add_foreign_key "comments", "users", column: "users_id"
   add_foreign_key "event_logs", "thesis_projects_users"
+  add_foreign_key "questions", "thesis_projects"
+  add_foreign_key "questions", "users"
   add_foreign_key "thesis", "thesis_projects", column: "thesis_project_associated_id"
   add_foreign_key "thesis", "thesis_projects", column: "thesis_project_father_id"
   add_foreign_key "thesis_projects_users", "thesis_project_rols"
