@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import {Form, Button} from "semantic-ui-react"
+import {Form, Button, Segment} from "semantic-ui-react"
 import AddComment from "../../services/RestServices"
 
 class Comment extends React.Component {
@@ -39,13 +39,15 @@ class Comment extends React.Component {
 
     render() {
 
-        return (<Form onSubmit={this.sendComment}>
-            <Form.Input label="Título del Concepto" placeholder="Título del Comentario" onChange={this.titleOnChange} name="comment_title"/>
-            <Form.TextArea  label="Concepto" placeholder="Descripción" style={{
-                    height: "100px"
-                }} onChange={this.contentOnChange} name="comment_content"/>
-            <Button type="submit">Enviar</Button>
-        </Form>);
+        return (<Segment >
+            <Form onSubmit={this.sendComment}>
+                <Form.Input label="Título del Concepto" placeholder="Título del Comentario" onChange={this.titleOnChange} name="comment_title"/>
+                <Form.TextArea  label="Concepto" placeholder="Descripción" style={{
+                        height: "100px"
+                    }} onChange={this.contentOnChange} name="comment_content"/>
+                <Button type="submit" >Enviar Concepto</Button>
+            </Form>
+        </Segment>);
     }
 }
 

@@ -6,7 +6,7 @@ class HomeJury extends React.Component {
     render() {
         return (
             <div>
-            <div style={{height: "100px"}}></div>
+            <div style={{height: "70px"}}></div>
             <Home/>
         </div>);
     }

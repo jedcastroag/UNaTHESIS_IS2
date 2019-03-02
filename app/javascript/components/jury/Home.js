@@ -20,7 +20,6 @@ class ShowProjects extends React.Component {
     componentDidMount() {
         Http.get(GET_PROJECTS_PATH).then( response => {
             this.setState({response: response['data']});
-            this.onClick(this.state.response[0].id.toString());
         }).catch(error => console.log(error));
     }
 
@@ -31,27 +30,25 @@ class ShowProjects extends React.Component {
     renderProjects() {
         if (this.state.response != null) {
             let list_items = this.state.response.map((project) => 
-            <List.Item key={project.id} onClick={this.onClick(project.id.toString(), project.title)} >
-                <List.Content>
-                    <Segment textAlign="center" raised>
-                        <List.Header>
-                            {project.title}
-                        </List.Header>
-                    </Segment>                    
-                </List.Content>
-            </List.Item>
+                <Segment textAlign="center" 
+                    key={project.id} 
+                    textAlign="center"
+                    style={{cursor: "pointer"}}
+                    onClick={this.onClick(project.id.toString(), project.title)}>
+                    {project.title}
+                </Segment>
             );
             return list_items;
         }
-        return (<Segment loading></Segment>);
+        return (<Segment loading style={{height: "200px"}}></Segment>);
     }
 
     render() {
         return (<Container>
             <Header as='h2'>Projects</Header>
-            <List animated verticalAlign="middle">
+            <Segment.Group>
                 { this.renderProjects() }
-            </List>
+            </Segment.Group>
         </Container>
         );
     }
@@ -70,7 +67,7 @@ class Home extends React.Component {
     }
 
     renderSpace () {
-        return <div style={{height: "100px"}}></div>;
+        return <div style={{height: "10px"}}></div>;
     }
 
     getPDF(id_project_pdf, title) {
@@ -101,7 +98,7 @@ class Home extends React.Component {
                 project_id={this.state.id_project} 
                 key = {this.state.project_id} />
         }
-        return <Segment placeholder>
+        return <Segment placeholder style={{height: "530px"}}>
             <Header icon>
                 <Icon name="pdf file outline" />
                 No Project selected
@@ -113,13 +110,19 @@ class Home extends React.Component {
         return (<Container>
             <Grid>
                 <Grid.Row>
-                    <Grid.Column width="12">  
-                        {this.renderPdf()}
-                        {this.renderSpace()}
-                        <Comment sendComment={this.sendComment}/>
+                    <Grid.Column width={11}>  
+                        <Segment>
+                            <Header as="h3" content="Document"/>
+                            {this.renderPdf()}
+                            {this.renderSpace()}
+                            <Header as="h3" content="Concept"/>
+                            <Comment sendComment={this.sendComment}/>
+                        </Segment>
                     </Grid.Column>
-                    <Grid.Column width="4">
-                        <ShowProjects changeProject={this.getPDF}/>
+                    <Grid.Column width={5}>
+                        <Segment raised>
+                            <ShowProjects changeProject={this.getPDF}/>
+                        </Segment>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>  
