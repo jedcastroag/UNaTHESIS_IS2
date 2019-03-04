@@ -3,9 +3,12 @@ import PropTypes from "prop-types"
 import {Container, Header, List, Grid, Icon, Segment} from "semantic-ui-react"
 import Comment from "./Comment"
 import PdfViewer from "../PdfViewer"
+import Question from "./Question"
 import Http from "../../services/RestServices"
 
 const GET_PROJECTS_PATH = "/jury_projects";
+const POST_COMMENT_PATH = "/jury_comment";
+const POST_QUESTIONS_PATH = "/jury_questions";
 
 class ShowProjects extends React.Component {
     constructor(props) {
@@ -64,6 +67,10 @@ class Home extends React.Component {
         };
         this.getPDF = this.getPDF.bind(this);
         this.sendComment = this.sendComment.bind(this);
+        this.sendQuestions = this.sendQuestions.bind(this);
+        this.renderSpace = this.renderSpace.bind(this);
+        this.renderPdf = this.renderPdf.bind(this);
+        this.sendData = this.sendData.bind(this);
     }
 
     renderSpace () {
@@ -81,15 +88,34 @@ class Home extends React.Component {
         if (this.state.id_project == null) {
             alert("Choose a Project");
         } else {
-            const concept = {
+            const data = {
             jury: {title: comment_title, 
                 thesis_project_id: this.state.id_project,
                 content: comment_content}
             };
-            Http.post("/jury_comment", concept).then((response) => {
+            this.sendData(POST_COMMENT_PATH, data).then((response) => {
                 alert(response.data.message);
             }).catch(error => console-log(error));
         }
+    }
+
+    sendQuestions (questions) {
+        if (this.state.id_project == null) {
+            alert("Choose a Project");
+        } else {
+            const data = {
+            jury: questions
+            };
+            this.sendData(POST_QUESTIONS_PATH, data).then(response => {
+                alert(response.data.message);
+            }).catch(error => console.log(error));
+        }
+    }
+
+    sendData (url, data) {
+        Http.post(url, data).then((response) => {
+            return response.data;
+        }).catch(error => console-log(error));
     }
 
     renderPdf () {
@@ -117,6 +143,9 @@ class Home extends React.Component {
                             {this.renderSpace()}
                             <Header as="h3" content="Concept"/>
                             <Comment sendComment={this.sendComment}/>
+                            {this.renderSpace()}
+                            <Header as="h3" content="Questions"/>
+                            <Question />
                         </Segment>
                     </Grid.Column>
                     <Grid.Column width={5}>
