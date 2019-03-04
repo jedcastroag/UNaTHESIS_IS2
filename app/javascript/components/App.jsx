@@ -11,6 +11,7 @@ import ViewProject from './ViewProject'
 import ProtectedRoute from './ProtectedRoute'
 import Home from './Home'
 import UploadThesisConcept from './UploadThesisConcept'
+import ModalTokenExpired from './ModalTokenExpired';
 
 /** 
 * All the application's paths must be declarated this.
@@ -46,7 +47,8 @@ class App extends React.Component {
 		});
 		
 		this.state = { 
-			isAuthenticated: auth.isAuthenticated()
+			isAuthenticated: auth.isAuthenticated(),
+			openModal: false
 		};
 		
 		this.logout = this.logout.bind(this);
@@ -56,7 +58,8 @@ class App extends React.Component {
 			next: (authenticated) => {
 				if(authenticated == false) {
 					this.setState({
-						isAuthenticated: authenticated
+						openModal: true,
+						isAuthenticated: false
 					});
 				}
 			}
@@ -86,9 +89,11 @@ class App extends React.Component {
 	}
 	
 	render () {
-		return (
+		return (			
 			<BrowserRouter>
 			<div>
+
+			<ModalTokenExpired open={ this.state.openModal }/>
 			
 			{ this.renderHeader() }
 			
@@ -102,7 +107,7 @@ class App extends React.Component {
 			</Switch>
 			
 			</div>
-			</BrowserRouter>
+			</BrowserRouter>			
 			);	
 		}
 	}
