@@ -1,7 +1,3 @@
-// Run this example by adding <%= javascript_pack_tag 'hello_react' %> to the head of your layout file,
-// like app/views/layouts/application.html.erb. All it does is render <div>Hello React</div> at the bottom
-// of the page.
-
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Button, Input, Checkbox, Form } from 'semantic-ui-react'
@@ -46,8 +42,6 @@ const FormTutor = props => (
     </div>
 )
 
-
-
 class LoadProject extends React.Component {
     constructor(props) {
         super(props)
@@ -65,8 +59,6 @@ class LoadProject extends React.Component {
             tutors: [...prevState.tutors, <FormTutor number={this.tutorsNumber} />]
         }))
     }
-
-    
     
     render() {
         return (
@@ -130,9 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>,
         document.body.appendChild(document.createElement('div')),
     )
-
-
-})
-
+});
 
 export default LoadProject

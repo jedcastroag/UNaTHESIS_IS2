@@ -96,7 +96,6 @@ export default class LoginForm extends React.Component {
   checkIfIsAuthenticated() {
     if(auth.isAuthenticated()) {
       this.props.updateAuth();
-
       const { referrer } = this.props.location.state || { referrer: { pathname: "/" }};
       return <Redirect to={ referrer } />;
     }

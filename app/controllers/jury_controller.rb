@@ -1,19 +1,21 @@
 class JuryController < ApplicationController
     skip_before_action :verify_authenticity_token
 
+    def initialize
+        super User.user_type_ids.slice 'jury_tutor'
+    end
+
     def search_projects
-        authenticate_request!
         projects = @current_user.thesis_projects
         titles = []
         projects.each do |project|
-            titles << {title: project.title, id: project.id}
+            titles << { title: project.title, id: project.id }
         end
         
         render json: titles
     end
 
     def add_comment
-        authenticate_request!
         msg = ""
         if @current_user.user_type_id == UserType.find_by(:name => "Jury").id            
             comment = Comment.find_by(users_id: @current_user.id,
@@ -44,11 +46,8 @@ class JuryController < ApplicationController
         end
     end
     
-    
     private
-    
     def jury_params
         params.require(:jury).permit(:title, :content, :thesis_project_id, :users_id)
     end
-
 end

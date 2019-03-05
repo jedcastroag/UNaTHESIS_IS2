@@ -18,6 +18,4 @@ class User < ApplicationRecord
 	has_many :thesis_projects, through: :thesis_project_users
 	
 	has_secure_password
-
-
 end

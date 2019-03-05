@@ -12,6 +12,11 @@ import ProtectedRoute from './ProtectedRoute'
 import Home from './Home'
 import UploadThesisConcept from './UploadThesisConcept'
 import ModalTokenExpired from './ModalTokenExpired';
+import UsersAdmin from './UsersAdmin';
+import UsersAdminAdd from './UsersAdminAdd';
+import ProjectsAdmin from './ProjectsAdmin';
+import ProjectsAdminAsignRoles from './ProjectsAdminAsignRoles';
+import LoadProjectAdmin from './LoadProjectAdmin';
 
 /** 
 * All the application's paths must be declarated this.
@@ -28,14 +33,12 @@ const routes = [
 	{ path: "/", exact: null, component: Home },
 	{ path: "/project/load", exact: null, component: LoadProjectForm },
 	{ path: "/project/view", exact: null, component: ViewProject },
-	{ path: "/404.html", exact: null, restricted: false },
 	{ path: "/load/:id", exact: null, component: UploadThesisConcept },
 	{ path: "/admin/users", exact: null, component: UsersAdmin },
 	{ path: "/admin/users/add", exact: null, component: UsersAdminAdd },
 	{ path: "/admin/projects", exact: null, component: ProjectsAdmin },
 	{ path: "/admin/projects/asign_roles", exact: null, component: ProjectsAdminAsignRoles },
 	{ path: "/admin/projects/create", exact: null, component: LoadProjectAdmin }
-
 ];
 
 class App extends React.Component {
@@ -109,7 +112,7 @@ class App extends React.Component {
 					return <ProtectedRoute { ...route } key={ index } />;
 				}, this)
 			}
-			<Route exact render={() => { window.location.href="404.html" }} />
+			<Route exact render={() => { window.location.href="/404.html" }} />
 			</Switch>
 			
 			</div>

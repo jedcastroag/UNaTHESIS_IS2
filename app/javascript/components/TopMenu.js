@@ -4,12 +4,7 @@ import ReactDOM from 'react-dom'
 import { Dropdown, Menu, Segment } from 'semantic-ui-react'
 import '../../../dist/semantic.min.css';
 
-
-
 class TopMenu extends React.Component {
-    
-
-
     render() {
         return (
             <div>
@@ -20,8 +15,6 @@ class TopMenu extends React.Component {
                     />
                     <Menu.Item
                         name='base_de_datos'
-                        
-                    
                     />
                     <Dropdown item text='Display Options'>
                         <Dropdown.Menu>
@@ -56,8 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>,
         document.body.appendChild(document.createElement('div')),
     )
-
-
 })
 
 

@@ -3,9 +3,7 @@ import PropTypes from "prop-types"
 import Http from '../services/RestServices'
 
 import { Button, Input, Checkbox, Form, Grid, Segment, Container } from 'semantic-ui-react'
-import '../../../dist/semantic.min.css';
 import { fromByteArray } from "ipaddr.js";
-
 
 class CheckThesis extends React.Component {
     componentDidMount() {                     

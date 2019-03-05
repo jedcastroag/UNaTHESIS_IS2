@@ -28,7 +28,7 @@ class FormTutor extends React.Component {
   }
   
   render() {
-    return(<React.Fragment>
+    return <React.Fragment>
       <Form.Group inline>
 
       <Form.Field required label="Nombres" placeholder='Nombres' control={ Input } 
@@ -53,7 +53,7 @@ class FormTutor extends React.Component {
       </Form.Group>
       
       <Divider section />
-      </React.Fragment>);
+      </React.Fragment>;
     }
   }
   
@@ -163,11 +163,7 @@ class FormTutor extends React.Component {
         }
         
         render () {
-          return (
-            <React.Fragment >
-            <LoadFile returnToHome={ this.returnToHome }/>
-            </React.Fragment>
-            )
+          return <LoadFile returnToHome={ this.returnToHome }/>;
           }
         }
         
