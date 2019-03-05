@@ -1,128 +1,173 @@
 import React from "react"
 import PropTypes from "prop-types"
-
-import { Redirect, BrowserRouter } from 'react-router-dom'
-import { Button, Input, Checkbox, Form, Grid, Segment, Container, Header } from 'semantic-ui-react'
+import Http from '../services/RestServices'
+import { withRouter } from 'react-router-dom'
+import { Button, Input, Checkbox, Form, Grid, Segment, Container, Table, TableBody } from 'semantic-ui-react'
+import '../../../dist/semantic.min.css'
 
 class ProjectRow extends React.Component {
-    state = {
-        redirect:false,
+
+    componentDidMount(){
+        let tableRows = []
+        Http.get('tutor/projects')
+        .then(response => {                     
+            response.data.forEach(row => {
+                Http.get(`users/${row[0].id_estudiante}`)
+                .then(res => {                    
+                    tableRows.push({studentName: res.data.name, studentEmail: res.data.email, projectTitle: row[0].title, studentId: row[0].id_estudiante})                                        
+                    this.setState({
+                        projects: tableRows
+                    })
+                })                                
+            })                                                                
+        })           
     }
-    
-    handleClick() {
-        this.setState(() => ({
-            redirect: true
-        }))
+
+    constructor(props) {
+        super(props)        
+        
+        this.state = {            
+            projects: [],                   
+        }  
+        this.handleClick = this.handleClick.bind(this)
     }
-    
-    render() {
-        const { redirect } = this.state
-        if(redirect){            
-            return <Redirect to='/load/2'/>;            
-        }
+
+
+    handleClick(project) {                
+        this.props.redirectToProject(project.studentId)
+    }
+
+    render(){        
+        const projects = this.state.projects                      
         return (
-            <Grid container row>
-            <Grid container columns={ 4 } stackable>
-            <Grid.Column>
-            <p>Juan Diego Moreno Mora</p>
-            </Grid.Column>
-            <Grid.Column>
-            <p>judmorenomo@unal.edu.co</p>
-            </Grid.Column>
-            <Grid.Column>
-            <p>Hola</p>
-            </Grid.Column>
-            <Grid.Column>
-            <Button onClick ={ this.handleClick.bind(this) }>Ver proyecto</Button>
-            </Grid.Column>
+            <Table celled padded>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Nombre Estudiante</Table.HeaderCell>
+                        <Table.HeaderCell>Correo Estudiante</Table.HeaderCell>
+                        <Table.HeaderCell>Titulo Proyecto</Table.HeaderCell>
+                        <Table.HeaderCell>Ver Tesis</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>      
+
+                <TableBody>                    
+                    {projects.map(project => <Table.Row key = {project.studentId} >
+                        <Table.Cell
+                            children = {project.studentName}>
+                        </Table.Cell>
+                        <Table.Cell
+                            children = {project.studentEmail}>
+                        </Table.Cell>
+                        <Table.Cell
+                            children = {project.projectTitle}>
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                            <Button onClick ={this.handleClick.bind(this,project)}>Ver Tesis</Button>                            
+                        </Table.Cell>
+                    </Table.Row>)}
+                </TableBody>      
+            </Table>
+
+            
+            
+        )
+    }       
+
+}
+
+class TutorInfo extends React.Component {
+    componentDidMount() {  
+        Http.get('/getUserInfo')        
+        .then(res => {
+            this.setState({
+                nombres: res.data.name,
+                apellidos: res.data.surname,
+                correo: res.data.email
+            })            
+        })
+    }
+
+    constructor(props) {        
+        super(props)
+        this.state = {
+            nombres: '',
+            apellidos: '',
+            correo: ''
+        }            
+    }
+
+    render() {
+        return (
+            <div>
+            <h3 className="ui header">Tu Información Personal</h3>
+            <Grid container columns ={3} stackable>
+                <Grid.Column>                
+                    <label>Nombre</label>                
+                    <Segment>
+                        <p>{this.state.nombres}</p>
+                    </Segment>   
+                </Grid.Column>
+                <Grid.Column>
+                    <label>Apellidos</label>                
+                    <Segment>
+                        <p >{this.state.apellidos}</p>
+                    </Segment>
+                </Grid.Column>
+                <Grid.Column>
+                    <label>Correo</label>  
+                    <Segment>
+                        <p>{this.state.correo}</p>    
+                    </Segment>              
+                </Grid.Column>
             </Grid>
-            </Grid>
-            )
-        }
+            </div>
+        )
     }
     
-    class TutorInfo extends React.Component {        
-        constructor(props) {        
-            super(props);
-        }
-        
-        render() {
-            return ( 
-                <div>
-                <Header as="h3">Tu Información Personal</Header>
-                <Grid container columns ={3} stackable>
-                <Grid.Column>                
-                <label>Nombre</label>                
-                <Segment>
-                <p>{ this.props.data.name }</p>
-                </Segment>   
-                </Grid.Column>
-                <Grid.Column>
-                <label>Apellidos</label>                
-                <Segment>
-                <p >{ this.props.data.surname }</p>
-                </Segment>
-                </Grid.Column>
-                <Grid.Column>
-                <label>Correo</label>  
-                <Segment>
-                <p>{ this.props.data.email }</p>    
-                </Segment>              
-                </Grid.Column>
-                </Grid>
-                </div>
-                )
-            }
-        }
-        
-        class TutorHomeView extends React.Component {
-            constructor(props) {        
-                super(props)
-                this.state = {
-                    nombre: 'Tutor1',
-                    estu: 'Estdiante Testercito',            
-                    cor: 'student@test.com',
-                    nombrePro: 'Tesis 100% real',
-                    rows: <ProjectRow />
-                }
-            }
-            
-            render () {                
-                return (
-                    <Container>
-                    <Segment raised compact> 
-                    <Header as='h2' textAlign='center'>Bienvenido { this.state.nombre }</Header>
-                    <TutorInfo data={ this.props.data }/>
+}
+
+class TutorHomeView extends React.Component {
+    constructor(props) {        
+        super(props)        
+    }
+
+    redirectToProject = (id) => {
+        this.props.redirectToProject(id)
+    }
+
+    render () {                        
+        return (
+            <div>
+                <div className="ui raised container segment"> 
+                    <h2 className="ui center aligned header">Bienvenido</h2>
+                    <TutorInfo />
                     <h3>Proyectos actuales</h3>
                     
-                    <Grid container columns = {4} stackable>
-                    <Grid.Column>
-                    <h4>Nombre Estudiante</h4>
-                    </Grid.Column>
-                    <Grid.Column>
-                    <h4>Correo</h4>
-                    </Grid.Column>
-                    <Grid.Column>
-                    <h4>Nombre Proyecto</h4>
-                    </Grid.Column>                        
-                    </Grid>
+                    <ProjectRow redirectToProject={this.redirectToProject}/>                    
+                </div>
+            </div>
+        )
+    }
+}
 
-                    <Grid container row>
-                    { this.state.rows } 
-                    </Grid>                   
-                    </Segment>
-                    </Container>
-                    )
-                }
-            }
-            
-            class HomeTutor extends React.Component {
-                constructor(props) {
-                    super(props);
-                }
-                render () {
-                    return <TutorHomeView data={ this.props.data }/>;
-                }
-            }
-            
-            export default HomeTutor
+class HomeTutor extends React.Component { 
+      
+    redirectToProject = (id) => {
+        const path = '/load/' + id         
+        this.props.history.push(path)                  
+    }
+    
+    render () {
+        return (
+            <div>
+            <TutorHomeView redirectToProject={this.redirectToProject}/>
+            </div>
+        )
+    }
+}
+
+HomeTutor.propTypes = {
+    greeting: PropTypes.string
+  };
+  
+  export default withRouter(HomeTutor)

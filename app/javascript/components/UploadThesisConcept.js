@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import Http from '../services/RestServices'
 
+import {withRouter} from 'react-router-dom'
 import { Button, Form, Grid, Segment } from 'semantic-ui-react'
 
 class CheckThesis extends React.Component {
@@ -11,14 +12,19 @@ class CheckThesis extends React.Component {
             this.setState({
                 nombres: res.data.name,
                 apellidos: res.data.surname,
-                correo: res.data.email     
+                correo: res.data.email,                    
             })            
         })
-        Http.get(`/project/find/${this.state.id}`)
-        .then(res => {            
+        Http.get(`/project/find/${this.state.studentId}`)
+        .then(res => {                         
+            Http.get(`/tutor/download/${res.data[0].thesis_project_id}`, { responseType: 'blob' })
+            .then(response => {                
+                this.setState({ projectUrl: URL.createObjectURL(response.data) });
+            })                  
             this.setState({                
-                titulo: res.data.title,
-                descripcion: res.data.description
+                titulo: res.data[0].title,
+                descripcion: res.data[0].description,
+                projectId: res.data[0].thesis_project_id
             })
         })
     }
@@ -31,18 +37,46 @@ class CheckThesis extends React.Component {
             correo: '',
             studentId: this.props.id,
             titulo: '',
-            descripcion: ''
-        }
+            descripcion: '',
+            projectUrl: null,
+            projectId: 0,            
+        }       
+        this.savePdf = this.savePdf.bind(this)
+        this.submitForm = this.submitForm.bind(this)
+         
     }
-    
-    render () {            
-        return (                   
-            <div>
-            <div className="ui raised container segment">           
-            <h2 className="ui center aligned header">Subir Concepto</h2>
-            
-            <h3 className="ui header">Información Estudiante</h3>        
-            <Grid container columns ={3} stackable>
+
+    savePdf(){
+        var url = this.state.projectUrl;
+
+        var anchorElem = document.createElement("a")
+        anchorElem.style = "display: none"
+        anchorElem.href = url
+        anchorElem.download = this.state.titulo
+
+        document.body.appendChild(anchorElem)
+        anchorElem.click()
+
+        document.body.removeChild(anchorElem)
+    }
+
+    submitForm(event){                
+        event.preventDefault()
+        const data = new FormData(event.target)
+        data.append('projectId', this.state.projectId)
+        Http.post('/tutor/upload_concept', data).then().catch(error => 
+        console.log('ERROR' + error))            
+        this.props.redirectToHome()            
+    }
+
+    render () {             
+      return (                   
+        <div>
+        <div className="ui raised container segment">           
+        <h2 className="ui center aligned header">Subir Concepto</h2>
+
+        <h3 className="ui header">Información Estudiante</h3>        
+        <Grid container columns ={3} stackable>
             <Grid.Column>                
             <label>DNI</label>                
             <Segment>
@@ -94,49 +128,71 @@ class CheckThesis extends React.Component {
             <p>{this.state.descripcion}</p>
             </Segment>
             </Grid.Column>   
-            </Grid>
-            
-            <Form id= "conceptForm">
-            
-            <Grid container columns = {2} stackable>
-            <Grid.Column>                
-            <Form.Field>
-            <label>Comentarios adicionales</label>
-            <textarea placeholder="Comentarios adicionales"></textarea>
-            </Form.Field>                
-            </Grid.Column>
+        </Grid>
+        <Grid container columns = {2} stackable>
             <Grid.Column>
-            <label>Documento tesis</label>
-            <Segment>Mostrar Documento</Segment>
-            <Form.Field>
-            <label>Revision</label>
-            <input type='file' name="file" />
-            </Form.Field> 
-            <Form.Field>
-            <Button floated="right" type="submit">Subir Revision</Button>
-            </Form.Field>       
+                <label>Documento tesis</label>
+                <Segment>                    
+                    <Button onClick={ this.savePdf } name="download" placeholder ="Descargar">Descargar</Button>                     
+                    <p>Presiona para descargar el documento correspondiente al proyecto</p>                    
+                </Segment>
+            </Grid.Column>   
+        </Grid>
+
+        <Form id= "conceptForm" onSubmit={ this.submitForm }>
+
+        <Grid container columns = {2} stackable>
+            <Grid.Column>                
+                <Form.Field>
+                    <label>Comentarios adicionales</label>
+                    <textarea placeholder="Comentarios adicionales" name = "comentarios"></textarea>
+                </Form.Field>                
             </Grid.Column>
-            </Grid>
-            
-            </Form>
-            </div>
-            </div>
-            );
-        }
+            <Grid.Column>                
+                <Form.Field>
+                    <label>Aprobación</label>
+                    <select className = "ui fluid dropdown" name = "estado">
+                        <option value="approved">Aprobado</option>
+                        <option value="disapproved">No Aprobado</option>
+                    </select>
+                </Form.Field>
+                <Form.Field>
+                    <label>Revision</label>
+                    <input type='file' name="file" />
+                </Form.Field>                 
+                <Form.Field>                    
+                    <Button floated="right" type="submit" name ="submitButton">Subir Revision</Button>
+                </Form.Field>                       
+        
+            </Grid.Column>            
+        </Grid>                      
+        </Form>
+        <Grid container columns = {1} stackable>
+            <Grid.Column>                                                
+                <Button floated="right" onClick={this.props.redirectToHome}  name = "cancel">Cancelar</Button>                                                 
+            </Grid.Column>   
+        </Grid>        
+        </div>
+        </div>
+    );
+  }
+}
+
+class UpdloadThesisConcept extends React.Component {
+    redirectToHome(){
+        this.props.history.push('/')        
     }
-    
-    class UpdloadThesisConcept extends React.Component {
-        render () {
-            return (
-                <div>            
-                <CheckThesis id = {this.props.match.params.id}/>            
-                </div>
-                )
-            }
-        }
-        
-        UpdloadThesisConcept.propTypes = {
-            greeting: PropTypes.string
-        };
-        
-        export default UpdloadThesisConcept
+    render () {        
+        return (
+            <div>            
+            <CheckThesis id = {this.props.match.params.id} redirectToHome={() => this.redirectToHome()}/>            
+            </div>            
+        );
+    }    
+}
+
+UpdloadThesisConcept.propTypes = {
+    greeting: PropTypes.string
+};
+  
+export default withRouter(UpdloadThesisConcept)

@@ -3,11 +3,7 @@ class UsersController < ApplicationController
 
 	def new
 	end
-
-	def find			
-		user = User.find(params[:id])
-		render json: user.to_json
-	end
+	
 
 	def create
 		user = User.new(user_params)

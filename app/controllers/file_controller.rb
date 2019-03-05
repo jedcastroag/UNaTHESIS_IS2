@@ -10,6 +10,8 @@ class FileController < ApplicationController
     super User.user_type_ids.slice 'student'
   end
 
+  
+
   def load_post
     file_name = Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'
     
