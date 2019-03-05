@@ -60,7 +60,7 @@ export default class LoginForm extends React.Component {
     this.checkIfIsAuthenticated = this.checkIfIsAuthenticated.bind(this);
   }
 
-  render () {    
+  render () {
     let authenticated = this.checkIfIsAuthenticated();
 
     if(authenticated === false) {

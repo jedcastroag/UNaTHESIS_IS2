@@ -31,7 +31,7 @@ class UserTest < ActiveSupport::TestCase
   	assert_not @user.valid?
   end
 
-  def setPassword(pass)	
+  def setPassword(pass)
   	@user.password = pass
   	@user.password_confirmation = pass
   end
@@ -46,7 +46,6 @@ class UserTest < ActiveSupport::TestCase
   	# Minimum password length: 8
   	setPassword("g" * 7)
   	assert_not @user.valid?
-  	
   	# Maximum password length: 30
   	setPassword("g" * 31)
   	assert_not @user.valid?

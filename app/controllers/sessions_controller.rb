@@ -31,7 +31,7 @@ class SessionsController < ApplicationController
 	private
 	def generateToken(user)
 		payload = { user_id: user.id }
-		TokenService.instance.encode payload, 1.minutes.from_now.to_i
+		TokenService.instance.encode payload
 	end
 
 	def user_params

@@ -27,7 +27,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 		invalid_user[:password] = ""
 		post users_path, as: :json, params: { user: invalid_user.as_json }, headers: @header
 		assert_response :unprocessable_entity
-		
 		invalid_user = @user.dup
 		invalid_user[:name] = ""
 		post users_path, as: :json, params: { user: invalid_user.as_json }, headers: @header
