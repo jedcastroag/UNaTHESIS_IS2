@@ -8,7 +8,6 @@ class User < ApplicationRecord
 	validates :name, presence:true, length: { maximum: 60 }
 	validates :password, presence:true, length: { minimum: 8, maximum: 30 }
 	validates :user_type_id, presence:true
-	after_create :send_mail
 	
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 	validates :email, presence:true, length: { maximum: 254 },
@@ -20,10 +19,5 @@ class User < ApplicationRecord
 	
 	has_secure_password
 
-	private
-
-	def send_mail
-		NewUserMailer.new_user(self).delivery_now
-	end
 
 end

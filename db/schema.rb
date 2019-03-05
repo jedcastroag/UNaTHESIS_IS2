@@ -44,10 +44,10 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
 
   create_table "support_documents", force: :cascade do |t|
     t.string "document", null: false
-    t.bigint "thesis_project_log_id"
+    t.bigint "event_log_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["thesis_project_log_id"], name: "index_support_documents_on_thesis_project_log_id"
+    t.index ["event_log_id"], name: "index_support_documents_on_event_log_id"
   end
 
   create_table "thesis", force: :cascade do |t|

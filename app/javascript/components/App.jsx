@@ -28,8 +28,14 @@ const routes = [
 	{ path: "/", exact: null, component: Home },
 	{ path: "/project/load", exact: null, component: LoadProjectForm },
 	{ path: "/project/view", exact: null, component: ViewProject },
-	{ path: "/404.html", exact:null, restricted: false },
-	{ path: "/load/:id", exact:null, component: UploadThesisConcept}
+	{ path: "/404.html", exact: null, restricted: false },
+	{ path: "/load/:id", exact: null, component: UploadThesisConcept },
+	{ path: "/admin/users", exact: null, component: UsersAdmin },
+	{ path: "/admin/users/add", exact: null, component: UsersAdminAdd },
+	{ path: "/admin/projects", exact: null, component: ProjectsAdmin },
+	{ path: "/admin/projects/asign_roles", exact: null, component: ProjectsAdminAsignRoles },
+	{ path: "/admin/projects/create", exact: null, component: LoadProjectAdmin }
+
 ];
 
 class App extends React.Component {

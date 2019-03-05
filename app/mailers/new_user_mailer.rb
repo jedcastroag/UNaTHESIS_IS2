@@ -1,6 +1,7 @@
 class NewUserMailer < ApplicationMailer
-	def new_user(user)
+	def new_user(user, password)
 		@user = user
-			mail(to: user.email, subject: "Bienvenido a UNaTesis")
+		@password = password
+		mail(to: @user.email, subject: "Bienvenido a UNaTesis")
 	end
 end
