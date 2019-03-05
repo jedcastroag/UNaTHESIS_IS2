@@ -25,7 +25,7 @@ const FormRol = props => (
             <Form.Field>
                 <label>Roles</label>
                 <select class="ui selection dropdown" name={'rol_' + props.number} value={props.rol_id} placeholder='Roles'>
-                    {users.map((value, index) => {
+                    {roles.map((value, index) => {
                         return <option value={value.value}>{value.text}</option>
                     })}
                 </select>
@@ -44,9 +44,10 @@ class ProjectsAdmin extends React.Component {
         this.state =
             {
                 project_id: props.location.query.id,
-                user_roles: []
+                user_roles: [],
+                tutors_number: 0
             }
-        this.tutorsNumber = 0;
+            this.countTutors = 0;
     }
 
 
@@ -72,9 +73,11 @@ class ProjectsAdmin extends React.Component {
                         for (var i = 0; i < res['data'].length; i++) {
                             var user = res['data'][i]
                             this.setState(prevState => ({
-                                user_roles: [...prevState.user_roles, <FormRol user_id={user.id} rol_id={user.rol_id} number={this.tutorsNumber} />]
-                            }))
-                            this.tutorsNumber += 1;
+                                user_roles: [...prevState.user_roles, <FormRol user_id={user.id} rol_id={user.rol_id} number={this.countTutors} />],
+                                tutors_number: prevState.tutors_number + 1
+                            }), () => {
+                                this.countTutors += 1
+                            });
                         }
                     })
 
@@ -88,12 +91,12 @@ class ProjectsAdmin extends React.Component {
 
     }
     onAddTutor = () => {
-        this.tutorsNumber += 1;
         this.setState(prevState => ({
-            user_roles: [...prevState.user_roles, <FormRol user_id={0} rol_id={0} number={this.tutorsNumber} />],
-            count: prevState.count + 1
-        }))
-
+            user_roles: [...prevState.user_roles, <FormRol  number={this.countTutors} />],
+            tutors_number: prevState.tutors_number + 1
+        }), () => {
+            this.countTutors += 1
+        });
     }
 
     render() {
@@ -108,13 +111,15 @@ class ProjectsAdmin extends React.Component {
                     </Row>
                     <Row>
                         <Col>
-                            <Form>
+                            <Form action='/admin/asign_roles' method='POST'>
+                                <input type="hidden" name="id_project" value={this.state.project_id}></input>
+                                <input type="hidden" name="count_users" value={this.state.tutors_number}></input>
                                 <Row>
                                     <Col>
                                         {this.state.user_roles}
                                         <Form.Field>
                                             <Button onClick={this.onAddTutor} type='button'>Añadir</Button>
-                                            <Button onClick={this.onAddTutor} type='button'>Enviar</Button>
+                                            <Button type='submit'>Enviar</Button>
                                         </Form.Field>
                                     </Col>
                                 </Row>

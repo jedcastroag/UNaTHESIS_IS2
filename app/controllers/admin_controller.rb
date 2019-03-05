@@ -58,10 +58,18 @@ class AdminController < ApplicationController
     thesis = ThesisProject.create(title: params[:title])
 
     for i in (0..(params[:count_users].to_i) - 1)
-      puts(i)
-      puts(params)
       ThesisProjectUser.create(thesis_project_id: thesis.id, user_id: params[:"user_#{i}"], thesis_project_rol_id: params[:"user_type_#{i}"])
     end
+    render json: 200
+  end
+
+  def asign_roles
+    if(!ThesisProjectUser.find_by(thesis_project_id: params[:id_project]).nil?)
+      ThesisProjectUser.find_by(thesis_project_id: params[:id_project]).destroy
+    end
+    for i in (0..(params[:count_users].to_i) - 1)
+      ThesisProjectUser.create(thesis_project_id: params[:id_project], user_id: params[:"user_#{i}"], thesis_project_rol_id: params[:"rol_#{i}"])
+    end  
     render json: 200
   end
 end
