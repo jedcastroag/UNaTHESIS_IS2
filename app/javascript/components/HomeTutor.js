@@ -102,22 +102,22 @@ class TutorInfo extends React.Component {
             <h3 className="ui header">Tu Información Personal</h3>
             <Grid container columns ={3} stackable>
                 <Grid.Column>                
-                    <label>Nombre</label>                
-                    <Segment>
-                        <p>{this.state.nombres}</p>
-                    </Segment>   
+                <label>Nombre</label>                
+                <Segment>
+                <p>{ this.props.data.name }</p>
+                </Segment>   
                 </Grid.Column>
                 <Grid.Column>
-                    <label>Apellidos</label>                
-                    <Segment>
-                        <p >{this.state.apellidos}</p>
-                    </Segment>
+                <label>Apellidos</label>                
+                <Segment>
+                <p >{ this.props.data.surname }</p>
+                </Segment>
                 </Grid.Column>
                 <Grid.Column>
-                    <label>Correo</label>  
-                    <Segment>
-                        <p>{this.state.correo}</p>    
-                    </Segment>              
+                <label>Correo</label>  
+                <Segment>
+                <p>{ this.props.data.email }</p>    
+                </Segment>              
                 </Grid.Column>
             </Grid>
             </div>

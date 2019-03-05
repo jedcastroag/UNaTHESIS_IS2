@@ -1,20 +1,21 @@
 require 'test_helper'
 
-class FileControllerTest < ActionDispatch::IntegrationTest
+class HomeControllerTest < ActionDispatch::IntegrationTest
 	def setup
-		@user = { name: "Fabio", surname: "Tovar", email: "ft@test.edu.co", 
-			password: "password", user_type_id: 1 }
-
-		post users_path, as: :json, params: { user: @user.as_json }
-		assert_response :success, "Problem with user creation"
-
-		post login_url, as: :json, params: { session: @user.as_json }
-		assert_response :success, "Problem with login"
-
-		@token = JSON.parse(response.body)['token']
+		@student = { email: "student@test.com", password: "12345678" }
+		@admin = { email: "admin@test.com", password: "12345678" }
+		@jury = { email: "jury@test.com", password: "12345678" }
+		@tutor = { email: "tutor@test.com", password: "12345678" }
+		authenticate @student
 	end
 
-	test 'should be detect an identified user' do
+	def authenticate (user)
+		post login_url, as: :json, params: { session: user.as_json }
+		assert_response :success, "Problem with login"
+		@headers = { 'Authorization' => "Bearer #{ JSON.parse(response.body)['token'] }" }
+	end
+
+	test 'should be detect an unidentified user' do
 		get home_path, params: {}, headers: { 
 			'Authorization' => "Bearer 666" 
 		}
@@ -23,12 +24,22 @@ class FileControllerTest < ActionDispatch::IntegrationTest
 		assert_response :unauthorized
 	end
 
-	test 'should be retrieve the home information' do
-		get '/home', params: {}, headers: { 
-			'Authorization' => "Bearer #{@token}" 
-		}
-
-		body = JSON.parse(response.body)
+	def validate_response(key_to_validate)
+		get home_path, params: {}, headers: @headers
 		assert_response :success
+		assert_includes JSON.parse(response.body), key_to_validate
+	end
+
+	test 'should be retrieve the home information for each rol' do
+		validate_response 'thesis'
+
+		authenticate @admin
+		validate_response 'user_type_id'
+
+		authenticate @jury
+		validate_response 'name'
+
+		authenticate @tutor
+		validate_response 'surname'
 	end
 end
