@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 	get '/home', to: 'home#view'
 	get 'file/download_project', to: 'file#download_pdf'
 	get 'jury_projects', to: 'jury#search_projects'
-	get 'jury_questions', to: 'jury#add_questions'
+	get 'jury_questions', to: 'jury#get_questions'
 	post '/login', to: 'sessions#create'
 	post 'file/load_post', to: 'file#load_post'
 	post 'jury_comment', to: 'jury#add_comment'

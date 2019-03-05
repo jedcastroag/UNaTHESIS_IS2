@@ -37,7 +37,7 @@ class ShowProjects extends React.Component {
                     key={project.id} 
                     textAlign="center"
                     style={{cursor: "pointer"}}
-                    onClick={this.onClick(project.id.toString(), project.title)}>
+                    onClick={this.onClick(project.id, project.title)}>
                     {project.title}
                 </Segment>
             );
@@ -70,7 +70,6 @@ class Home extends React.Component {
         this.sendQuestions = this.sendQuestions.bind(this);
         this.renderSpace = this.renderSpace.bind(this);
         this.renderPdf = this.renderPdf.bind(this);
-        this.sendData = this.sendData.bind(this);
     }
 
     renderSpace () {
@@ -93,7 +92,7 @@ class Home extends React.Component {
                 thesis_project_id: this.state.id_project,
                 content: comment_content}
             };
-            this.sendData(POST_COMMENT_PATH, data).then((response) => {
+            Http.post(POST_COMMENT_PATH, data).then((response) => {
                 alert(response.data.message);
             }).catch(error => console-log(error));
         }
@@ -104,18 +103,16 @@ class Home extends React.Component {
             alert("Choose a Project");
         } else {
             const data = {
-            jury: questions
+                jury: {
+                    questions: questions,
+                    thesis_project_id: this.state.id_project
+                }
             };
-            this.sendData(POST_QUESTIONS_PATH, data).then(response => {
-                alert(response.data.message);
+            Http.post(POST_QUESTIONS_PATH, data).then(response => {
+                alert(response.data);
+                console.log(response.data);
             }).catch(error => console.log(error));
         }
-    }
-
-    sendData (url, data) {
-        Http.post(url, data).then((response) => {
-            return response.data;
-        }).catch(error => console-log(error));
     }
 
     renderPdf () {
@@ -145,7 +142,7 @@ class Home extends React.Component {
                             <Comment sendComment={this.sendComment}/>
                             {this.renderSpace()}
                             <Header as="h3" content="Questions"/>
-                            <Question />
+                            <Question sendQuestions={this.sendQuestions} project_id={this.state.id_project} />
                         </Segment>
                     </Grid.Column>
                     <Grid.Column width={5}>

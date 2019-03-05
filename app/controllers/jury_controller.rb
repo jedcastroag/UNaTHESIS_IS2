@@ -15,8 +15,8 @@ class JuryController < ApplicationController
     def add_comment
         authenticate_request!
         msg = ""
-        if @current_user.user_type_id == UserType.find_by(:name => "Jury").id            
-            comment = Comment.find_by(users_id: @current_user.id,
+        if check_user
+            comment = Comment.where(users_id: @current_user.id,
                 thesis_project_id: jury_params[:thesis_project_id])
             if comment == nil
                 users_id = {:users_id => @current_user.id}
@@ -43,9 +43,50 @@ class JuryController < ApplicationController
             render json: {:message => "Invalid Request"}, status: :unauthorized
         end
     end
+
+    def add_questions
+        authenticate_request!
+
+        if check_user
+            questions = Question.where(user_id: @current_user.id,
+                thesis_project_id: jury_params[:thesis_project_id])
+            if questions.empty?
+                params[:jury][:questions].each do |question|
+                    if question != ""
+                        questions = Question.create(
+                            question: question,
+                            user_id: @current_user.id,
+                            thesis_project_id: jury_params[:thesis_project_id]
+                        )
+                    end                    
+                end
+            else
+                
+            end
+        else
+            render json: {:message => "Invalid Request"}, status: :unauthorized
+        end
+        render json: questions
+    end
     
+    def get_questions
+        authenticate_request!
+
+        questions = []
+        if check_user
+            questions = Question.where(
+                user_id: @current_user.id,
+                thesis_project_id: params[:thesis_project_id]
+                )
+        end    
+        render json: questions
+    end    
     
     private
+
+    def check_user
+        @current_user.user_type_id == UserType.find_by(name: "Jury").id
+    end
     
     def jury_params
         params.require(:jury).permit(:title, :content, :thesis_project_id, :users_id)
