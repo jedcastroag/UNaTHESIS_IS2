@@ -8,8 +8,6 @@ import { Button } from 'semantic-ui-react';
 
 import Http from '../services/RestServices';
 
-const GET_PDF_PATH = 'file/download_project';
-
 class PDFRenderizer extends React.Component {
 	constructor(props){
 		super(props);
@@ -124,22 +122,24 @@ PDFEmbedded.propTypes = {
 
 PDFEmbedded.defaultProps = {
 	width: '100%',
-	height: 500,
+	height: '500px',
 	containerId: 'pdf-viewer'
 };
 
 class PdfViewer extends React.Component {
 	constructor(props){
 		super(props);
+
 		this.state = {
 			projectUrl: null
 		};
+
 		this.downloadPDF();
 		this.savePDF = this.savePDF.bind(this);
 	}
 
 	downloadPDF() {
-		Http.get(GET_PDF_PATH, { responseType: 'blob' })
+		Http.get(this.props.url, { responseType: 'blob' })
 		.then(response => {
 			this.setState({ projectUrl: URL.createObjectURL(response.data) });
 		}).catch(error => console.log("Error fetching project " + error));
@@ -149,10 +149,12 @@ class PdfViewer extends React.Component {
 		if(this.state.projectUrl != null){
 			var url = this.state.projectUrl;
 
+			console.log(url);
+
 			var anchorElem = document.createElement("a");
 			anchorElem.style = "display: none";
 			anchorElem.href = url;
-			anchorElem.download = this.props.data.thesis.title;
+			anchorElem.download = this.props.title;
 
 			document.body.appendChild(anchorElem);
 			anchorElem.click();

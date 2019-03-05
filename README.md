@@ -20,8 +20,10 @@
 * [Install Semantic UI](https://github.com/ashtonthomas/sample-rails-react-semantic-ui-app)
 * Run `bundle install`
 * Run `yarn install`
+
 * Run rails `db:migrate` and rails `db:seed`
 * Run `foreman start` or `rails server`
+
 * Heroku version is in https://unthesis.herokuapp.com/.
 
 ## Unit testing

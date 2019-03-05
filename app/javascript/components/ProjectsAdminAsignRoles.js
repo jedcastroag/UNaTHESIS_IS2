@@ -33,16 +33,12 @@ const FormRol = props => (
         </Form.Group>
         <hr></hr>
     </div>
-)
-
-
-
-
-class ProjectsAdmin extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state =
-            {
+    );
+    
+    class ProjectsAdmin extends React.Component {
+        constructor(props) {
+            super(props)
+            this.state = {
                 project_id: props.location.query.id,
                 user_roles: [],
                 tutors_number: 0

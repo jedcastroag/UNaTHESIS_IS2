@@ -4,9 +4,8 @@ Rails.application.routes.draw do
   post '/login', to: 'sessions#create'
   post 'file/load_post', to: 'file#load_post'
   get '/users/:id', to: 'users#find'
-  get '/getUserInfo', to: 'users#getActualUserInfo'
   get '/project/find/:userId', to: 'project#getProjectForUser'
-  get 'file/download_project', to: 'file#download_pdf'
+	get '/student/download_project', to: 'student#download_pdf'
   get 'admin/fetch_users_data', to: 'admin#fetch_users_data'
   get 'admin/fetch_projects', to: 'admin#fetch_projects'
   get 'admin/fetch_user_data', to: 'admin#fetch_user_data'
@@ -17,7 +16,10 @@ Rails.application.routes.draw do
   match 'admin/add_user', to: 'admin#add_user', via: [:post]
   match 'admin/create_project', to: 'admin#create_project', via: [:post]
   match 'admin/asign_roles', to: 'admin#asign_roles', via: [:post]
+  get 'jury_projects', to: 'jury#search_projects'
+  post 'jury_comment', to: 'jury#add_comment'
+  
+	resources :users
 
-  resources :users
-  get '*path', to: 'users#new'
+	get '*path', to: "users#new"
 end
