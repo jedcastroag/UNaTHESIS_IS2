@@ -15,7 +15,8 @@ Rails.application.routes.draw do
   match 'admin/delete_project', to: 'admin#delete_project', via: [:post]
   match 'admin/add_user', to: 'admin#add_user', via: [:post]
   match 'admin/create_project', to: 'admin#create_project', via: [:post]
-  match 'admin/asign_roles', to: 'admin#asign_roles', via: [:post]
+  post 'admin/asign_roles', to: 'admin#asign_roles'
+
   get 'jury_projects', to: 'jury#search_projects'
   post 'jury_comment', to: 'jury#add_comment'
   

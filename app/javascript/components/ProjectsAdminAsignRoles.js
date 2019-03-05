@@ -69,7 +69,7 @@ const FormRol = props => (
                         for (var i = 0; i < res['data'].length; i++) {
                             var user = res['data'][i]
                             this.setState(prevState => ({
-                                user_roles: [...prevState.user_roles, <FormRol user_id={user.id} rol_id={user.rol_id} number={this.countTutors} />],
+                                user_roles: [...prevState.user_roles, <FormRol user_id={user.id} rol_id={user.thesis_project_rol_id} number={this.countTutors} />],
                                 tutors_number: prevState.tutors_number + 1
                             }), () => {
                                 this.countTutors += 1
@@ -98,7 +98,6 @@ const FormRol = props => (
     render() {
         return (
             <div>
-                <h2>a</h2>
                 <Container>
                     <Row>
                         <Col>
