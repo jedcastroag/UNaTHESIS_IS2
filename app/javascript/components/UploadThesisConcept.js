@@ -2,7 +2,8 @@ import React from "react"
 import PropTypes from "prop-types"
 import Http from '../services/RestServices'
 
-import { Button, Input, Checkbox, Form, Grid, Segment, Container } from 'semantic-ui-react'
+import { Button, Form, Grid, Segment } from 'semantic-ui-react'
+import { withRouter } from 'react-router-dom'
 import '../../../dist/semantic.min.css';
 import { fromByteArray } from "ipaddr.js";
 
@@ -19,15 +20,15 @@ class CheckThesis extends React.Component {
             })            
         })
         Http.get(`/project/find/${this.state.studentId}`)
-        .then(res => { 
-            
+        .then(res => {                         
             Http.get(`/tutor/download/${res.data[0].thesis_project_id}`, { responseType: 'blob' })
-            .then(response => {
+            .then(response => {                
                 this.setState({ projectUrl: URL.createObjectURL(response.data) });
             })                  
             this.setState({                
                 titulo: res.data[0].title,
-                descripcion: res.data[0].description
+                descripcion: res.data[0].description,
+                projectId: res.data[0].thesis_project_id
             })
         })
     }
@@ -40,28 +41,39 @@ class CheckThesis extends React.Component {
             correo: '',
             studentId: this.props.id,
             titulo: '',
-            descripcion: '',  
-            projectUrl: null          
+            descripcion: '',
+            projectUrl: null,
+            projectId: 0,            
         }       
-        this.savePdf = this.savePdf.bind(this);
+        this.savePdf = this.savePdf.bind(this)
+        this.submitForm = this.submitForm.bind(this)
          
     }
 
     savePdf(){
         var url = this.state.projectUrl;
 
-        var anchorElem = document.createElement("a");
-        anchorElem.style = "display: none";
-        anchorElem.href = url;
-        anchorElem.download = this.state.titulo;
+        var anchorElem = document.createElement("a")
+        anchorElem.style = "display: none"
+        anchorElem.href = url
+        anchorElem.download = this.state.titulo
 
-        document.body.appendChild(anchorElem);
-        anchorElem.click();
+        document.body.appendChild(anchorElem)
+        anchorElem.click()
 
-        document.body.removeChild(anchorElem);
+        document.body.removeChild(anchorElem)
     }
 
-    render () {            
+    submitForm(event){                
+        event.preventDefault()
+        const data = new FormData(event.target)
+        data.append('projectId', this.state.projectId)
+        Http.post('/tutor/upload_concept', data).then().catch(error => 
+        console.log('ERROR' + error))            
+        this.props.redirectToHome()            
+    }
+
+    render () {             
       return (                   
         <div>
         <div className="ui raised container segment">           
@@ -121,32 +133,49 @@ class CheckThesis extends React.Component {
                 </Segment>
             </Grid.Column>   
         </Grid>
-        
-        <Form id= "conceptForm">
+        <Grid container columns = {2} stackable>
+            <Grid.Column>
+                <label>Documento tesis</label>
+                <Segment>                    
+                    <Button onClick={ this.savePdf } name="download" placeholder ="Descargar">Descargar</Button>                     
+                    <p>Presiona para descargar el documento correspondiente al proyecto</p>                    
+                </Segment>
+            </Grid.Column>   
+        </Grid>
+
+        <Form id= "conceptForm" onSubmit={ this.submitForm }>
 
         <Grid container columns = {2} stackable>
             <Grid.Column>                
                 <Form.Field>
                     <label>Comentarios adicionales</label>
-                    <textarea placeholder="Comentarios adicionales"></textarea>
+                    <textarea placeholder="Comentarios adicionales" name = "comentarios"></textarea>
                 </Form.Field>                
             </Grid.Column>
-            <Grid.Column>
-                <label>Documento tesis</label>
-                <Segment>
-                    <Button onClick={ this.savePdf }>Descargar</Button>
-                </Segment>
+            <Grid.Column>                
+                <Form.Field>
+                    <label>Aprobación</label>
+                    <select className = "ui fluid dropdown" name = "estado">
+                        <option value="approved">Aprobado</option>
+                        <option value="disapproved">No Aprobado</option>
+                    </select>
+                </Form.Field>
                 <Form.Field>
                     <label>Revision</label>
                     <input type='file' name="file" />
-                </Form.Field> 
-                <Form.Field>
-                    <Button floated="right" type="submit">Subir Revision</Button>
-                </Form.Field>       
-            </Grid.Column>
-        </Grid>
-
+                </Form.Field>                 
+                <Form.Field>                    
+                    <Button floated="right" type="submit" name ="submitButton">Subir Revision</Button>
+                </Form.Field>                       
+        
+            </Grid.Column>            
+        </Grid>                      
         </Form>
+        <Grid container columns = {1} stackable>
+            <Grid.Column>                                                
+                <Button floated="right" onClick={this.props.redirectToHome}  name = "cancel">Cancelar</Button>                                                 
+            </Grid.Column>   
+        </Grid>        
         </div>
         </div>
     );
@@ -154,10 +183,13 @@ class CheckThesis extends React.Component {
 }
 
 class UpdloadThesisConcept extends React.Component {
+    redirectToHome(){
+        this.props.history.push('/')        
+    }
     render () {        
         return (
             <div>            
-            <CheckThesis id = {this.props.match.params.id}/>            
+            <CheckThesis id = {this.props.match.params.id} redirectToHome={() => this.redirectToHome()}/>            
             </div>
         )
     }
@@ -167,4 +199,4 @@ UpdloadThesisConcept.propTypes = {
     greeting: PropTypes.string
   };
   
-  export default UpdloadThesisConcept
+  export default withRouter(UpdloadThesisConcept)
