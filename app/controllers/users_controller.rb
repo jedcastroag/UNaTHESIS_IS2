@@ -3,40 +3,7 @@ class UsersController < ApplicationController
 
 	def new
 	end
-
-	def find			
-		user = User.find(params[:id])
-		render json: user.to_json
-	end
-
-	def getProjectsForTutor		
-		authenticate_request!
-		tutor = @current_user
-		tutorId = tutor.id.to_s
-		sqlGetProjects = "select distinct thesis_project_id from thesis_projects_users where user_id = " + tutorId + ";"		
-		res = ActiveRecord::Base.connection.exec_query(sqlGetProjects)
-		studentsArr = []
-		res.each do |val|
-			projectId = val['thesis_project_id'].to_s			
-			sqlGetStudents = "SELECT distinct user_id FROM thesis_projects_users
-			WHERE thesis_project_id = " + projectId + " AND thesis_project_rol_id = 1;"
-			students = ActiveRecord::Base.connection.exec_query(sqlGetStudents)
-			studentsArr.push(students[0]['user_id'])			
-		end		
-		studentsArr = studentsArr.to_set
-		projectsArray = []
-		studentsArr.each do |val|
-			studentId = val.to_s
-			getProjectForStudent = "SELECT thesis_projects.*, user_id as id_estudiante
-			FROM thesis_projects_users
-			INNER JOIN thesis_projects ON thesis_projects_users.thesis_project_id = thesis_projects.id
-			WHERE thesis_projects_users.user_id = " + studentId +" ORDER BY created_at DESC LIMIT 1;"
-			project = ActiveRecord::Base.connection.exec_query(getProjectForStudent)
-			projectsArray.push(project)			
-		end
-		
-		render json: projectsArray.to_json
-	end
+	
 
 	def create
 		user = User.new(user_params)

@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get '/home', to: 'home#view'
   post '/login', to: 'sessions#create'
   post 'file/load_post', to: 'file#load_post'
-  get '/users/:id', to: 'users#find'
+  get '/users/:id', to: 'tutor#find'
   get '/project/find/:userId', to: 'project#getProjectForUser'
 	get '/student/download_project', to: 'student#download_pdf'
   get 'admin/fetch_users_data', to: 'admin#fetch_users_data'
@@ -18,12 +18,10 @@ Rails.application.routes.draw do
   match 'admin/create_project', to: 'admin#create_project', via: [:post]
   get 'jury_projects', to: 'jury#search_projects'
   post 'jury_comment', to: 'jury#add_comment'
-  get 'tutor/projects', to: 'users#getProjectsForTutor'
-  get '/tutor/download/:id', to: 'file#downloadPdfTutor'
-  post 'tutor/upload_concept', to: 'file#save_thesis_concept'
-  get '/getUserInfo', to: 'users#getActualUserInfo'
-	get '/project/find/:userId', to: 'project#getProjectForUser'	
-  get 'file/download_project', to: 'file#download_pdf'
+  get 'tutor/projects', to: 'tutor#getProjectsForTutor'
+  get '/tutor/download/:id', to: 'tutor#downloadPdfTutor'
+  post 'tutor/upload_concept', to: 'tutor#save_thesis_concept'
+  get '/getUserInfo', to: 'tutor#getActualUserInfo'		  
   
 	resources :users
 

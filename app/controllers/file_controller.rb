@@ -10,42 +10,7 @@ class FileController < ApplicationController
     super User.user_type_ids.slice 'student'
   end
 
-  def downloadPdfTutor
-    thesis_project = ThesisProject.find(params[:id])
-    
-    send_file(
-      "#{Rails.root}/#{thesis_project.document}",
-      filename: "#{ thesis_project.title }.pdf",
-      type: "application/pdf"
-    )
-  rescue => error
-    if Rails.env.production?
-      render json: { error: "Bad request" }, status: :unauthorized
-    else
-      render json: { error: error }, status: :unauthorized
-    end
-  end
-
-  def save_thesis_concept    
-    authenticate_request!
-    file_path = process_file(
-      params[:file],
-      Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'
-    )        
-    state = params[:estado] == 'approved' ? true : false    
-    ThesisProject.where(id: params[:projectId]).update_all(approbation_state: state)
-    Comment.create(
-     thesis_project_id: params[:projectId],
-      users_id: @current_user.id,
-      title: "Comentarios adicionales revision tesis",
-      content: params[:comentarios],
-      created_at: Time.now.strftime('%Y%m%d_%H%M%S'),
-      updated_at: Time.now.strftime('%Y%m%d_%H%M%S')
-    )
-    date = Time.now.strftime('%Y%m%d_%H%M%S')
-    sql = "INSERT into support_documents (document, created_at, updated_at) values ('" +file_path +"','"  + date + "','"+ date+"');"     
-    ActiveRecord::Base.connection.exec_query(sql)       
-  end
+  
 
   def load_post
     file_name = Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'

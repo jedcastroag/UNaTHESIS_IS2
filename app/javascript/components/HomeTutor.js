@@ -10,7 +10,7 @@ class ProjectRow extends React.Component {
     componentDidMount(){
         let tableRows = []
         Http.get('tutor/projects')
-        .then(response => {                                                            
+        .then(response => {                     
             response.data.forEach(row => {
                 Http.get(`users/${row[0].id_estudiante}`)
                 .then(res => {                    
@@ -38,7 +38,7 @@ class ProjectRow extends React.Component {
     }
 
     render(){        
-        const projects = this.state.projects                
+        const projects = this.state.projects                      
         return (
             <Table celled padded>
                 <Table.Header>
@@ -102,22 +102,22 @@ class TutorInfo extends React.Component {
             <h3 className="ui header">Tu Información Personal</h3>
             <Grid container columns ={3} stackable>
                 <Grid.Column>                
-                <label>Nombre</label>                
-                <Segment>
-                <p>{ this.props.data.name }</p>
-                </Segment>   
+                    <label>Nombre</label>                
+                    <Segment>
+                        <p>{this.state.nombres}</p>
+                    </Segment>   
                 </Grid.Column>
                 <Grid.Column>
-                <label>Apellidos</label>                
-                <Segment>
-                <p >{ this.props.data.surname }</p>
-                </Segment>
+                    <label>Apellidos</label>                
+                    <Segment>
+                        <p >{this.state.apellidos}</p>
+                    </Segment>
                 </Grid.Column>
                 <Grid.Column>
-                <label>Correo</label>  
-                <Segment>
-                <p>{ this.props.data.email }</p>    
-                </Segment>              
+                    <label>Correo</label>  
+                    <Segment>
+                        <p>{this.state.correo}</p>    
+                    </Segment>              
                 </Grid.Column>
             </Grid>
             </div>

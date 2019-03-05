@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import Http from '../services/RestServices'
 
+import {withRouter} from 'react-router-dom'
 import { Button, Form, Grid, Segment } from 'semantic-ui-react'
 
 class CheckThesis extends React.Component {
@@ -185,15 +186,13 @@ class UpdloadThesisConcept extends React.Component {
         return (
             <div>            
             <CheckThesis id = {this.props.match.params.id} redirectToHome={() => this.redirectToHome()}/>            
-            </div>
-            </div>
-            );
-        }
-    }
+            </div>            
+        );
+    }    
 }
 
 UpdloadThesisConcept.propTypes = {
     greeting: PropTypes.string
-  };
+};
   
-  export default withRouter(UpdloadThesisConcept)
+export default withRouter(UpdloadThesisConcept)
