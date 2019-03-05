@@ -16,7 +16,7 @@ const GET_PDF_PATH = 'student/download_project';
 
 class Details extends React.Component {
 	render () {
-		return(<h1>Details</h1>);
+		return <h1>Details</h1>;
 	}
 }
 
@@ -85,7 +85,7 @@ class NoThesisFound extends React.Component {
 			  <Icon name='file alternate outline' />
 			  Aún no has cargado tu proyecto de tesis.
 			</Header>
-			<Button primary onClick={this.props.linkToAddDocument}>
+			<Button primary onClick={ this.props.linkToAddDocument }>
 			Añadir documento
 			</Button>
 		  </Segment>
@@ -104,8 +104,11 @@ class HomeStudent extends React.Component {
 	}
 
 	checkIfThesisExists() {
-		if(this.props.thesis == null) {
-			return <NoThesisFound linkToAddDocument={this.linkToAddDocument}/>;
+		
+		console.log(this.props);
+
+		if(this.props.data.thesis == null) {
+			return <NoThesisFound linkToAddDocument={ this.linkToAddDocument }/>;
 		} else {
 			return (
 			<Container text>

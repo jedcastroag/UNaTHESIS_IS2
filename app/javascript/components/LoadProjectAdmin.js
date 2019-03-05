@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Table, Button, Dropdown, Form, Select } from 'semantic-ui-react'
+import { Button, Form, Select } from 'semantic-ui-react'
 import { Container, Row, Col } from 'react-grid-system';
 
 import Http from '../services/RestServices'
@@ -51,7 +51,7 @@ const FormTutor = props => (
                 count: prevState.count+1
             }))
         }
-        
+
         componentDidMount() {
             Http.get(`/admin/fetch_users_data`)
             .then(res => {

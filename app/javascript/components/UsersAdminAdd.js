@@ -1,11 +1,10 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Table } from 'semantic-ui-react'
+
 import Http from '../services/RestServices'
 import { Container, Row, Col } from 'react-grid-system';
 
 import { Button, Input, Checkbox, Form } from 'semantic-ui-react'
-
 
 class UsersAdminAdd extends React.Component {
     constructor(props) {
