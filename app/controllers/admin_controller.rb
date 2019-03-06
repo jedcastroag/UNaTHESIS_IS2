@@ -49,8 +49,9 @@ class AdminController < ApplicationController
   end
 
   def fetch_roles_project
-    users = User.joins('INNER JOIN thesis_projects_users ON users.id = user_id')
-    .where('thesis_projects_users.thesis_project_id = ?', params[:id])
+    users = User.select('thesis_projects_users.*, users.*')
+                .joins('INNER JOIN thesis_projects_users ON users.id = user_id')
+                .where('thesis_projects_users.thesis_project_id = ?', params[:id])
     render json: users.to_json
   end
 
