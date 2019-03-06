@@ -64,7 +64,7 @@ class ProjectsAdmin extends React.Component {
                             <h1>Proyectos</h1>
                         </Col>
                         <Col>
-                            <Button class="ui right floated button" href="/admin/users/add"><Link to="/admin/users/add">Añadir proyecto</Link></Button>
+                            <Link to="/admin/projects/create">Crear proyecto</Link>
                         </Col>
                     </Row>
                     <Row>

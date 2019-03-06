@@ -23,7 +23,6 @@ class TokenService
 		return decoded
 	end
 
-	# https://en.wikipedia.org/wiki/JSON_Web_Token#Standard_fields
 	def encode(payload, expiration=6.hours.from_now.to_i, issuer = 'unathesis_client')
 		meta = { iss: issuer, exp: expiration, aud: 'unathesis' }
 		payload.reverse_merge! meta

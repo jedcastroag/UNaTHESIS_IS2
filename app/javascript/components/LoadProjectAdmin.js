@@ -67,43 +67,64 @@ const FormTutor = props => (
                     }
                 })
             })
-        }
-        
-        render() {
-            return <Container>
-                <Row>
-                <Col>
-                <Header>Crear proyecto</Header>
-                </Col>
-                </Row>
-                <Row>
-                <Col>
-                <Form id="formProject" action='/admin/create_project' method='POST' enctype="multipart/form-data">
-                <input type="hidden" value={this.state.count} id='count_users' name='count_users'/>
-                <Form.Field>
-                <label>Titulo</label>
-                <input placeholder='Titulo' name='title' />
-                </Form.Field>
-                
-                <Form.Field>
-                <label>Información directores, tutores y asesores</label>
-                </Form.Field>
-                
-                { this.state.tutors }
-                
-                <Form.Field>
-                <Button onClick={ this.onAddTutor } type='button'>Añadir</Button>
-                </Form.Field>
-                
-                <Form.Field>
-                <Button type='submit'>Cargar proyecto</Button>
-                </Form.Field>
-                </Form>
-                </Col>
-                </Row>
-                </Container>;
-            }
-        }
-        
-        export default LoadProjectAdmin
-        
+
+
+
+    }
+
+
+    render() {
+        return (
+            <div>
+                <Container>
+                    <Row>
+                        <Col>
+                            <h1 class="ui header">Crear proyecto</h1>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Form id="formProject" action='/admin/create_project' method='POST' enctype="multipart/form-data">
+                                <input type="hidden" value={this.state.count} id='count_users' name='count_users'/>
+                                <Form.Field>
+                                    <label>Titulo</label>
+                                    <input placeholder='Titulo' name='title' />
+                                </Form.Field>
+                                
+                                <Form.Field>
+                                    <label>Información directores, tutores y asesores</label>
+
+                                </Form.Field>
+                                {this.state.tutors}
+
+
+                                <Form.Field>
+                                    <Button onClick={this.onAddTutor} type='button'>Añadir</Button>
+                                </Form.Field>
+                                
+                                <Form.Field>
+                                    <Button type='submit'>Crear proyecto</Button>
+                                </Form.Field>
+                            </Form>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+
+        );
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    ReactDOM.render(
+        <div>
+            <LoadProject />
+        </div>,
+        document.body.appendChild(document.createElement('div')),
+    )
+
+
+})
+
+
+export default LoadProjectAdmin

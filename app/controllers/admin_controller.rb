@@ -1,7 +1,7 @@
 require 'securerandom'
 
 class AdminController < ApplicationController
-  skip_before_action :verify_authenticity_token
+    skip_before_action :verify_authenticity_token
 
   def initialize
     super User.user_type_ids.slice 'admin'
@@ -49,7 +49,7 @@ class AdminController < ApplicationController
   end
 
   def fetch_roles_project
-    users = User.select('thesis_projects_users.*, users.*')
+    users = User.select('users.*, thesis_projects_users.*')
                 .joins('INNER JOIN thesis_projects_users ON users.id = user_id')
                 .where('thesis_projects_users.thesis_project_id = ?', params[:id])
     render json: users.to_json
@@ -67,6 +67,16 @@ class AdminController < ApplicationController
       ThesisProjectUser.create thesis_project_id: thesis.id, user_id: params[:"user_#{i}"], 
       thesis_project_rol_id: params[:"user_type_#{i}"]
     end
+    render json: 200
+  end
+
+  def asign_roles
+    if(!ThesisProjectUser.find_by(thesis_project_id: params[:id_project]).nil?)
+      ThesisProjectUser.find_by(thesis_project_id: params[:id_project]).destroy
+    end
+    for i in (0..(params[:count_users].to_i) - 1)
+      ThesisProjectUser.create(thesis_project_id: params[:id_project], user_id: params[:"user_#{i}"], thesis_project_rol_id: params[:"rol_#{i}"])
+    end  
     render json: 200
   end
 end
