@@ -30,6 +30,4 @@ yarn-debug.log*
 /config/database.
 /files/*
 /config/jwt*
-
-# Ignore master key for decrypting credentials and more.
-/config/master.key
+/config/master*
