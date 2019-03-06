@@ -109,7 +109,7 @@ class Home extends React.Component {
                 }
             };
             Http.post(POST_QUESTIONS_PATH, data).then(response => {
-                alert(response.data);
+                alert(response.data.message);
                 console.log(response.data);
             }).catch(error => console.log(error));
         }

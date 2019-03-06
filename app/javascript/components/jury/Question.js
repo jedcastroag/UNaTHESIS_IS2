@@ -10,7 +10,6 @@ class EditQuestions extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      questions: [],
       showOtherQuestionField: (this.props.questions.length == 2),
       sendButtonContent: (this.props.questions.length == 2) ? "Questions": "Question",
     };
@@ -25,7 +24,6 @@ class EditQuestions extends React.Component {
 
   onChangeQuestion = (num_question) => (e) => {
     this.questions[num_question] = e.target.value;
-    this.setState({questions: this.questions});
   }
 
   addOrHideQuestion () {
@@ -72,18 +70,18 @@ class EditQuestions extends React.Component {
   }
 
   sendQuestions () {
-    if (this.state.questions.length == 0) {
+    if (this.questions.length == 0) {
       alert("Make a Question");
     } else {
-      if (this.state.questions[0] == "" || 
-        (this.state.showOtherQuestionField && this.state.questions[1] == "")) {
+      if (this.questions[0] == "" || 
+        (this.state.showOtherQuestionField && (this.questions[1] == null || this.questions[1] == ""))) {
         alert("Question can't be blank");
       }else {
         if (!this.state.showOtherQuestionField) {
-          this.questions = this.questions.splice(1,1);
-          this.setState({questions: this.questions});
+          this.props.sendQuestions(this.questions.slice(0,1));
+        } else {
+          this.props.sendQuestions(this.questions);
         }
-        this.props.sendQuestions(this.state.questions);
       }
     }
   }
@@ -176,18 +174,23 @@ class Question extends React.Component {
         }
       };
       Http.get(GET_QUESTIONS_PATH, params).then(response => {
-        if (response.data.length != 0) {
+        if (response.data.length == 0) {
+          this.setState({
+            questions: response.data,
+            EditQuestions: true
+          });
+        } else {
           this.setState({
             questions: response.data,
             EditQuestions:false
-          });  
+          });
         }
       }).catch(error => console.error(error));
     }
   }
 
   renderQuestionsOrEditQuestions () {
-    if (this.state.EditQuestions) {
+    if (this.state.EditQuestions) {      
       return <EditQuestions sendQuestions={this.props.sendQuestions} questions={this.state.questions} />
     }
     return (
