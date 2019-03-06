@@ -61,7 +61,17 @@ class JuryController < ApplicationController
                     end                    
                 end
             else
-                
+                # new_questions = params[:jury][:questions]
+                # if new_questions.length == questions.length
+                #     i = 0                    
+                #     questions.each do |question_obj|
+                #         question_obj.question = new_questions[i].question
+                #     end                                     
+                # elsif new_questions.length < question.length
+                        
+                # else
+                    
+                # end
             end
         else
             render json: {:message => "Invalid Request"}, status: :unauthorized
