@@ -15,8 +15,11 @@ const FormRol = props => (
         <Form.Group widths='equal'>
             <Form.Field>
                 <label>Usuario</label>
-                <select class="ui selection dropdown" name={'user_' + props.number} value={props.user_id} placeholder='Usuario'>
+                <select class="ui selection dropdown" name={'user_' + props.number}  placeholder='Usuario'>
                     {users.map((value, index) => {
+                        if (value.value ==  props.user_id ){
+                            return <option value={value.value} selected>{value.text}</option>
+                        }
                         return <option value={value.value}>{value.text}</option>
                     })}
                 </select>
@@ -24,8 +27,12 @@ const FormRol = props => (
 
             <Form.Field>
                 <label>Roles</label>
-                <select class="ui selection dropdown" name={'rol_' + props.number} value={props.rol_id} placeholder='Roles'>
+                <select class="ui selection dropdown" name={'rol_' + props.number} placeholder='Roles'>
                     {roles.map((value, index) => {
+                        if(value.value == props.rol_id){
+                            return <option value={value.value} selected>{value.text}</option>
+
+                        }
                         return <option value={value.value}>{value.text}</option>
                     })}
                 </select>
@@ -69,7 +76,7 @@ const FormRol = props => (
                         for (var i = 0; i < res['data'].length; i++) {
                             var user = res['data'][i]
                             this.setState(prevState => ({
-                                user_roles: [...prevState.user_roles, <FormRol user_id={user.id} rol_id={user.thesis_project_rol_id} number={this.countTutors} />],
+                                user_roles: [...prevState.user_roles, <FormRol user_id={user.user_id} rol_id={user.thesis_project_rols_id} number={this.countTutors} />],
                                 tutors_number: prevState.tutors_number + 1
                             }), () => {
                                 this.countTutors += 1

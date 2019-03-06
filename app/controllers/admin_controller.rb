@@ -49,9 +49,9 @@ class AdminController < ApplicationController
   end
 
   def fetch_roles_project
-    users = User.select('users.*, thesis_projects_users.*')
-                .joins('INNER JOIN thesis_projects_users ON users.id = user_id')
-                .where('thesis_projects_users.thesis_project_id = ?', params[:id])
+    users = User.select('users.*, thesis_project_users.*')
+                .joins('INNER JOIN thesis_project_users ON users.id = user_id')
+                .where('thesis_project_users.thesis_project_id = ?', params[:id])
     render json: users.to_json
   end
 
@@ -75,7 +75,7 @@ class AdminController < ApplicationController
       ThesisProjectUser.find_by(thesis_project_id: params[:id_project]).destroy
     end
     for i in (0..(params[:count_users].to_i) - 1)
-      ThesisProjectUser.create(thesis_project_id: params[:id_project], user_id: params[:"user_#{i}"], thesis_project_rol_id: params[:"rol_#{i}"])
+      ThesisProjectUser.create(thesis_project_id: params[:id_project], user_id: params[:"user_#{i}"], thesis_project_rols_id: params[:"rol_#{i}"])
     end  
     render json: 200
   end
