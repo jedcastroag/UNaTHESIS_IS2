@@ -8,6 +8,7 @@ import HomeJury from './HomeJury'
 import HomeStudent from './HomeStudent'
 import HomeTutor from './HomeTutor'
 import HomeAdmin from './HomeAdmin'
+import Login from './LoginForm'
 
 const HOME_PATH = '/home';
 
@@ -39,7 +40,9 @@ class Home extends React.Component {
 			case 4:
 			return <HomeJury data={this.state.response}/>;
 			default:
-			return <HomeStudent data={this.setState.response} />;
+			return <div style = {{height:"100px"}}>
+				<h2>Redirecting...</h2>
+			</div>;
 		}
 	}
 

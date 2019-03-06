@@ -91,26 +91,26 @@ class PDFRenderizerContainer extends React.Component {
 			{ this.showButtons() }
 			</div>
 			);
+		}
 	}
-}
-
-class PDFEmbedded extends React.Component {
-	constructor(props){
-		super(props);
-		this.pdfShowed = false;
-	}
-
+	
+	class PDFEmbedded extends React.Component {
+		constructor(props){
+			super(props);
+			this.pdfShowed = false;
+		}
+		
 	componentDidMount() {
 		const { containerId } = this.props;
 		if(this.props.projectUrl != null)
 			PDFObject.embed(this.props.projectUrl, `#${containerId}`);
-	}
+		}
 
 	render() {
 		if(!this.pdfShowed && this.props.projectUrl != null) {
 			this.componentDidMount();
 		}
-
+		
 		const { width, height, containerId } = this.props;
 		return <div style={{ width: this.props.width, height: this.props.height }} id={ containerId } />;
 	}
@@ -142,7 +142,7 @@ class PdfViewer extends React.Component {
 			this.downloadPDF();			
 		}
 	}
-
+	
 	downloadPDF() {
 		const params = {responseType: 'blob', params:{id: this.props.project_id}};
 		Http.get(GET_PDF_PATH, params)
@@ -150,11 +150,11 @@ class PdfViewer extends React.Component {
 			this.setState({ projectUrl: URL.createObjectURL(response.data) });
 		}).catch(error => console.log("Error fetching project " + error));
 	}
-
+	
 	savePDF() {
 		if(this.state.projectUrl != null){
 			var url = this.state.projectUrl;
-
+			
 			var anchorElem = document.createElement("a");
 			anchorElem.style = "display: none";
 			anchorElem.href = url;
@@ -163,17 +163,17 @@ class PdfViewer extends React.Component {
 
 			document.body.appendChild(anchorElem);
 			anchorElem.click();
-
+			
 			document.body.removeChild(anchorElem);
 		}
 	}
 
 	renderPDF() {
 		if(PDFObject.supportsPDFs)
-			return <PDFEmbedded projectUrl={ this.state.projectUrl }/>;
+		return <PDFEmbedded projectUrl={ this.state.projectUrl }/>;
 		return <PDFRenderizerContainer projectUrl={ this.state.projectUrl }/>;
 	}
-
+	
 	render () {
 		return (
 			<React.Fragment>
@@ -181,7 +181,7 @@ class PdfViewer extends React.Component {
 			<Button basic compact attached='bottom' onClick={ this.savePDF }>Descargar</Button>
 			</React.Fragment>
 			);
+		}
 	}
-}
 
 export default PdfViewer

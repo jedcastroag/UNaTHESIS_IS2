@@ -15,8 +15,8 @@ class JuryController < ApplicationController
     def add_comment
         authenticate_request!
         msg = ""
-        if @current_user.user_type_id == UserType.find_by(:name => "Jury").id            
-            comment = Comment.find_by(users_id: @current_user.id,
+        if check_user
+            comment = Comment.where(users_id: @current_user.id,
                 thesis_project_id: jury_params[:thesis_project_id])
             if comment == nil
                 users_id = {:users_id => @current_user.id}
@@ -43,9 +43,83 @@ class JuryController < ApplicationController
             render json: {:message => "Invalid Request"}, status: :unauthorized
         end
     end
+
+    def add_questions
+        authenticate_request!
+        message = ""
+        create_answer = ""
+        if check_user
+            questions = Question.where(user_id: @current_user.id,
+                thesis_project_id: jury_params[:thesis_project_id])
+            if questions.empty?
+                i = 1
+                params[:jury][:questions].each do |question|
+                    if question != ""
+                        if Question.create(
+                            question: question,
+                            user_id: @current_user.id,
+                            thesis_project_id: jury_params[:thesis_project_id]
+                        ) != nil
+                            message << "Question " + i.to_s + " was created and saved\n"
+                        else
+                            message << "Question" + i.to_s + " couldn't be created and saved\n"
+                        end
+                        i += 1
+                    end                    
+                end
+            else
+                new_questions = params[:jury][:questions]
+                if new_questions.length == questions.length
+                    i = 0                    
+                    questions.each do |question|
+                        if question.update(question: new_questions[i])
+                            message << "Question " + (i+1).to_s + " Updated \n"
+                            i += 1
+                        else
+                            message << "Can't Update the question " + (i+1).to_s + "\n"
+                        end
+                    end
+                else
+                    if questions[0].update question: new_questions[0]
+                        message << "Question " + 1.to_s + " Updated \n"
+                    else
+                        message << "Can't Update the question " + 1.to_s + "\n"
+                    end
+                    if Question.create(
+                        question: new_questions[1],
+                        user_id: @current_user.id,
+                        thesis_project_id: jury_params[:thesis_project_id]
+                    ) != nil
+                        message << "Question " + 2.to_s + " Created \n"
+                    else
+                        message << "Question " + 2.to_s + " Can't be Created\n"
+                    end
+                end
+            end
+        else
+            render json: {:message => "Invalid Request"}, status: :unauthorized
+        end
+        render json: {:message => message}
+    end
     
+    def get_questions
+        authenticate_request!
+
+        questions = []
+        if check_user
+            questions = Question.where(
+                user_id: @current_user.id,
+                thesis_project_id: params[:thesis_project_id]
+                )
+        end    
+        render json: questions
+    end    
     
     private
+
+    def check_user
+        @current_user.user_type_id == UserType.find_by(name: "Jury").id
+    end
     
     def jury_params
         params.require(:jury).permit(:title, :content, :thesis_project_id, :users_id)
