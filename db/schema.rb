@@ -59,42 +59,34 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
     t.index ["thesis_project_father_id"], name: "index_thesis_on_thesis_project_father_id"
   end
 
-  create_table "thesis_project_rols", force: :cascade do |t|
+  create_table "thesis_project_roles", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "thesis_project_users", force: :cascade do |t|
-    t.bigint "thesis_project_rols_id"
+    t.bigint "thesis_project_roles_id", null: false
     t.bigint "thesis_project_id", null: false
     t.bigint "user_id", null: false
+    t.boolean "confirmed", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["thesis_project_id", "user_id"], name: "index_thesis_project_users_on_thesis_project_id_and_user_id", unique: true
     t.index ["thesis_project_id"], name: "index_thesis_project_users_on_thesis_project_id"
-    t.index ["thesis_project_rols_id"], name: "index_thesis_project_users_on_thesis_project_rols_id"
+    t.index ["thesis_project_roles_id"], name: "index_thesis_project_users_on_thesis_project_roles_id"
     t.index ["user_id", "thesis_project_id"], name: "index_thesis_project_users_on_user_id_and_thesis_project_id", unique: true
     t.index ["user_id"], name: "index_thesis_project_users_on_user_id"
   end
 
   create_table "thesis_projects", force: :cascade do |t|
     t.string "title", null: false
-    t.string "document", null: false
-    t.text "description", null: false
-    t.boolean "approbation_state", null: false
-    t.boolean "activation_state", null: false
+    t.string "document"
+    t.text "description"
+    t.boolean "approbation_state"
+    t.boolean "activation_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "thesis_projects_users", force: :cascade do |t|
-    t.bigint "thesis_project_id", null: false
-    t.bigint "user_id", null: false
-    t.bigint "thesis_project_rol_id"
-    t.index ["thesis_project_id", "user_id"], name: "index_thesis_projects_users_on_thesis_project_id_and_user_id", unique: true
-    t.index ["thesis_project_rol_id"], name: "index_thesis_projects_users_on_thesis_project_rol_id"
-    t.index ["user_id", "thesis_project_id"], name: "index_thesis_projects_users_on_user_id_and_thesis_project_id", unique: true
   end
 
   create_table "user_types", force: :cascade do |t|
@@ -125,7 +117,8 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
   add_foreign_key "questions", "users"
   add_foreign_key "thesis", "thesis_projects", column: "thesis_project_associated_id"
   add_foreign_key "thesis", "thesis_projects", column: "thesis_project_father_id"
-  add_foreign_key "thesis_project_users", "thesis_project_rols", column: "thesis_project_rols_id"
-  add_foreign_key "thesis_projects_users", "thesis_project_rols"
+  add_foreign_key "thesis_project_users", "thesis_project_roles", column: "thesis_project_roles_id"
+  add_foreign_key "thesis_project_users", "thesis_projects"
+  add_foreign_key "thesis_project_users", "users"
   add_foreign_key "users", "user_types"
 end

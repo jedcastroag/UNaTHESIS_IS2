@@ -103,7 +103,7 @@ class FormTutor extends React.Component {
         data.append("tutors_juries", JSON.stringify(this.state.tutors_data));
         
         //this.props.returnToHome()
-        Http.post('/file/load_post', data).then(response => console.log(response))
+        Http.post('/file/load_post', data).then(response => console.log())
         .catch( error => console.log("ERROR " + error));
       }
       

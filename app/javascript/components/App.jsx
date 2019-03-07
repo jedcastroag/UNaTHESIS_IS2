@@ -17,6 +17,7 @@ import UsersAdminAdd from './UsersAdminAdd';
 import ProjectsAdmin from './ProjectsAdmin';
 import ProjectsAdminAsignRoles from './ProjectsAdminAsignRoles';
 import LoadProjectAdmin from './LoadProjectAdmin';
+import { Segment } from "semantic-ui-react";
 
 /** 
 * All the application's paths must be declarated this.
@@ -115,8 +116,10 @@ class App extends React.Component {
 			<Route exact render={() => { window.location.href="/404.html" }} />
 			</Switch>
 			
+			<Segment basic />
+			
 			</div>
-			</BrowserRouter>			
+			</BrowserRouter>
 			);	
 		}
 	}

@@ -13,10 +13,18 @@ class HomeController < ApplicationController
 
 		when 'student'
 			thesis_project = @current_user.thesis_projects.last
+
+			users = ThesisProject.select('users.name, users.surname, users.email,
+				thesis_project_users.thesis_project_roles_id as role, users.institution, 
+				users.country, thesis_project_users.confirmed, thesis_project_users.user_id')
+				.joins('INNER JOIN thesis_project_users ON thesis_projects.id = thesis_project_users.thesis_project_id')
+				.joins('INNER JOIN users ON thesis_project_users.user_id = users.id')
+				.where('thesis_projects.id = ? AND NOT users.id = ?', thesis_project.id, @current_user.id);
+
 			student = { 
 				:thesis => thesis_project, 
 				:comments => thesis_project&.comments || [],
-				:users => thesis_project&.users || []
+				:users => users || []
 			}
 			body.merge! student
 		when 'jury_tutor'

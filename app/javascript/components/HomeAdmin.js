@@ -5,7 +5,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Header, Grid, Container } from 'semantic-ui-react'
-import '../../../dist/semantic.min.css';
+
 import {
     DateInput,
     TimeInput,
@@ -20,7 +20,7 @@ class HomeAdmin extends React.Component {
     }
     constructor(props) {
         super(props);
-
+        
         this.state = {
             date: '',
             time: '',
@@ -29,24 +29,15 @@ class HomeAdmin extends React.Component {
         };
     }
     render() {
-        return (
-            <div>
-                <Container>
-                    <DateInput
-                        inline
-                        name='date'
-                        value={this.state.date}
-                        onChange={this.handleDateChange}
-                    />
-                </Container>
-                
-                
-            </div>
-
-        );
+        return <Container>
+        <DateInput
+        inline
+        name='date'
+        value={ this.state.date }
+        onChange={ this.handleDateChange }
+        />
+        </Container>;
     }
 }
-
-
 
 export default HomeAdmin

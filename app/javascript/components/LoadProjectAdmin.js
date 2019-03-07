@@ -115,16 +115,4 @@ const FormTutor = props => (
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    ReactDOM.render(
-        <div>
-            <LoadProject />
-        </div>,
-        document.body.appendChild(document.createElement('div')),
-    )
-
-
-})
-
-
 export default LoadProjectAdmin

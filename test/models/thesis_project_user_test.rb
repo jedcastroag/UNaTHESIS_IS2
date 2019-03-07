@@ -12,17 +12,17 @@ class ThesisProjectUserTest < ActiveSupport::TestCase
 		
 		# Author rol
 		@author_thesis_project_user = ThesisProjectUser.create user: @user, 
-		thesis_project: @thesis_project, thesis_project_rols_id: 1
+		thesis_project: @thesis_project, thesis_project_roles_id: 1
 		
 		# Tutor rol
 		@tutor_thesis_project_user = ThesisProjectUser.create user: @user2, 
-		thesis_project: @thesis_project, thesis_project_rols_id: 2
+		thesis_project: @thesis_project, thesis_project_roles_id: 2
 	end
 	
 	def teardown
-		@thesis_project.delete
 		@tutor_thesis_project_user.delete
 		@author_thesis_project_user.delete
+		# @thesis_project.delete
 	end
 	
 	test "should be save a thesis project - user association" do
@@ -32,12 +32,12 @@ class ThesisProjectUserTest < ActiveSupport::TestCase
 	test "should be throw an error when try create a duplicate association between a thesis and user with the same rol" do
 		assert_raises ActiveRecord::RecordNotUnique do
 			ThesisProjectUser.create user: @user2, 
-			thesis_project: @thesis_project, thesis_project_rols_id: 2
+			thesis_project: @thesis_project, thesis_project_roles_id: 2
 		end
 		
 		assert_raises ActiveRecord::RecordNotUnique do
 			ThesisProjectUser.create user: @user, 
-			thesis_project: @thesis_project, thesis_project_rols_id: 1
+			thesis_project: @thesis_project, thesis_project_roles_id: 1
 		end
 	end
 	
@@ -46,7 +46,7 @@ class ThesisProjectUserTest < ActiveSupport::TestCase
 		new_project.save
 		
 		new_thesis_project_user = ThesisProjectUser.new user: @user2, 
-		thesis_project: new_project, thesis_project_rols_id: 2
+		thesis_project: new_project, thesis_project_roles_id: 2
 
 		assert new_thesis_project_user.save
 
@@ -64,7 +64,7 @@ class ThesisProjectUserTest < ActiveSupport::TestCase
 		description: "Here the description"
 		
 		thesis_project_user = ThesisProjectUser.create user: @user, 
-		thesis_project: new_thesis, thesis_project_rols_id: "author"
+		thesis_project: new_thesis, thesis_project_roles_id: "author"
 
 		assert @user.thesis_projects.size == 2 && @user.thesis_projects.last.id == thesis_project_user.thesis_project_id
 

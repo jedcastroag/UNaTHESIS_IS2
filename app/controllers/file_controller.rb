@@ -10,8 +10,6 @@ class FileController < ApplicationController
     super User.user_type_ids.slice 'student'
   end
 
-  
-
   def load_post
     file_name = Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'
     
@@ -20,7 +18,7 @@ class FileController < ApplicationController
     title: params[:project_title]
     
     thesis_project_user = ThesisProjectUser.new user: @current_user,
-    thesis_project: thesis_project, thesis_project_rols_id: "author"
+    thesis_project: thesis_project, thesis_project_roles_id: "author"
 
     tutors_juries = JSON.parse params[:tutors_juries]
 
