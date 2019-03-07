@@ -17,7 +17,7 @@ const FormRol = props => (
                 <label>Usuario</label>
                 <select class="ui selection dropdown" name={'user_' + props.number}  placeholder='Usuario'>
                     {users.map((value, index) => {
-                        if (value.value ==  props.user_id ){
+                        if (value.value ==  props.user_id){
                             return <option value={value.value} selected>{value.text}</option>
                         }
                         return <option value={value.value}>{value.text}</option>
