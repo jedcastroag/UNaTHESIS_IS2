@@ -16,8 +16,8 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
   enable_extension "plpgsql"
 
   create_table "comments", force: :cascade do |t|
-    t.bigint "thesis_project_id"
-    t.bigint "users_id"
+    t.bigint "thesis_project_id", null: false
+    t.bigint "users_id", null: false
     t.string "title", null: false
     t.string "content", null: false
     t.datetime "created_at", null: false
@@ -28,10 +28,10 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
 
   create_table "event_logs", force: :cascade do |t|
     t.string "name", null: false
-    t.bigint "thesis_projects_user_id"
+    t.bigint "thesis_project_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["thesis_projects_user_id"], name: "index_event_logs_on_thesis_projects_user_id"
+    t.index ["thesis_project_user_id"], name: "index_event_logs_on_thesis_project_user_id"
   end
 
   create_table "questions", force: :cascade do |t|
@@ -44,10 +44,10 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
 
   create_table "support_documents", force: :cascade do |t|
     t.string "document", null: false
-    t.bigint "thesis_project_log_id"
+    t.bigint "event_log_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["thesis_project_log_id"], name: "index_support_documents_on_thesis_project_log_id"
+    t.index ["event_log_id"], name: "index_support_documents_on_event_log_id"
   end
 
   create_table "thesis", force: :cascade do |t|
@@ -65,12 +65,25 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "thesis_project_users", force: :cascade do |t|
+    t.bigint "thesis_project_rols_id"
+    t.bigint "thesis_project_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["thesis_project_id", "user_id"], name: "index_thesis_project_users_on_thesis_project_id_and_user_id", unique: true
+    t.index ["thesis_project_id"], name: "index_thesis_project_users_on_thesis_project_id"
+    t.index ["thesis_project_rols_id"], name: "index_thesis_project_users_on_thesis_project_rols_id"
+    t.index ["user_id", "thesis_project_id"], name: "index_thesis_project_users_on_user_id_and_thesis_project_id", unique: true
+    t.index ["user_id"], name: "index_thesis_project_users_on_user_id"
+  end
+
   create_table "thesis_projects", force: :cascade do |t|
     t.string "title", null: false
-    t.string "document", null: false
-    t.text "description", null: false
-    t.boolean "approbation_state", null: false
-    t.boolean "activation_state", null: false
+    t.string "document"
+    t.text "description"
+    t.boolean "approbation_state"
+    t.boolean "activation_state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -95,7 +108,10 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
     t.string "name", null: false
     t.string "surname", null: false
     t.string "email", null: false
+    t.string "institution", default: "universidad nacional de colombia", null: false
+    t.string "country", default: "colombia", null: false
     t.string "password_digest", null: false
+    t.string "dni", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email"
@@ -104,11 +120,12 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
 
   add_foreign_key "comments", "thesis_projects"
   add_foreign_key "comments", "users", column: "users_id"
-  add_foreign_key "event_logs", "thesis_projects_users"
+  add_foreign_key "event_logs", "thesis_project_users"
   add_foreign_key "questions", "thesis_projects"
   add_foreign_key "questions", "users"
   add_foreign_key "thesis", "thesis_projects", column: "thesis_project_associated_id"
   add_foreign_key "thesis", "thesis_projects", column: "thesis_project_father_id"
+  add_foreign_key "thesis_project_users", "thesis_project_rols", column: "thesis_project_rols_id"
   add_foreign_key "thesis_projects_users", "thesis_project_rols"
   add_foreign_key "users", "user_types"
 end
