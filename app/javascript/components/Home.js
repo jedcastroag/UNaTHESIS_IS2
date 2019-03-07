@@ -4,9 +4,8 @@ import Redirect from 'react-router-dom'
 
 import Http from '../services/RestServices'
 
-import HomeJury from './HomeJury'
+import JuryTutorHome from './JuryTutorHome'
 import HomeStudent from './HomeStudent'
-import HomeTutor from './HomeTutor'
 import HomeAdmin from './HomeAdmin'
 import Login from './LoginForm'
 
@@ -31,14 +30,12 @@ class Home extends React.Component {
 
 	renderUserHome() {
 		switch(this.state.user_type_id) {
-			case 1:
+			case 'admin':
 			return <HomeAdmin data={this.state.response}/>;
-			case 2:
+			case 'student':
 			return <HomeStudent data={ this.state.response }/>;
-			case 3:
-			return <HomeTutor data={this.state.response}/>;
-			case 4:
-			return <HomeJury data={this.state.response}/>;
+			case 'jury_tutor':
+			return <JuryTutorHome data={this.state.response}/>;
 			default:
 			return <div style = {{height:"100px"}}>
 				<h2>Redirecting...</h2>

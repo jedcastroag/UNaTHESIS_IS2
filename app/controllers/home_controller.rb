@@ -8,9 +8,9 @@ class HomeController < ApplicationController
 		}
 
 		case @current_user.user_type_id
-		when 1 # Administrator
+		when 'admin' # Administrator
 
-		when 2 # Student
+		when 'student' # Student
 			thesis_project = @current_user.thesis_projects.last
 			student = {
 				:thesis => thesis_project,
@@ -18,9 +18,7 @@ class HomeController < ApplicationController
 				:users => thesis_project.users
 			}
 			body.merge! student
-		when 3 # Tutor
-
-		when 4 # Jury
+		when 'jury_tutor' # Jury
 
 		else
 			raise 'Invalid Request'
