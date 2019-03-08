@@ -18,7 +18,7 @@ class JuryController < ApplicationController
         if check_user
             comment = Comment.where(users_id: @current_user.id,
                 thesis_project_id: jury_params[:thesis_project_id])
-            if comment == nil
+            if comment.empty?
                 users_id = {:users_id => @current_user.id}
                 params[:jury].merge! users_id
                 comment = Comment.create(jury_params)
@@ -29,9 +29,7 @@ class JuryController < ApplicationController
                 end
     
             else
-                comment.title = jury_params[:title]
-                comment.content = jury_params[:content]
-                if comment.save
+                if comment[0].update :content => jury_params[:content], :title => jury_params[:title]
                     msg = "Updated"
                 else
                     msg = "Couldn't be updated"
@@ -97,9 +95,33 @@ class JuryController < ApplicationController
                 end
             end
         else
-            render json: {:message => "Invalid Request"}, status: :unauthorized
+            render json: {:message => :jury_tutor}, status: :unauthorized
+            return
         end
         render json: {:message => message}
+    end
+
+    def get_comment
+        authenticate_request!
+
+        comment = []
+        if check_user
+            comment_aux = Comment.where(
+                users_id: @current_user.id,
+                thesis_project_id: params[:thesis_project_id]
+            )
+            if !comment_aux.empty?
+                comment << {
+                    :title => comment_aux[0].title,
+                    :content => comment_aux[0].content
+                }
+            end
+            
+        else
+            render json: comment, status: :unauthorized
+            return
+        end    
+        render json: comment
     end
     
     def get_questions
@@ -107,10 +129,15 @@ class JuryController < ApplicationController
 
         questions = []
         if check_user
-            questions = Question.where(
+            questions_aux = Question.where(
                 user_id: @current_user.id,
                 thesis_project_id: params[:thesis_project_id]
-                )
+            )
+            
+            questions_aux.each do |question_obj|
+                questions << {:question => question_obj.question}
+            end
+            
         end    
         render json: questions
     end    
@@ -118,7 +145,7 @@ class JuryController < ApplicationController
     private
 
     def check_user
-        @current_user.user_type_id == UserType.find_by(name: "Jury").id
+        @current_user.user_type_id.intern == :jury_tutor
     end
     
     def jury_params

@@ -50,7 +50,7 @@ class EditQuestions extends React.Component {
         <Segment>
           <Form.TextArea label= "Make Other Question" 
           onChange={this.onChangeQuestion(1)}
-          defaultValue={this.renderQuestion(2)} />
+          value={this.renderQuestion(2)} />
           {this.renderHideButton()}          
         </Segment>
       );
@@ -94,7 +94,7 @@ class EditQuestions extends React.Component {
         );
       }
     }
-    return null;
+    return "";
   }
 
   render () {
@@ -105,7 +105,7 @@ class EditQuestions extends React.Component {
           <Segment>
             <Form.TextArea label= "Make a Question" 
             onChange={this.onChangeQuestion(0)}
-            defaultValue={this.renderQuestion(1)} />
+            value={this.renderQuestion(1)} />
           </Segment>
           {this.renderOtherQuestionField()}
         </Segment.Group>  
