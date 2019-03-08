@@ -139,7 +139,7 @@ class Home extends React.Component {
                             {this.renderPdf()}
                             {this.renderSpace()}
                             <Header as="h3" content="Concept"/>
-                            <Comment sendComment={this.sendComment}/>
+                            <Comment sendComment={this.sendComment} project_id={this.state.id_project} />
                             {this.renderSpace()}
                             <Header as="h3" content="Questions"/>
                             <Question sendQuestions={this.sendQuestions} project_id={this.state.id_project} />
