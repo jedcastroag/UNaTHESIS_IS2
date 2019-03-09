@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import { Menu, Image, Label } from 'semantic-ui-react';
 import logo from '../../assets/images/escudounal.png';
+import Auth from '../services/Auth';
 
 const items = [
 {}, //Administrator
@@ -32,6 +33,7 @@ class MainMenu extends React.Component {
 
 			<Menu.Menu position="right">
 
+			
 			<Menu.Item as="a" content="Salir" key="logout" onClick={ this.props.logout } />
 
 			</Menu.Menu>
