@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
 	def payload
 		payload = request.headers['Authorization'].split().last
 		TokenService.instance.validate payload
-	rescue Exception => error	
+	rescue Exception => error
 		false
 	end
 

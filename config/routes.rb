@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  
+			
   root 'users#new'
   get '/home', to: 'home#view'
   post '/login', to: 'sessions#create'

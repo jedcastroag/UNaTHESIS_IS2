@@ -170,7 +170,6 @@ class PdfViewer extends React.Component {
 			return <PDFEmbedded projectUrl={ this.state.projectUrl }/>;
 		return <PDFRenderizerContainer projectUrl={ this.state.projectUrl }/>;
 	}
-	
 	render () {
 		return (
 			<React.Fragment>
