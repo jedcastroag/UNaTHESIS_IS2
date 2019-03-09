@@ -18,5 +18,3 @@ User.create({ name: "Tutor", surname: "Testercito", email: "tutor@test.com",
 	dni: "12345678", password: "12345678", password_confirmation: "12345678", user_type_id: "jury_tutor" })
 User.create({ name: "Jury", surname: "Testercito", email: "jury@test.com", 
 	dni: "12345678", password: "12345678", password_confirmation: "12345678", user_type_id: "jury_tutor" })
-User.create({ name: "Student2", surname: "Testercito", email: "student2@test.com", 
-	dni: "123456789", password: "12345678", password_confirmation: "12345678", user_type_id: "student" })

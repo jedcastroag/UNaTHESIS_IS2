@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import {Form, Button, Segment, Header} from "semantic-ui-react"
 import Http from "../../services/RestServices"
 
-const GET_COMMENT_PATH = "/jury_comment"
+const GET_COMMENT_PATH = "jury/comment"
 
 class EditComment extends React.Component {
 
@@ -33,7 +33,6 @@ class EditComment extends React.Component {
     }
 
     componentDidMount () {
-        console.log("props", this.props);
         const comment = this.props.comment;
         if (comment.length != 0) {
             this.setState({comment_title: comment[0].title, comment_content: comment[0].content})

@@ -20,8 +20,6 @@ class OnlyLoginForm extends React.Component {
   }
 
   render() {
-    //console.log("Render child");
-
     return (
       <Form size="large" error>
       <Segment stacked>
@@ -47,7 +45,7 @@ class OnlyLoginForm extends React.Component {
 
   login() {
     auth.login(this.state.email, this.state.password)
-    .then((response) => {console.log(response);
+    .then((response) => {
       this.setState({ passwordError: false, emailError: false });
       this.props.updateAuth();
     }).catch((error) => {
@@ -65,12 +63,10 @@ export default class LoginForm extends React.Component {
   render () {
     let authenticated = this.checkIfIsAuthenticated();
 
-    //console.log("Render parent");
-
     if(authenticated === false) {
       return (
         <div className="login-form">
-
+        
         <Container fluid style={{ lineHeight: '32px' }} style={{height: '100%'}}>
         <style>{`
           body > div,
@@ -100,9 +96,7 @@ export default class LoginForm extends React.Component {
   checkIfIsAuthenticated() {
     if(auth.isAuthenticated()) {
       this.props.updateAuth();
-
       const { referrer } = this.props.location.state || { referrer: { pathname: "/" }};
-
       return <Redirect to={ referrer } />;
     }
 

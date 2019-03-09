@@ -30,4 +30,8 @@ yarn-debug.log*
 /config/database.
 /files/*
 /config/jwt*
-/config/master*
+# Ignore master key for decrypting credentials and more.
+config/master.key
+Gemfile.lock
+yarn.lock
+package-lock.json

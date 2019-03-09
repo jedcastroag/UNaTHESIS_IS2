@@ -6,9 +6,10 @@ import PdfViewer from "../PdfViewer"
 import Question from "./Question"
 import Http from "../../services/RestServices"
 
-const GET_PROJECTS_PATH = "/jury_projects";
-const POST_COMMENT_PATH = "/jury_comment";
-const POST_QUESTIONS_PATH = "/jury_questions";
+const GET_PDF_PATH = "jury/download/"
+const GET_PROJECTS_PATH = "jury/projects";
+const POST_COMMENT_PATH = "jury/comment";
+const POST_QUESTIONS_PATH = "jury/questions";
 
 class ShowProjects extends React.Component {
     constructor(props) {
@@ -58,7 +59,6 @@ class ShowProjects extends React.Component {
 }
     
 class Home extends React.Component {
-
     constructor (props) {
         super(props);
         this.state = {
@@ -118,7 +118,7 @@ class Home extends React.Component {
     renderPdf () {
         if (this.state.title_project != null && this.state.id_project != null) {
             return <PdfViewer title={this.state.title_project} 
-                project_id={this.state.id_project} 
+                url={GET_PDF_PATH + this.state.id_project}
                 key = {this.state.project_id} />
         }
         return <Segment placeholder style={{height: "530px"}}>

@@ -1,20 +1,20 @@
 import React from "react"
 import PropTypes from "prop-types"
-import Redirect from 'react-router-dom'
 
 import Http from '../services/RestServices'
 
-import JuryTutorHome from './JuryTutorHome'
+import HomeJury from './HomeJury'
 import HomeStudent from './HomeStudent'
+import HomeTutor from './HomeTutor'
 import HomeAdmin from './HomeAdmin'
-import Login from './LoginForm'
+import JuryTutorHome from './JuryTutorHome'
 
 const HOME_PATH = '/home';
 
 class Home extends React.Component {
 	constructor(props) {
 		super(props);
-
+		
 		this.state = {
 			user_type_id: null,
 			response: null

@@ -36,7 +36,6 @@ class JuryTutorHome extends React.Component {
   render () {
     return (
       <React.Fragment>
-        <div style={{height: "70px"}} />
         <Tab menu={{secondary: true, pointing: true}} panes={this.tabs()} />
       </React.Fragment>
     );

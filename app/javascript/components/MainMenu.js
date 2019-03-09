@@ -1,7 +1,10 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Menu, Image } from 'semantic-ui-react'
+import { Link } from "react-router-dom";
+
+import { Menu, Image, Label } from 'semantic-ui-react';
+import logo from '../../assets/images/escudounal.png';
 
 const items = [
 {}, //Administrator
@@ -9,30 +12,25 @@ const items = [
 {},
 {}
 ]
-
+ 
 class MainMenu extends React.Component {
 	constructor(props) {
 		super(props);
 		this.userType = this.props.userType;
 	}
 
-	/*{ items[this.props.userType].map(function(element, index) {
-				return <Menu.Item key={ index } content={ element }/>;
-			}) 
-		}*/
-
 	render () {
 		return (
 			<Menu fixed="top">
 			<Menu.Item>
-			<Image size="mini" src="https://react.semantic-ui.com/logo.png" />
+			<Image size="mini" src={ logo } />
 			</Menu.Item>
 
-			<Menu.Item as="a" content="UnThesis" key="home" />
+			<Menu.Item as={ Label } size="large">UnThesis</Menu.Item>
+
+			<Menu.Item as={ Link } content="Home" key="home" to="/"/>
 
 			<Menu.Menu position="right">
-
-			<Menu.Item content={ this.userType }/>
 
 			<Menu.Item as="a" content="Salir" key="logout" onClick={ this.props.logout } />
 

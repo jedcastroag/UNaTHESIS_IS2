@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import {Form, Button, Segment, Icon, Header} from "semantic-ui-react"
 import Http from "../../services/RestServices"
 
-const GET_QUESTIONS_PATH = "/jury_questions";
+const GET_QUESTIONS_PATH = "jury/questions";
 
 class EditQuestions extends React.Component {
 
@@ -24,6 +24,7 @@ class EditQuestions extends React.Component {
 
   onChangeQuestion = (num_question) => (e) => {
     this.questions[num_question] = e.target.value;
+    // this.setState()
   }
 
   addOrHideQuestion () {
@@ -50,7 +51,7 @@ class EditQuestions extends React.Component {
         <Segment>
           <Form.TextArea label= "Make Other Question" 
           onChange={this.onChangeQuestion(1)}
-          value={this.renderQuestion(2)} />
+          defaultValue={this.renderQuestion(2)} />
           {this.renderHideButton()}          
         </Segment>
       );
@@ -105,7 +106,7 @@ class EditQuestions extends React.Component {
           <Segment>
             <Form.TextArea label= "Make a Question" 
             onChange={this.onChangeQuestion(0)}
-            value={this.renderQuestion(1)} />
+            defaultValue={this.renderQuestion(1)} />
           </Segment>
           {this.renderOtherQuestionField()}
         </Segment.Group>  
