@@ -80,10 +80,10 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
 
   create_table "thesis_projects", force: :cascade do |t|
     t.string "title", null: false
-    t.string "document"
-    t.text "description"
-    t.boolean "approbation_state"
-    t.boolean "activation_state"
+    t.string "document", null: false
+    t.text "description", null: false
+    t.boolean "approbation_state", null: false
+    t.boolean "activation_state", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

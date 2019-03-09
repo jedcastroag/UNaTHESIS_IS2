@@ -1,19 +1,38 @@
 class JuryController < ApplicationController
     skip_before_action :verify_authenticity_token
 
+    def initialize
+        super User.user_type_ids.slice 'jury_tutor'
+    end
+
+    def download_pdf
+        thesis_project = @current_user.thesis_projects.find(params[:id])
+        
+        send_file(
+            "#{Rails.root}/#{thesis_project.document}",
+            filename: "#{ thesis_project.title }.pdf",
+            type: "application/pdf"
+        )
+        rescue => error
+        if Rails.env.production?
+            render json: { error: "Bad request" }, status: :unauthorized
+        else    
+            render json: { error: error }, status: :unauthorized
+        end
+    end
+
     def search_projects
-        authenticate_request!
-        projects = @current_user.thesis_projects
+        project_users = @current_user.thesis_project_users.where(:thesis_project_rols_id => :jury)
         titles = []
-        projects.each do |project|
-            titles << {title: project.title, id: project.id}
+        project_users.each do |project_user|
+            project = ThesisProject.find(project_user.thesis_project_id)
+            titles << { title: project.title, id: project.id }
         end
         
         render json: titles
     end
 
     def add_comment
-        authenticate_request!
         msg = ""
         if check_user
             comment = Comment.where(users_id: @current_user.id,
@@ -43,7 +62,6 @@ class JuryController < ApplicationController
     end
 
     def add_questions
-        authenticate_request!
         message = ""
         create_answer = ""
         if check_user
@@ -102,7 +120,6 @@ class JuryController < ApplicationController
     end
 
     def get_comment
-        authenticate_request!
 
         comment = []
         if check_user
@@ -125,7 +142,6 @@ class JuryController < ApplicationController
     end
     
     def get_questions
-        authenticate_request!
 
         questions = []
         if check_user

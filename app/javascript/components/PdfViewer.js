@@ -8,8 +8,6 @@ import { Button } from 'semantic-ui-react';
 
 import Http from '../services/RestServices';
 
-const GET_PDF_PATH = 'file/download_project';
-
 class PDFRenderizer extends React.Component {
 	constructor(props){
 		super(props);
@@ -57,10 +55,10 @@ class PDFRenderizerContainer extends React.Component {
 			var nEnabled = !((state.pageNumber + offset + 1) > state.numPages);
 			var pEnabled = !((state.pageNumber + offset - 1) < 1);
 
-			return {
-				pageNumber: state.pageNumber + offset,
+			return { 
+				pageNumber: state.pageNumber + offset, 
 				prevEnabled: pEnabled,
-				nextEnabled: nEnabled
+				nextEnabled: nEnabled 
 			};
 		});
 	}
@@ -84,35 +82,35 @@ class PDFRenderizerContainer extends React.Component {
 	render() {
 		return(
 			<div>
-			<PDFRenderizer pageNumber={ this.state.pageNumber }
+			<PDFRenderizer pageNumber={ this.state.pageNumber } 
 			onDocumentLoadSuccess={ this.onDocumentLoadSuccess }
 			projectUrl={ this.props.projectUrl } />
 
 			{ this.showButtons() }
 			</div>
 			);
-		}
 	}
-	
-	class PDFEmbedded extends React.Component {
-		constructor(props){
-			super(props);
-			this.pdfShowed = false;
-		}
-		
+}
+
+class PDFEmbedded extends React.Component {
+	constructor(props){
+		super(props);
+		this.pdfShowed = false;
+	}
+
 	componentDidMount() {
 		const { containerId } = this.props;
 		if(this.props.projectUrl != null)
 			PDFObject.embed(this.props.projectUrl, `#${containerId}`);
-		}
+	}
 
 	render() {
 		if(!this.pdfShowed && this.props.projectUrl != null) {
 			this.componentDidMount();
 		}
-		
+
 		const { width, height, containerId } = this.props;
-		return <div style={{ width: this.props.width, height: this.props.height }} id={ containerId } />;
+		return <div style={{ width, height }} id={ containerId } />;
 	}
 }
 
@@ -142,35 +140,34 @@ class PdfViewer extends React.Component {
 			this.downloadPDF();			
 		}
 	}
-	
 	downloadPDF() {
 		const params = {responseType: 'blob', params:{id: this.props.project_id}};
-		Http.get(GET_PDF_PATH, params)
+		Http.get(this.props.url, params)
 		.then(response => {
 			this.setState({ projectUrl: URL.createObjectURL(response.data) });
 		}).catch(error => console.log("Error fetching project " + error));
 	}
-	
+
 	savePDF() {
 		if(this.state.projectUrl != null){
 			var url = this.state.projectUrl;
-			
+
+			console.log(url);
+
 			var anchorElem = document.createElement("a");
 			anchorElem.style = "display: none";
 			anchorElem.href = url;
-			// console.log(this.props.data);
 			anchorElem.download = this.props.title;
 
 			document.body.appendChild(anchorElem);
 			anchorElem.click();
-			
 			document.body.removeChild(anchorElem);
 		}
 	}
 
 	renderPDF() {
 		if(PDFObject.supportsPDFs)
-		return <PDFEmbedded projectUrl={ this.state.projectUrl }/>;
+			return <PDFEmbedded projectUrl={ this.state.projectUrl }/>;
 		return <PDFRenderizerContainer projectUrl={ this.state.projectUrl }/>;
 	}
 	
@@ -181,7 +178,7 @@ class PdfViewer extends React.Component {
 			<Button basic compact attached='bottom' onClick={ this.savePDF }>Descargar</Button>
 			</React.Fragment>
 			);
-		}
 	}
+}
 
 export default PdfViewer
