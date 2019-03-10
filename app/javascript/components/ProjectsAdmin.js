@@ -71,7 +71,9 @@ class ProjectsAdmin extends React.Component {
             })
 
     }
-
+    reload = () => {
+        this.componentDidMount();
+    };
 
     render() {
         return (

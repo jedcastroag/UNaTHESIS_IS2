@@ -73,7 +73,9 @@ class UsersAdmin extends React.Component {
             pathname: '/admin/users/add'
         });
     }
-
+    reload = () => {
+        this.componentDidMount();
+    };
     render() {
         return <Container>
             <Segment>
