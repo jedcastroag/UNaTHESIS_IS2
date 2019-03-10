@@ -35,6 +35,9 @@ class AdminController < ApplicationController
     end
     
     def delete_user
+      if(!ThesisProjectUser.where(user_id: params[:user_id]).nil?)
+          ThesisProjectUser.where(user_id: params[:user_id]).each { |register| register.destroy }
+        end
       User.find(params[:user_id]).destroy
       render json: 200
     end
@@ -54,6 +57,9 @@ class AdminController < ApplicationController
       end
       
       def delete_project
+        if(!ThesisProjectUser.where(thesis_project_id: params[:id_project]).nil?)
+          ThesisProjectUser.where(thesis_project_id: params[:id_project]).each { |register| register.destroy }
+        end
         ThesisProject.find(params[:project_id]).destroy
         render json: 200
       end
