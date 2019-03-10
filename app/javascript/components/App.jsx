@@ -18,6 +18,7 @@ import ProjectsAdmin from './ProjectsAdmin';
 import ProjectsAdminAsignRoles from './ProjectsAdminAsignRoles';
 import LoadProjectAdmin from './LoadProjectAdmin';
 import { Segment } from "semantic-ui-react";
+import UsersAdminEdit from "./UsersAdminEdit";
 
 /** 
 * All the application's paths must be declarated this.
@@ -37,6 +38,7 @@ const routes = [
 	{ path: "/load/:id", exact: null, component: UploadThesisConcept },
 	{ path: "/admin/users", exact: null, component: UsersAdmin },
 	{ path: "/admin/users/add", exact: null, component: UsersAdminAdd },
+	{ path: "/admin/users/edit", exact: null, component: UsersAdminEdit },
 	{ path: "/admin/projects", exact: null, component: ProjectsAdmin },
 	{ path: "/admin/projects/asign_roles", exact: null, component: ProjectsAdminAsignRoles },
 	{ path: "/admin/projects/create", exact: null, component: LoadProjectAdmin }

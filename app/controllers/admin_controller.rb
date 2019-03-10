@@ -13,18 +13,25 @@ class AdminController < ApplicationController
   end
   
   def fetch_user_data
-    user = User.where(email: params[:user_id]).first.select :user_type_id, 
-    :name, :surname, :email, :institution, :country, :dni
+    user = User.where(id: params[:user_id]).select(:user_type_id, 
+    :name, :surname, :email, :institution, :country, :dni).first
     render json: user.to_json
   end
   
   def edit_user
-    User.update(params[:id],
-      :name => params[:name], :surname => params[:surname], 
-      :user_type_id => params[:user_type].to_i)
-      user = User.find(params[:id]).select :user_type_id, 
-      :name, :surname, :email, :institution, :country, :dni
-      render json: user.to_json
+    user = User.find(params[:id])
+    user.update_attribute(:name, params[:name])
+    user.update_attribute(:surname, params[:surname])
+    user.update_attribute(:email, params[:email])
+    user.update_attribute(:dni, params[:dni])
+    user.update_attribute(:user_type_id, params[:user_type].to_i)
+
+    render json: 200
+  end
+
+    def fetch_user_types
+      types = UserType.all
+      render json: types.to_json
     end
     
     def delete_user
