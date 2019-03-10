@@ -65,6 +65,11 @@ class AdminController < ApplicationController
         render json: users.to_json
       end
       
+      def fetch_project_data
+        project = ThesisProject.find(params[:id])
+        render json: project.to_json
+      end
+
       def fetch_roles
         roles = ThesisProjectRole.all
         render json: roles.to_json
@@ -81,8 +86,11 @@ class AdminController < ApplicationController
       end
       
       def asign_roles
-        if(!ThesisProjectUser.find_by(thesis_project_id: params[:id_project]).nil?)
-          ThesisProjectUser.find_by(thesis_project_id: params[:id_project]).destroy
+        project = ThesisProject.find(params[:id_project])
+        project.update_attribute(:title, params[:title])
+
+        if(!ThesisProjectUser.where(thesis_project_id: params[:id_project]).nil?)
+          ThesisProjectUser.where(thesis_project_id: params[:id_project]).each { |register| register.destroy }
         end
         for i in (0..(params[:count_users].to_i) - 1)
           ThesisProjectUser.create(thesis_project_id: params[:id_project], user_id: params[:"user_#{i}"], thesis_project_roles_id: params[:"rol_#{i}"].to_i)

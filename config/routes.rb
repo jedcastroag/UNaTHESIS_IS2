@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get 'admin/fetch_roles_project', to: 'admin#fetch_roles_project'
   get 'admin/fetch_roles', to: 'admin#fetch_roles'
   get 'admin/fetch_user_types', to: 'admin#fetch_user_types'
+  get 'admin/fetch_project_data', to: 'admin#fetch_project_data'
   match 'admin/delete_user', to: 'admin#delete_user', via: [:post]
   match 'admin/delete_project', to: 'admin#delete_project', via: [:post]
   match 'admin/add_user', to: 'admin#add_user', via: [:post]
