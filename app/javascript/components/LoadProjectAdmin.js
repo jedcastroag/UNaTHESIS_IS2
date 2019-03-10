@@ -78,7 +78,7 @@ class LoadProjectAdmin extends React.Component {
         const data = new FormData(event.target);
 
 
-        Http.post('/admin/create_project', data).then(response => console.log())
+        Http.post('/admin/create_project', data).then(() => window.location.href = '/admin/projects')
             .catch(error => console.log("ERROR " + error));
     }
 

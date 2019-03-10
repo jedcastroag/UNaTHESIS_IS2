@@ -112,7 +112,7 @@ class ProjectsAdmin extends React.Component {
         const data = new FormData(event.target);
 
 
-        Http.post('/admin/asign_roles', data).then(response => console.log())
+        Http.post('/admin/asign_roles', data).then(() => window.location.href = '/admin/projects')
             .catch(error => console.log("ERROR " + error));
     }
 
