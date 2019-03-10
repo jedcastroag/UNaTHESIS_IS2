@@ -27,7 +27,9 @@ Rails.application.routes.draw do
   get 'tutor/projects', to: 'tutor#getProjectsForTutor'
   get '/tutor/download/:id', to: 'tutor#downloadPdfTutor'
   post 'tutor/upload_concept', to: 'tutor#save_thesis_concept'
-  get '/getUserInfo', to: 'tutor#getActualUserInfo'		  
+  get '/getUserInfo', to: 'tutor#getActualUserInfo'	
+  
+  match 'mailer(/:action(/:id(.:format)))' => 'mailer#:action', via: [:get]
   
 	resources :users
 

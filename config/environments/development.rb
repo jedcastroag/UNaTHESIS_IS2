@@ -33,26 +33,34 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # DO CARE if the mailer can't send.
+  # config.action_mailer.raise_delivery_errors = true
+
+  config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              '127.0.0.1',
+    port:                 1025,
+  }
 
   #For mailing
   #config.action_mailer.default_url_options = {host: "localhost:3000"}
   #config.action_mailer.delivery_method = :letter_opener
   #config.action_mailer.perform_deliveries = true
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = { host: 'localhost', port: '3000' }
-  config.action_mailer.perform_deliveries = true
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default :charset => "utf-8"
-  config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
-    port: 587,
-    domain: 'localhost:3030',
-    user_name: 'ptesis2019@gmail.com',
-    password: 'UNtesis2019software',
-    authentication: :plain,
-    enable_starttls_auto: true
-  }
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.default_url_options = { host: 'localhost', port: '1025' }
+  # config.action_mailer.perform_deliveries = true
+  # config.action_mailer.raise_delivery_errors = true
+  # config.action_mailer.default :charset => "utf-8"
+  # config.action_mailer.smtp_settings = {
+    # address: "smtp.gmail.com",
+    # port: 587,
+  #   domain: 'localhost:1025',
+  #   user_name: 'ptesis2019@gmail.com',
+  #   password: 'UNtesis2019software',
+  #   authentication: :plain,
+  #   enable_starttls_auto: true
+  # }
 
   config.action_mailer.perform_caching = false
 
