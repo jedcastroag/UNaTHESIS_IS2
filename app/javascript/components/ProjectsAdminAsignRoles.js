@@ -76,7 +76,7 @@ const FormRol = props => (
                         for (var i = 0; i < res['data'].length; i++) {
                             var user = res['data'][i]
                             this.setState(prevState => ({
-                                user_roles: [...prevState.user_roles, <FormRol user_id={user.user_id} rol_id={user.thesis_project_rols_id} number={this.countTutors} />],
+                                user_roles: [...prevState.user_roles, <FormRol user_id={user.user_id} rol_id={user.thesis_project_roles_id} number={this.countTutors} />],
                                 tutors_number: prevState.tutors_number + 1
                             }), () => {
                                 this.countTutors += 1
@@ -101,6 +101,15 @@ const FormRol = props => (
             this.countTutors += 1
         });
     }
+    submitForm(event) {
+        event.preventDefault();
+
+        const data = new FormData(event.target);
+
+
+        Http.post('/admin/asign_roles', data).then(response => console.log())
+            .catch(error => console.log("ERROR " + error));
+    }
 
     render() {
         return (
@@ -113,7 +122,7 @@ const FormRol = props => (
                     </Row>
                     <Row>
                         <Col>
-                            <Form action='/admin/asign_roles' method='POST'>
+                            <Form onSubmit={this.submitForm}>
                                 <input type="hidden" name="id_project" value={this.state.project_id}></input>
                                 <input type="hidden" name="count_users" value={this.state.tutors_number}></input>
                                 <Row>

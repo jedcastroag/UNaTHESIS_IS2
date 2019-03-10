@@ -8,7 +8,7 @@ class AdminController < ApplicationController
   end
   
   def fetch_users_data
-    users = User.all.select :user_type_id, :name, :surname, :email, :institution, :country, :dni
+    users = User.all.select :user_type_id, :name, :surname, :email, :institution, :country, :dni, :id
     render json: users.to_json
   end
   
@@ -59,7 +59,7 @@ class AdminController < ApplicationController
       end
       
       def fetch_roles
-        roles = ThesisProjectRol.all
+        roles = ThesisProjectRole.all
         render json: roles.to_json
       end
       
@@ -68,7 +68,7 @@ class AdminController < ApplicationController
         
         for i in (0..(params[:count_users].to_i) - 1)
           ThesisProjectUser.create thesis_project_id: thesis.id, user_id: params[:"user_#{i}"], 
-          thesis_project_rol_id: params[:"user_type_#{i}"]
+          thesis_project_roles_id: params[:"user_type_#{i}"].to_i
         end
         render json: 200
       end
@@ -78,7 +78,7 @@ class AdminController < ApplicationController
           ThesisProjectUser.find_by(thesis_project_id: params[:id_project]).destroy
         end
         for i in (0..(params[:count_users].to_i) - 1)
-          ThesisProjectUser.create(thesis_project_id: params[:id_project], user_id: params[:"user_#{i}"], thesis_project_rols_id: params[:"rol_#{i}"])
+          ThesisProjectUser.create(thesis_project_id: params[:id_project], user_id: params[:"user_#{i}"], thesis_project_roles_id: params[:"rol_#{i}"].to_i)
         end  
         render json: 200
       end
