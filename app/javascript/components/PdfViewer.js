@@ -129,17 +129,20 @@ PDFEmbedded.defaultProps = {
 class PdfViewer extends React.Component {
 	constructor(props){
 		super(props);
-
 		this.state = {
 			projectUrl: null
 		};
-
 		this.downloadPDF();
 		this.savePDF = this.savePDF.bind(this);
 	}
-
+	componentDidUpdate(prevProps) {
+		if (this.props.project_id != prevProps.project_id) {
+			this.downloadPDF();			
+		}
+	}
 	downloadPDF() {
-		Http.get(this.props.url, { responseType: 'blob' })
+		const params = {responseType: 'blob', params:{id: this.props.project_id}};
+		Http.get(this.props.url, params)
 		.then(response => {
 			this.setState({ projectUrl: URL.createObjectURL(response.data) });
 		}).catch(error => console.log("Error fetching project " + error));
@@ -158,7 +161,6 @@ class PdfViewer extends React.Component {
 
 			document.body.appendChild(anchorElem);
 			anchorElem.click();
-
 			document.body.removeChild(anchorElem);
 		}
 	}
@@ -168,7 +170,6 @@ class PdfViewer extends React.Component {
 			return <PDFEmbedded projectUrl={ this.state.projectUrl }/>;
 		return <PDFRenderizerContainer projectUrl={ this.state.projectUrl }/>;
 	}
-
 	render () {
 		return (
 			<React.Fragment>

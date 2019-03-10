@@ -5,7 +5,7 @@ class TokenService
 	
 	def initialize
 		@rsa_private = OpenSSL::PKey::RSA.new File.read('config/jwt.key'), 
-		Rails.application.credentials.secret_key_base
+		Rails.application.credentials.rsa_key
 		@rsa_public = @rsa_private.public_key
 	end
 

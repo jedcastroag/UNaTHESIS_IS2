@@ -10,7 +10,7 @@ class HomeController < ApplicationController
 
 		case @current_user.user_type_id
 		when 'admin'
-
+			
 		when 'student'
 			thesis_project = @current_user.thesis_projects.last
 
@@ -29,6 +29,8 @@ class HomeController < ApplicationController
 			body.merge! student
 		when 'jury_tutor'
 			jury_tutor = {
+				:is_jury => (is_rol? :jury),
+				:is_tutor => (is_rol? :tutor),
 				:name => @current_user.name,
 				:surname => @current_user.surname,
 				:email => @current_user.email
@@ -41,5 +43,11 @@ class HomeController < ApplicationController
 		render json: body
 	rescue => error
 		render json: { error: error }, status: :unauthorized
+	end
+
+	private
+
+	def is_rol? (rol_id)
+		!@current_user.thesis_project_users.where(:thesis_project_roles_id => rol_id).empty?
 	end
 end
