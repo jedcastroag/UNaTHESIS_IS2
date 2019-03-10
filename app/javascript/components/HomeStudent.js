@@ -148,11 +148,14 @@ class AdditionalInformation extends React.Component {
 		}
 		
 		linkToAddDocument() {
-			this.props.history.push('/project/load');
+			this.props.history.push({
+				pathname: '/project/load',
+				thesis: this.props.data.thesis
+			});
 		}
 		
-		checkIfThesisExists() {
-			if(this.props.data.thesis == null) {
+		checkIfThesisExists() {			
+			if(this.props.data.thesis == null || this.props.data.thesis.document == null || this.props.data.thesis.document == "") {
 				return <NoThesisFound linkToAddDocument={ this.linkToAddDocument }/>;
 			} else {
 				return <Container text>
@@ -162,7 +165,7 @@ class AdditionalInformation extends React.Component {
 				
 				<PdfViewer url={ GET_PDF_PATH } title={ this.props.data.thesis.title || "[Tesis sin título]" } />
 				
-				<Comments comments= { this.props['data']['comments'] }/>
+				<Comments comments={ this.props['data']['comments'] }/>
 				
 				<Segment>
 				<Grid columns='2' stackable>

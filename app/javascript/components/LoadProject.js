@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Button, Input, Checkbox, Form } from 'semantic-ui-react'
-import '../../../dist/semantic.min.css';
 
 const FormTutor = props => (
     <div className="formTutor">

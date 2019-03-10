@@ -12,27 +12,29 @@ class FileController < ApplicationController
 
   def load_post
     file_name = Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'
-    
-    thesis_project = ThesisProject.create document: create_path(@current_user.id, file_name),
-    approbation_state: 0, activation_state: 0, description: params[:project_description], 
-    title: params[:project_title]
-    
-    thesis_project_user = ThesisProjectUser.new user: @current_user,
-    thesis_project: thesis_project, thesis_project_roles_id: "author"
 
-    tutors_juries = JSON.parse params[:tutors_juries]
+    byebug
+    
+    thesis_project = ThesisProject.update params[:id], 
+    :document => create_path(@current_user.id, file_name),
+    :description => params[:project_description]
+    
+    #thesis_project_user = ThesisProjectUser.new user: @current_user,
+    #thesis_project: thesis_project, thesis_project_roles_id: "author"
+
+    #tutors_juries = JSON.parse params[:tutors_juries]
 
     users = []
-    tutors_juries.each do | user |
-      unless User.find_by(email: user["email"])
-        users << User.create({ name: user["name"], surname: user["surname"], 
-          country: user["country"], institution: user["institution"], dni: user["dni"], 
-          email: user["email"], password: "12345678", password_confirmation: "12345678",
-          user_type_id: "jury_tutor"})
-      end
-    end
+    #tutors_juries.each do | user |
+    #  unless User.find_by(email: user["email"])
+    #    users << User.create({ name: user["name"], surname: user["surname"], 
+    #      country: user["country"], institution: user["institution"], dni: user["dni"], 
+    #      email: user["email"], password: "12345678", password_confirmation: "12345678",
+    #      user_type_id: "jury_tutor"})
+    #  end
+    #end
     
-    if thesis_project_user.save
+    if thesis_project.save
       file_path = process_file params[:file], file_name
     else
       raise 'Thesis project user not valid'
@@ -41,8 +43,6 @@ class FileController < ApplicationController
     users.each do | user |
       user.destroy
     end
-    
-    thesis_project.destroy
 
     if Rails.env.production?
       render json: { error: "Bad request" }, status: :unauthorized

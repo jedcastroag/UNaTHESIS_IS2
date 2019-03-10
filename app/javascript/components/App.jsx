@@ -1,7 +1,8 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Segment } from "semantic-ui-react";
 
 import auth from '../services/Auth'
 import LoginForm from './LoginForm'
@@ -17,7 +18,7 @@ import UsersAdminAdd from './UsersAdminAdd';
 import ProjectsAdmin from './ProjectsAdmin';
 import ProjectsAdminAsignRoles from './ProjectsAdminAsignRoles';
 import LoadProjectAdmin from './LoadProjectAdmin';
-import { Segment } from "semantic-ui-react";
+import ChangePassword from "./ChangePassword";
 
 /** 
 * All the application's paths must be declarated this.
@@ -39,7 +40,8 @@ const routes = [
 	{ path: "/admin/users/add", exact: null, component: UsersAdminAdd },
 	{ path: "/admin/projects", exact: null, component: ProjectsAdmin },
 	{ path: "/admin/projects/asign_roles", exact: null, component: ProjectsAdminAsignRoles },
-	{ path: "/admin/projects/create", exact: null, component: LoadProjectAdmin }
+	{ path: "/admin/projects/create", exact: null, component: LoadProjectAdmin },
+	{ path: "/changepassword", exact: null, component: ChangePassword }
 ];
 
 class App extends React.Component {
