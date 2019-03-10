@@ -1,7 +1,7 @@
 require 'securerandom'
 
 class AdminController < ApplicationController
-  skip_before_action :verify_authenticity_token 
+  skip_before_action :verify_authenticity_token
   def initialize
     super()
   end
@@ -102,8 +102,10 @@ class AdminController < ApplicationController
       register.destroy
     end
     for i in (0..(params[:count_users].to_i) - 1)
-      ThesisProjectUser.create(thesis_project_id: params[:id_project], user_id: params[:"user_#{i}"], thesis_project_roles_id: params[:"rol_#{i}"].to_i)
-    end 
+      ThesisProjectUser.create(thesis_project_id: params[:id_project],
+                               user_id: params[:"user_#{i}"],
+                               thesis_project_roles_id: params[:"rol_#{i}"].to_i)
+    end
     render json: 200
   end
 end

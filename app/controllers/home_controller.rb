@@ -10,7 +10,7 @@ class HomeController < ApplicationController
 
 		case @current_user.user_type_id
 		when 'admin'
-
+			
 		when 'student'
 			thesis_project = @current_user.thesis_projects.last
 

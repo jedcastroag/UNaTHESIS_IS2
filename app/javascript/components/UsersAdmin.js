@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-import { Table, Button } from 'semantic-ui-react'
+import { Table, Button, Segment, Header, Divider, Grid } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'react-grid-system';
 
@@ -27,11 +27,11 @@ class RowUser extends React.Component {
             <Table.Cell>{this.props.name}</Table.Cell>
             <Table.Cell>{this.props.surname}</Table.Cell>
             <Table.Cell>{this.props.email}</Table.Cell>
-            <Table.Cell  selectable positive onClick={() => this.props.editUserRedirect(this.props.id)}>
-                <p>Editar usuario</p>
-                </Table.Cell>
-            <Table.Cell selectable positive>
-                <a onClick={() => deleteUser(this.props)}>Eliminar</a>
+            <Table.Cell selectable positive >
+                <a href="javascript:void(0);" onClick={() => this.props.editUserRedirect(this.props.id)} >Editar usuario</a>
+            </Table.Cell>
+            <Table.Cell selectable negative>
+                <a href="javascript:void(0);" onClick={() => deleteUser(this.props)}>Eliminar</a>
             </Table.Cell>
         </Table.Row>
     }
@@ -45,9 +45,10 @@ class UsersAdmin extends React.Component {
             user_rows: []
         }
         this.editUserRedirect = this.editUserRedirect.bind(this)
+        this.createUserRedirect = this.createUserRedirect.bind(this)
 
-    } 
-    
+    }
+
     editUserRedirect(id) {
         this.props.history.push({
             pathname: '/admin/users/edit',
@@ -67,37 +68,48 @@ class UsersAdmin extends React.Component {
             })
     }
 
+    createUserRedirect(id) {
+        this.props.history.push({
+            pathname: '/admin/users/add'
+        });
+    }
+
     render() {
         return <Container>
-            <Row>
-                <Col>
-                    <h1>Usuarios</h1>
-                </Col>
-                <Col>
-                    <Button right floated button><Link to="/admin/users/add">Añadir usuario</Link></Button>
-                </Col>
-            </Row>
-            <Row>
-                <Table celled>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell>Nombres</Table.HeaderCell>
-                            <Table.HeaderCell>Apellidos</Table.HeaderCell>
-                            <Table.HeaderCell>Email</Table.HeaderCell>
-                            <Table.HeaderCell>Editar</Table.HeaderCell>
-                            <Table.HeaderCell>Eliminar</Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
+            <Segment>
+                <Header>
+                    <Grid>
+                        <Grid.Column width={14}><h1>Usuarios</h1></Grid.Column>
+                        <Grid.Column width={2}>
+                            <Button right floated button onClick onClick={this.createUserRedirect}>Añadir Usuario</Button>
+                        </Grid.Column>
+                    </Grid>
+                    <div className="right">
 
-                    <Table.Body>
+                    </div></Header>
+                <Divider section />
 
-                        {this.state.user_rows}
+                    
+                    
+                        <Table celled>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell>Nombres</Table.HeaderCell>
+                                    <Table.HeaderCell>Apellidos</Table.HeaderCell>
+                                    <Table.HeaderCell>Email</Table.HeaderCell>
+                                    <Table.HeaderCell>Editar</Table.HeaderCell>
+                                    <Table.HeaderCell>Eliminar</Table.HeaderCell>
+                                </Table.Row>
+                            </Table.Header>
 
-                    </Table.Body>
-                </Table>
+                            <Table.Body>
 
-            </Row>
+                                {this.state.user_rows}
 
+                            </Table.Body>
+                        </Table>
+
+            </Segment>
         </Container>;
     }
 }
