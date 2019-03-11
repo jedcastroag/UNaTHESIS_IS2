@@ -13,13 +13,13 @@ class TutorController < ApplicationController
 	def getProjectsForTutor				
 		tutor = @current_user
 		tutorId = tutor.id.to_s		
-		sqlGetProjects = "select distinct thesis_project_id from thesis_projects_users where user_id = " + tutorId + ";"		
+		sqlGetProjects = "select distinct thesis_project_id from thesis_project_users where user_id = " + tutorId + ";"		
 		res = ActiveRecord::Base.connection.exec_query(sqlGetProjects)
 		studentsArr = []
 		res.each do |val|
 			projectId = val['thesis_project_id'].to_s			
-			sqlGetStudents = "SELECT distinct user_id FROM thesis_projects_users
-			WHERE thesis_project_id = " + projectId + " AND thesis_project_rol_id = 1;"
+			sqlGetStudents = "SELECT distinct user_id FROM thesis_project_users
+			WHERE thesis_project_id = " + projectId + " AND thesis_project_roles_id = 1;"
 			students = ActiveRecord::Base.connection.exec_query(sqlGetStudents)
 			studentsArr.push(students[0]['user_id'])			
 		end		
@@ -28,9 +28,9 @@ class TutorController < ApplicationController
 		studentsArr.each do |val|
 			studentId = val.to_s
 			getProjectForStudent = "SELECT thesis_projects.*, user_id as id_estudiante
-			FROM thesis_projects_users
-			INNER JOIN thesis_projects ON thesis_projects_users.thesis_project_id = thesis_projects.id
-			WHERE thesis_projects_users.user_id = " + studentId +" ORDER BY created_at DESC LIMIT 1;"
+			FROM thesis_project_users
+			INNER JOIN thesis_projects ON thesis_project_users.thesis_project_id = thesis_projects.id
+			WHERE thesis_project_users.user_id = " + studentId +" ORDER BY created_at DESC LIMIT 1;"
 			project = ActiveRecord::Base.connection.exec_query(getProjectForStudent)
 			projectsArray.push(project)			
 		end
@@ -54,14 +54,14 @@ class TutorController < ApplicationController
         end
     end
     
-      def save_thesis_concept    
-        authenticate_request!
+      def save_thesis_concept            
         file_path = process_file(
           params[:file],
           Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'
         )        
-        state = params[:estado] == 'approved' ? true : false    
-        ThesisProject.where(id: params[:projectId]).update_all(approbation_state: state)
+
+        state = params[:estado] == 'approved' ? true : false            
+        ThesisProject.where(id: params[:projectId]).update_all(approbation_state: state, updated_at: Time.now.strftime('%Y%m%d_%H%M%S'))
         Comment.create(
          thesis_project_id: params[:projectId],
           users_id: @current_user.id,
@@ -72,7 +72,12 @@ class TutorController < ApplicationController
         )
         date = Time.now.strftime('%Y%m%d_%H%M%S')
         sql = "INSERT into support_documents (document, created_at, updated_at) values ('" +file_path +"','"  + date + "','"+ date+"');"     
-        ActiveRecord::Base.connection.exec_query(sql)       
+        ActiveRecord::Base.connection.exec_query(sql)      
+
+        user_name = params[:student_name]
+        user_email = params[:student_email]
+        project_title = params[:project_title]
+        TutorMailer.concept_notice(user_name, user_email, project_title).deliver_now        
       end
 
       def process_file(file, name)
@@ -94,9 +99,13 @@ class TutorController < ApplicationController
         FileUtils.mv(file_path, destiny_dir)
         return destiny_dir
       end
+      
+      def create_path(user_id, file_name)
+        "files/#{Digest::MD5.hexdigest(user_id.to_s)}/#{file_name}"
+      end
 
       def find			
-		user = User.find(params[:id])
-		render json: user.to_json
-	  end
+        user = User.find(params[:id])
+        render json: user.to_json
+      end
 end
