@@ -10,11 +10,11 @@ class ProjectRow extends React.Component {
     componentDidMount(){
         let tableRows = []
         Http.get('tutor/projects')
-        .then(response => {                     
+        .then(response => {                         
             response.data.forEach(row => {
                 Http.get(`users/${row[0].id_estudiante}`)
                 .then(res => {                    
-                    tableRows.push({studentName: res.data.name, studentEmail: res.data.email, projectTitle: row[0].title, studentId: row[0].id_estudiante})                                        
+                    tableRows.push({studentName: res.data.name, studentEmail: res.data.email, projectTitle: row[0].title, studentId: row[0].id_estudiante, thesis_state: row[0].approbation_state})                                        
                     this.setState({
                         projects: tableRows
                     })
@@ -38,7 +38,7 @@ class ProjectRow extends React.Component {
     }
 
     render(){        
-        const projects = this.state.projects                      
+        const projects = this.state.projects             
         return (
             <Table celled padded>
                 <Table.Header>
@@ -46,6 +46,7 @@ class ProjectRow extends React.Component {
                         <Table.HeaderCell>Nombre Estudiante</Table.HeaderCell>
                         <Table.HeaderCell>Correo Estudiante</Table.HeaderCell>
                         <Table.HeaderCell>Titulo Proyecto</Table.HeaderCell>
+                        <Table.HeaderCell>Estado</Table.HeaderCell>
                         <Table.HeaderCell>Ver Tesis</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>      
@@ -60,6 +61,9 @@ class ProjectRow extends React.Component {
                         </Table.Cell>
                         <Table.Cell
                             children = {project.projectTitle}>
+                        </Table.Cell>
+                        <Table.Cell
+                            children = {project.thesis_state === true ? "Aprobado" : "Desaprobado"}>
                         </Table.Cell>
                         <Table.Cell collapsing>
                             <Button onClick ={this.handleClick.bind(this,project)}>Ver Tesis</Button>                            
@@ -139,7 +143,7 @@ class TutorHomeView extends React.Component {
         return (
             <div>
                 <div className="ui raised container segment"> 
-                    <h2 className="ui center aligned header">Bienvenido</h2>
+                    <h2 className="ui center aligned header">Bienvenido </h2>
                     <TutorInfo />
                     <h3>Proyectos actuales</h3>
                     

@@ -8,7 +8,6 @@ class ChangePasswordController < ApplicationController
   def create
     if @current_user.authenticate params[:current_password]
       @current_user.change_password params[:new_password], params[:new_password_confirmation]
-      render json: {}
     else
       raise "Authentication failed"
     end

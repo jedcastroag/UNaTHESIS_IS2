@@ -16,7 +16,7 @@ class CheckThesis extends React.Component {
             })            
         })
         Http.get(`/project/find/${this.state.studentId}`)
-        .then(res => {                         
+        .then(res => {                  
             Http.get(`/tutor/download/${res.data[0].thesis_project_id}`, { responseType: 'blob' })
             .then(response => {                
                 this.setState({ projectUrl: URL.createObjectURL(response.data) });
@@ -24,7 +24,8 @@ class CheckThesis extends React.Component {
             this.setState({                
                 titulo: res.data[0].title,
                 descripcion: res.data[0].description,
-                projectId: res.data[0].thesis_project_id
+                projectId: res.data[0].thesis_project_id,
+                thesis_state: res.data[0].approbation_state
             })
         })
     }
@@ -39,7 +40,8 @@ class CheckThesis extends React.Component {
             titulo: '',
             descripcion: '',
             projectUrl: null,
-            projectId: 0,            
+            projectId: 0,     
+            thesis_state: false
         }       
         this.savePdf = this.savePdf.bind(this)
         this.submitForm = this.submitForm.bind(this)
@@ -64,6 +66,9 @@ class CheckThesis extends React.Component {
         event.preventDefault()
         const data = new FormData(event.target)
         data.append('projectId', this.state.projectId)
+        data.append('student_name', this.state.nombres)
+        data.append('student_email', this.state.correo)
+        data.append('project_title', this.state.titulo)
         Http.post('/tutor/upload_concept', data).then().catch(error => 
         console.log('ERROR' + error))            
         this.props.redirectToHome()            
@@ -161,7 +166,7 @@ class CheckThesis extends React.Component {
                     <input type='file' name="file" />
                 </Form.Field>                 
                 <Form.Field>                    
-                    <Button floated="right" type="submit" name ="submitButton">Subir Revision</Button>
+                    <Button floated="right" type="submit" name ="submitButton" style={{display: this.state.thesis_state ? 'none' : 'block'}}>Subir Revision</Button>
                 </Form.Field>                       
         
             </Grid.Column>            
