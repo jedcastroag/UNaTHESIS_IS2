@@ -64,7 +64,7 @@ class AdminController < ApplicationController
     ThesisProjectUser&.where(thesis_project_id: params[:project_id])&.each do |register| 
       register.destroy
     end
-    hesisProject.find(params[:project_id]).destroy
+    ThesisProject&.find(params[:project_id])&.destroy
     render json: 200
   end
 

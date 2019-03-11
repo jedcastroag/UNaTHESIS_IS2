@@ -4,7 +4,11 @@ import Home from "./jury/Home"
 
 class HomeJury extends React.Component {
     render() {
-        return <Home/>;
+        return (
+            <div>
+            <div style={{height: "70px"}}></div>
+            <Home/>
+        </div>);
     }
 }
 

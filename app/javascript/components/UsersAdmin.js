@@ -86,30 +86,26 @@ class UsersAdmin extends React.Component {
                             <Button right floated button onClick onClick={this.createUserRedirect}>Añadir Usuario</Button>
                         </Grid.Column>
                     </Grid>
-                    <div className="right">
-
-                    </div></Header>
+                </Header>
                 <Divider section />
 
-                    
-                    
-                        <Table celled>
-                            <Table.Header>
-                                <Table.Row>
-                                    <Table.HeaderCell>Nombres</Table.HeaderCell>
-                                    <Table.HeaderCell>Apellidos</Table.HeaderCell>
-                                    <Table.HeaderCell>Email</Table.HeaderCell>
-                                    <Table.HeaderCell>Editar</Table.HeaderCell>
-                                    <Table.HeaderCell>Eliminar</Table.HeaderCell>
-                                </Table.Row>
-                            </Table.Header>
+                <Table celled>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Nombres</Table.HeaderCell>
+                            <Table.HeaderCell>Apellidos</Table.HeaderCell>
+                            <Table.HeaderCell>Email</Table.HeaderCell>
+                            <Table.HeaderCell>Editar</Table.HeaderCell>
+                            <Table.HeaderCell>Eliminar</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
 
-                            <Table.Body>
+                    <Table.Body>
 
-                                {this.state.user_rows}
+                        {this.state.user_rows}
 
-                            </Table.Body>
-                        </Table>
+                    </Table.Body>
+                </Table>
 
             </Segment>
         </Container>;

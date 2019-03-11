@@ -52,7 +52,7 @@ class TutorController < ApplicationController
         else
           render json: { error: error }, status: :unauthorized
         end
-      end
+    end
     
       def save_thesis_concept    
         authenticate_request!

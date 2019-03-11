@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Table, Button, Dropdown, Form, Input, Header } from 'semantic-ui-react'
+import { Button, Form, Segment, Header, Divider } from 'semantic-ui-react'
 import Http from '../services/RestServices'
 import { Link } from 'react-router-dom'
 import { Container, Row, Col } from 'react-grid-system';
@@ -12,6 +12,8 @@ const roles = []
 const FormRol = props => (
 
     <div className="formTutor">
+        <Divider section />
+
         <Form.Group widths='equal'>
             <Form.Field required>
                 <label>Usuario</label>
@@ -38,7 +40,6 @@ const FormRol = props => (
                 </select>
             </Form.Field>
         </Form.Group>
-        <hr></hr>
     </div>
 );
 
@@ -116,9 +117,9 @@ class ProjectsAdmin extends React.Component {
             .catch(error => console.log("ERROR " + error));
     }
 
-    onChangeHandle(type, value){
+    onChangeHandle(type, value) {
         console.log(value)
-        switch(type){
+        switch (type) {
             case 'title':
                 this.setState(() => ({
                     title: value
@@ -130,23 +131,20 @@ class ProjectsAdmin extends React.Component {
         return (
             <div>
                 <Container>
-                    <Row>
-                        <Col>
-                            <h1>Editar proyecto</h1>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <Form onSubmit={this.submitForm}>
-                                <input type="hidden" name="id_project" value={this.state.project_id}></input>
-                                <input type="hidden" name="count_users" value={this.state.tutors_number}></input>
-                                <Form.Field required>
-                                    <label>Titulo</label>
-                                    <input type="text" placeholder='Titulo' name='title' value={this.state.title} onChange={(e, value) => this.onChangeHandle('title', value) } ></input>
-                                </Form.Field>
-                                
-                                <Form.Field>
-                                    <label>Información directores, tutores y asesores</label>
+                    <Segment>
+                        <Header as="h2">Editar proyecto</Header>
+                        <Divider section />
+
+                        <Form onSubmit={this.submitForm}>
+                            <input type="hidden" name="id_project" value={this.state.project_id}></input>
+                            <input type="hidden" name="count_users" value={this.state.tutors_number}></input>
+                            <Form.Field required>
+                                <label>Titulo</label>
+                                <input type="text" placeholder='Titulo' name='title' value={this.state.title} onChange={(e, value) => this.onChangeHandle('title', value)} ></input>
+                            </Form.Field>
+
+                            <Form.Field>
+                                <label>Información directores, tutores y asesores</label>
 
                                 <Row>
                                     <Col>
@@ -157,10 +155,9 @@ class ProjectsAdmin extends React.Component {
                                         </Form.Field>
                                     </Col>
                                 </Row>
-                                </Form.Field>
-                            </Form>
-                        </Col>
-                    </Row>
+                            </Form.Field>
+                        </Form>
+                    </Segment>
 
                 </Container>
             </div>

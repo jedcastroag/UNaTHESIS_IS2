@@ -3,9 +3,13 @@ import PropTypes from "prop-types"
 import {Container, Header, List, Grid, Icon, Segment} from "semantic-ui-react"
 import Comment from "./Comment"
 import PdfViewer from "../PdfViewer"
+import Question from "./Question"
 import Http from "../../services/RestServices"
 
-const GET_PROJECTS_PATH = "/jury_projects";
+const GET_PDF_PATH = "jury/download/"
+const GET_PROJECTS_PATH = "jury/projects";
+const POST_COMMENT_PATH = "jury/comment";
+const POST_QUESTIONS_PATH = "jury/questions";
 
 class ShowProjects extends React.Component {
     constructor(props) {
@@ -34,7 +38,7 @@ class ShowProjects extends React.Component {
                     key={project.id} 
                     textAlign="center"
                     style={{cursor: "pointer"}}
-                    onClick={this.onClick(project.id.toString(), project.title)}>
+                    onClick={this.onClick(project.id, project.title)}>
                     {project.title}
                 </Segment>
             );
@@ -63,6 +67,9 @@ class Home extends React.Component {
         };
         this.getPDF = this.getPDF.bind(this);
         this.sendComment = this.sendComment.bind(this);
+        this.sendQuestions = this.sendQuestions.bind(this);
+        this.renderSpace = this.renderSpace.bind(this);
+        this.renderPdf = this.renderPdf.bind(this);
     }
 
     renderSpace () {
@@ -80,21 +87,38 @@ class Home extends React.Component {
         if (this.state.id_project == null) {
             alert("Choose a Project");
         } else {
-            const concept = {
+            const data = {
             jury: {title: comment_title, 
                 thesis_project_id: this.state.id_project,
                 content: comment_content}
             };
-            Http.post("/jury_comment", concept).then((response) => {
+            Http.post(POST_COMMENT_PATH, data).then((response) => {
                 alert(response.data.message);
             }).catch(error => console-log(error));
+        }
+    }
+
+    sendQuestions (questions) {
+        if (this.state.id_project == null) {
+            alert("Choose a Project");
+        } else {
+            const data = {
+                jury: {
+                    questions: questions,
+                    thesis_project_id: this.state.id_project
+                }
+            };
+            Http.post(POST_QUESTIONS_PATH, data).then(response => {
+                alert(response.data.message);
+                console.log(response.data);
+            }).catch(error => console.log(error));
         }
     }
 
     renderPdf () {
         if (this.state.title_project != null && this.state.id_project != null) {
             return <PdfViewer title={this.state.title_project} 
-                project_id={this.state.id_project} 
+                url={GET_PDF_PATH + this.state.id_project}
                 key = {this.state.project_id} />
         }
         return <Segment placeholder style={{height: "530px"}}>
@@ -115,7 +139,10 @@ class Home extends React.Component {
                             {this.renderPdf()}
                             {this.renderSpace()}
                             <Header as="h3" content="Concept"/>
-                            <Comment sendComment={this.sendComment}/>
+                            <Comment sendComment={this.sendComment} project_id={this.state.id_project} />
+                            {this.renderSpace()}
+                            <Header as="h3" content="Questions"/>
+                            <Question sendQuestions={this.sendQuestions} project_id={this.state.id_project} />
                         </Segment>
                     </Grid.Column>
                     <Grid.Column width={5}>
