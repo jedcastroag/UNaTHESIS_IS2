@@ -35,7 +35,7 @@ class Home extends React.Component {
 			case 'student':
 			return <HomeStudent data={ this.state.response }/>;
 			case 'jury_tutor':
-			return <HomeTutor data={this.state.response}/>;
+			return <JuryTutorHome data={this.state.response}/>;
 			default:
 			return <div style = {{height:"100px"}}>
 				<h2>Redirecting...</h2>

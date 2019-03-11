@@ -42,6 +42,7 @@ class JuryController < ApplicationController
                 params[:jury].merge! users_id
                 comment = Comment.create(jury_params)
                 if comment.id != nil
+                    JuryMailer.with(:email => "jedcastroag@gmail.com").concept_created.deliver_now
                     msg = "Created and Saved"
                 else
                     msg = "Created and Didn't Saved"
