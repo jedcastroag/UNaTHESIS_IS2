@@ -1,46 +1,82 @@
 import React from "react"
 import PropTypes from "prop-types"
 import Http from '../services/RestServices'
-import { Redirect, BrowserRouter } from 'react-router-dom'
-import { Button, Input, Checkbox, Form, Grid, Segment, Container } from 'semantic-ui-react'
+import { withRouter } from 'react-router-dom'
+import { Button, Input, Checkbox, Form, Grid, Segment, Container, Table, TableBody } from 'semantic-ui-react'
 import '../../../dist/semantic.min.css'
 
 class ProjectRow extends React.Component {
-    state = {
-        redirect:false,
+
+    componentDidMount(){
+        let tableRows = []
+        Http.get('tutor/projects')
+        .then(response => {                         
+            response.data.forEach(row => {
+                Http.get(`users/${row[0].id_estudiante}`)
+                .then(res => {                    
+                    tableRows.push({studentName: res.data.name, studentEmail: res.data.email, projectTitle: row[0].title, studentId: row[0].id_estudiante, thesis_state: row[0].approbation_state})                                        
+                    this.setState({
+                        projects: tableRows
+                    })
+                })                                
+            })                                                                
+        })           
     }
 
-    handleClick(){
-        this.setState(() => ({
-            redirect: true
-        }))
+    constructor(props) {
+        super(props)        
+        
+        this.state = {            
+            projects: [],                   
+        }  
+        this.handleClick = this.handleClick.bind(this)
     }
 
-    render(){
-        const {redirect} = this.state
-        if(redirect){            
-            return <Redirect to='/load/2'/>;            
-        }
+
+    handleClick(project) {                
+        this.props.redirectToProject(project.studentId)
+    }
+
+    render(){        
+        const projects = this.state.projects             
         return (
-        <Grid container row>
-            <Grid container columns ={4} stackable>
-                <Grid.Column>
-                    <p>Juan Diego Moreno Mora</p>
-                </Grid.Column>
-                <Grid.Column>
-                    <p>judmorenomo@unal.edu.co</p>
-                </Grid.Column>
-                <Grid.Column>
-                    <p>Hola</p>
-                </Grid.Column>
-                <Grid.Column>
-                    <Button onClick ={this.handleClick.bind(this)}>See Project</Button>
-                </Grid.Column>
-            </Grid>
-        </Grid>
+            <Table celled padded>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Nombre Estudiante</Table.HeaderCell>
+                        <Table.HeaderCell>Correo Estudiante</Table.HeaderCell>
+                        <Table.HeaderCell>Titulo Proyecto</Table.HeaderCell>
+                        <Table.HeaderCell>Estado</Table.HeaderCell>
+                        <Table.HeaderCell>Ver Tesis</Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>      
+
+                <TableBody>                    
+                    {projects.map(project => <Table.Row key = {project.studentId} >
+                        <Table.Cell
+                            children = {project.studentName}>
+                        </Table.Cell>
+                        <Table.Cell
+                            children = {project.studentEmail}>
+                        </Table.Cell>
+                        <Table.Cell
+                            children = {project.projectTitle}>
+                        </Table.Cell>
+                        <Table.Cell
+                            children = {project.thesis_state === true ? "Aprobado" : "Desaprobado"}>
+                        </Table.Cell>
+                        <Table.Cell collapsing>
+                            <Button onClick ={this.handleClick.bind(this,project)}>Ver Tesis</Button>                            
+                        </Table.Cell>
+                    </Table.Row>)}
+                </TableBody>      
+            </Table>
+
+            
+            
         )
-    }
-    
+    }       
+
 }
 
 class TutorInfo extends React.Component {
@@ -61,7 +97,7 @@ class TutorInfo extends React.Component {
             nombres: '',
             apellidos: '',
             correo: ''
-        }
+        }            
     }
 
     render() {
@@ -96,49 +132,39 @@ class TutorInfo extends React.Component {
 
 class TutorHomeView extends React.Component {
     constructor(props) {        
-        super(props)
-        this.state = {
-            nombre: 'Tutor1',
-            estu: 'Estdiante Testercito',            
-            cor: 'student@test.com',
-            nombrePro: 'Tesis 100% real',
-            rows: <ProjectRow/>
-        }
+        super(props)        
     }
 
-    render () {                
+    redirectToProject = (id) => {
+        this.props.redirectToProject(id)
+    }
+
+    render () {                        
         return (
             <div>
                 <div className="ui raised container segment"> 
-                    <h2 className="ui center aligned header">Bienvenido {this.state.nombre}</h2>
+                    <h2 className="ui center aligned header">Bienvenido </h2>
                     <TutorInfo />
                     <h3>Proyectos actuales</h3>
-                    <Grid container columns = {4} stackable>
-                        <Grid.Column>
-                            <h4>Nombre Estudiante</h4>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <h4>Correo</h4>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <h4>Nombre Proyecto</h4>
-                        </Grid.Column>                        
-                    </Grid>
-
-                    <Grid container row>
-                        {this.state.rows} 
-                    </Grid>                   
+                    
+                    <ProjectRow redirectToProject={this.redirectToProject}/>                    
                 </div>
             </div>
         )
     }
 }
 
-class HomeTutor extends React.Component {
+class HomeTutor extends React.Component { 
+      
+    redirectToProject = (id) => {
+        const path = '/load/' + id         
+        this.props.history.push(path)                  
+    }
+    
     render () {
         return (
             <div>
-            <TutorHomeView />
+            <TutorHomeView redirectToProject={this.redirectToProject}/>
             </div>
         )
     }
@@ -148,4 +174,4 @@ HomeTutor.propTypes = {
     greeting: PropTypes.string
   };
   
-  export default HomeTutor
+  export default withRouter(HomeTutor)

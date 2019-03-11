@@ -1,11 +1,15 @@
 import React from "react"
 import PropTypes from "prop-types"
+import Home from "./jury/Home"
+
 class HomeJury extends React.Component {
-  render () {
-    return (
-      <h1>Home jury</h1>
-    );
-  }
+    render() {
+        return (
+            <div>
+            <div style={{height: "70px"}}></div>
+            <Home/>
+        </div>);
+    }
 }
 
 export default HomeJury

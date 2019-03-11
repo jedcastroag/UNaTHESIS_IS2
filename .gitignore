@@ -27,7 +27,12 @@
 /node_modules
 yarn-debug.log*
 .yarn-integrity
-/config/database.*
+/config/database.yml
 /files/*
 /config/jwt*
-/config/master.key
+# Ignore master key for decrypting credentials and more.
+config/master.key
+config/database.yml
+Gemfile.lock
+/yarn.lock
+yarn.lock

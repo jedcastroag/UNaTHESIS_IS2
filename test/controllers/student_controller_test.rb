@@ -2,11 +2,7 @@ require 'test_helper'
 
 class FileControllerTest < ActionDispatch::IntegrationTest
 	def setup
-		@user = { name: "Fabio", surname: "Tovar", email: "ft@test.edu.co", 
-			password: "password", user_type_id: 1 }
-
-		post users_path, as: :json, params: { user: @user.as_json }
-		assert_response :success, "Problem with user creation"
+		@user = { email: "student@test.com", password: "12345678" }
 
 		post login_url, as: :json, params: { session: @user.as_json }
 		assert_response :success, "Problem with login"

@@ -12,7 +12,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '../components/App';
 
-import '../../../dist/semantic.min.css';
+// import '../../../dist/semantic.min.css';
+import '../../../node_modules/fomantic-ui/dist/semantic.min.css';
 
 // Support component names relative to this directory:
 var componentRequireContext = require.context("components", true)

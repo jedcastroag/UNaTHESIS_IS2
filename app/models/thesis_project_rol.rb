@@ -1,2 +1,0 @@
-class ThesisProjectRol < ApplicationRecord
-end

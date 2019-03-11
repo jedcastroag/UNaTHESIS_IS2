@@ -1,19 +1,9 @@
 class UsersController < ApplicationController
-	skip_before_action :verify_authenticity_token#, except: [:create]
+	skip_before_action :verify_authentication_request!, only: [:new]
 
-	def index
-		render json: User.all.to_json(only: [:email, :created_at])
+	def new
 	end
-
-	def getActualUserInfo
-		authenticate_request!
-		render json: @current_user
-	end
-
-	def find			
-		user = User.find(params[:id])
-		render json: user.to_json
-	end
+	
 
 	def create
 		user = User.new(user_params)
@@ -22,16 +12,16 @@ class UsersController < ApplicationController
 			render json: user.to_json
 		else
 			if Rails.env.production?
-				render json: {error: "Error trying to create new user" }
+				render json: { error: "Error trying to create new user" }
 			else
-				render json: {error: user.errors.to_json }, status: :unprocessable_entity
+				render json: { error: user.errors.to_json }, status: :unprocessable_entity
 			end
 		end
 	end
 
 	def home
 		user = User.find_by(id: 3)
-		
+
 		data = {}
 
 		if(user.user_type_id == 1)
@@ -48,6 +38,6 @@ class UsersController < ApplicationController
 	private
 	def user_params
 		params.require(:user).permit(:email, :password, 
-			:name, :surname, :user_type_id)
+			:name, :surname, :user_type_id, :dni)
 	end
 end

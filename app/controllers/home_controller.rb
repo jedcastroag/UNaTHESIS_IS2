@@ -1,33 +1,48 @@
 class HomeController < ApplicationController
-	#GET Method
-	def view
-		authenticate_request!
+	def initialize
+		super User.user_type_ids
+	end
 
+	def view
 		body = {
 			:user_type_id => @current_user.user_type_id
 		}
 
 		case @current_user.user_type_id
-		when 1 # Administrator
-
-		when 2 # Student
+		when 'admin'
+			
+		when 'student'
 			thesis_project = @current_user.thesis_projects.last
+
+			users = thesis_project.related_users(@current_user).as_json if thesis_project
+
 			student = { 
 				:thesis => thesis_project, 
-				:comments => thesis_project&.comments,
-				:users => thesis_project.users
+				:comments => thesis_project&.comments || [],
+				:users => users || []
 			}
 			body.merge! student
-		when 3 # Tutor
-
-		when 4 # Jury
-
+		when 'jury_tutor'
+			jury_tutor = {
+				:is_jury => (is_rol? :jury),
+				:is_tutor => (is_rol? :tutor),
+				:name => @current_user.name,
+				:surname => @current_user.surname,
+				:email => @current_user.email
+			}
+			body.merge! jury_tutor
 		else
-			raise 'Invalid Request'
+			raise "Invalid request #{@current_user.user_type_id}"
 		end
 
 		render json: body
 	rescue => error
-		render json: { error: error }, status: :unauthorized
+		render json: { error: error }, status: :bad_request
+	end
+
+	private
+
+	def is_rol? (rol_id)
+		!@current_user.thesis_project_users.where(:thesis_project_roles_id => rol_id).empty?
 	end
 end

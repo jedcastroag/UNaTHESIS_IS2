@@ -17,11 +17,14 @@
 * Open repository folder and execute `bundle install`.
 * Run `rails server` and open http://localhost:3000 in a browser or `heroku local` and open http://localhost:5000 in a browser.
 * [Install React-Rails](https://github.com/reactjs/react-rails)
-* [Install Semantic UI](https://github.com/ashtonthomas/sample-rails-react-semantic-ui-app)
+* ~~[Install Semantic UI](https://github.com/ashtonthomas/sample-rails-react-semantic-ui-app)~~
+* [Install Fomantic UI](https://fomantic-ui.com/elements/icon.html#/definition)
 * Run `bundle install`
 * Run `yarn install`
+
 * Run rails `db:migrate` and rails `db:seed`
 * Run `foreman start` or `rails server`
+
 * Heroku version is in https://unthesis.herokuapp.com/.
 
 ## Unit testing

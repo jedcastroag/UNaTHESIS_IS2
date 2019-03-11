@@ -1,6 +1,5 @@
 import React from "react"
 import PropTypes from "prop-types"
-import Redirect from 'react-router-dom'
 
 import Http from '../services/RestServices'
 
@@ -8,6 +7,7 @@ import HomeJury from './HomeJury'
 import HomeStudent from './HomeStudent'
 import HomeTutor from './HomeTutor'
 import HomeAdmin from './HomeAdmin'
+import JuryTutorHome from './JuryTutorHome'
 
 const HOME_PATH = '/home';
 
@@ -30,16 +30,16 @@ class Home extends React.Component {
 
 	renderUserHome() {
 		switch(this.state.user_type_id) {
-			case 1:
+			case 'admin':
 			return <HomeAdmin data={this.state.response}/>;
-			case 2:
+			case 'student':
 			return <HomeStudent data={ this.state.response }/>;
-			case 3:
+			case 'jury_tutor':
 			return <HomeTutor data={this.state.response}/>;
-			case 4:
-			return <HomeJury data={this.state.response}/>;
 			default:
-			return <HomeStudent data={this.setState.response} />;
+			return <div style = {{height:"100px"}}>
+				<h2>Redirecting...</h2>
+			</div>;
 		}
 	}
 
