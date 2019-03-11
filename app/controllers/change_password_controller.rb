@@ -14,8 +14,4 @@ class ChangePasswordController < ApplicationController
   rescue => error
     render json: { error: error }, status: :bad_request
   end
-
-  def new
-
-  end
 end
