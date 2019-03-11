@@ -13,7 +13,7 @@ class FileController < ApplicationController
   def load_post
     file_name = Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'
 
-    byebug
+    # byebug
     
     thesis_project = ThesisProject.update params[:id], 
     :document => create_path(@current_user.id, file_name),

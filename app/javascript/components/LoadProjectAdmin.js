@@ -107,7 +107,7 @@ const FormTutor = props => (
                 
                 
                 <Form.Field required>
-                <Button onClick={this.onAddTutor} type='button'>Añadir</Button>
+                <Button onClick={this.onAddTutor} type='button'>Añadir usuario</Button>
                 </Form.Field>
                 
                 <Form.Field required>
