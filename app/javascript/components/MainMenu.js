@@ -12,11 +12,56 @@ const items = [
 {},
 {}
 ]
+
+
+const AdminMenu = () =>{
+	<div>
+		<Menu.Item as={Link} content="Usuarios" key="home" to="/admin/users" />
+		<Menu.Item as={Link} content="Proyectos" key="home" to="/admin/projects" />
+	</div>
+}
  
+
+const StudentMenu = () => {
+	<div>
+		<Menu.Item as={Link} content="Usuarios" key="home" to="/admin/users" />
+		<Menu.Item as={Link} content="Proyectos" key="home" to="/admin/projects" />
+	</div>
+}
+
+const TutorMenu = () => {
+	<div>
+		<Menu.Item as={Link} content="Usuarios" key="home" to="/admin/users" />
+		<Menu.Item as={Link} content="Proyectos" key="home" to="/admin/projects" />
+	</div>
+}
+
+const JuryMenu = () => {
+	<div>
+		<Menu.Item as={Link} content="Usuarios" key="home" to="/admin/users" />
+		<Menu.Item as={Link} content="Proyectos" key="home" to="/admin/projects" />
+	</div>
+}
 class MainMenu extends React.Component {
 	constructor(props) {
 		super(props);
 		this.userType = this.props.userType;
+		this.state = {
+			menu: []
+		}	
+		switch (this.userType) {
+			case 'admin':
+				this.setState(prevState => ({
+					menu: [<AdminMenu />]
+				}))
+			case 'student':
+				this.menu = <StudentMenu />;
+			case 'jury_tutor':
+				this.menu = <JuryMenu />;
+			case 'jury_tutor':
+				this.menu = <TutorMenu />;
+		}
+		
 	}
 
 	render () {
@@ -29,7 +74,7 @@ class MainMenu extends React.Component {
 			<Menu.Item as={ Label } size="large">UnThesis</Menu.Item>
 
 			<Menu.Item as={ Link } content="Home" key="home" to="/"/>
-
+			{this.state.menu}
 			<Menu.Menu position="right">
 
 			<Menu.Item as="a" content="Salir" key="logout" onClick={ this.props.logout } />

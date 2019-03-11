@@ -1,8 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Button, Input, Checkbox, Form } from 'semantic-ui-react'
-import TopMenu from './TopMenu';
-import '../../../dist/semantic.min.css';
 
 const FormTutor = props => (
     <div className="formTutor">
@@ -63,7 +61,6 @@ class LoadProject extends React.Component {
     render() {
         return (
             <div>
-                <TopMenu />
                 <div class="ui raised very padded text container segment">
                     <div class="content">
                         <h2 class="ui header">Cargar archivo</h2>

@@ -7,6 +7,7 @@ import HomeJury from './HomeJury'
 import HomeStudent from './HomeStudent'
 import HomeTutor from './HomeTutor'
 import HomeAdmin from './HomeAdmin'
+import JuryTutorHome from './JuryTutorHome'
 
 const HOME_PATH = '/home';
 
@@ -30,15 +31,15 @@ class Home extends React.Component {
 	renderUserHome() {
 		switch(this.state.user_type_id) {
 			case 'admin':
-			return <HomeAdmin data={ this.state.response }/>;
+			return <HomeAdmin data={this.state.response}/>;
 			case 'student':
 			return <HomeStudent data={ this.state.response }/>;
 			case 'jury_tutor':
-			return <HomeTutor data={ this.state.response }/>;
-			case 'jury_tutor':
-			return <HomeJury data={ this.state.response }/>;
+			return <JuryTutorHome data={this.state.response}/>;
 			default:
-			return null;
+			return <div style = {{height:"100px"}}>
+				<h2>Redirecting...</h2>
+			</div>;
 		}
 	}
 

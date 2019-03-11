@@ -5,28 +5,39 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Header, Grid, Container } from 'semantic-ui-react'
-import TopMenu from './TopMenu';
-import '../../../dist/semantic.min.css';
 
+import {
+    DateInput,
+    TimeInput,
+    DateTimeInput,
+    DatesRangeInput
+} from 'semantic-ui-calendar-react';
 class HomeAdmin extends React.Component {
-
+    handleChange = (event, { name, value }) => {
+        if (this.state.hasOwnProperty(name)) {
+            this.setState({ [name]: value });
+        }
+    }
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            date: '',
+            time: '',
+            dateTime: '',
+            datesRange: ''
+        };
+    }
     render() {
-        return (
-            <div>
-                <TopMenu />
-                <Container>
-                    <Header as='h2' textAlign='center'>
-                        Header
-                </Header>
-                </Container>
-                
-                
-            </div>
-
-        );
+        return <Container>
+        <DateInput
+        inline
+        name='date'
+        value={ this.state.date }
+        onChange={ this.handleDateChange }
+        />
+        </Container>;
     }
 }
-
-
 
 export default HomeAdmin

@@ -2,6 +2,11 @@ class StudentController < ApplicationController
   def initialize
     super User.user_type_ids.slice 'student'
   end
+
+  def change_password
+    user = User.find_by email: @current_user.email
+    # user.
+  end
   
   def download_pdf
     thesis_project = @current_user.thesis_projects.last
@@ -18,4 +23,5 @@ class StudentController < ApplicationController
         render json: { error: error }, status: :unauthorized
       end
     end
+    
   end
