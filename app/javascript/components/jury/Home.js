@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import {Container, Header, List, Grid, Icon, Segment} from "semantic-ui-react"
+import {Container, Header, Select, Grid, Icon, Segment} from "semantic-ui-react"
 import Comment from "./Comment"
 import PdfViewer from "../PdfViewer"
 import Question from "./Question"
@@ -15,49 +15,44 @@ class ShowProjects extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            response: null,
-            changeProject: this.props.changeProject
-        };         
-        this.onClick = this.onClick.bind(this);
+            projects :[{text: "No tiene proyectos asignados aún"}],
+            hasProjects: false
+        };
+        this.getSelectOption = this.getSelectOption.bind(this);
     }  
 
     componentDidMount() {
         Http.get(GET_PROJECTS_PATH).then( response => {
-            this.setState({response: response['data']});
+            this.setState({
+                projects: response.data.map((obj, idx) => ({
+                    text: obj.title,
+                    value: idx,
+                    key: obj.id,
+                })),
+                hasProjects: true
+            });
         }).catch(error => console.log(error));
     }
 
-    onClick = (id, title) => () => {
-        this.props.changeProject(id, title);
-    }
-
-    renderProjects() {
-        if (this.state.response != null) {
-            let list_items = this.state.response.map((project) => 
-                <Segment textAlign="center" 
-                    key={project.id} 
-                    textAlign="center"
-                    style={{cursor: "pointer"}}
-                    onClick={this.onClick(project.id, project.title)}>
-                    {project.title}
-                </Segment>
-            );
-            return list_items;
-        }
-        return (<Segment loading style={{height: "200px"}}></Segment>);
+    getSelectOption = (e, {name, value}) => {
+        const project = this.state.projects[value];
+        this.props.changeProject(project.key, project.text);
     }
 
     render() {
         return (<Container>
-            <Header as='h2'>Projects</Header>
-            <Segment.Group>
-                { this.renderProjects() }
-            </Segment.Group>
+            <Select 
+            name="project"
+            placeholder="Seleccione un Proyecto"
+            onChange={this.state.hasProjects ? this.getSelectOption : null}
+            options={this.state.projects} />
         </Container>
         );
     }
 }
     
+//-----------------------------------------------------------------------------
+
 class Home extends React.Component {
     constructor (props) {
         super(props);
@@ -131,23 +126,25 @@ class Home extends React.Component {
 
     render() {
         return (<Container>
+            {this.renderSpace()}
+            <Header content="Proyectos" dividing />
             <Grid>
                 <Grid.Row>
-                    <Grid.Column width={11}>  
+                    <Grid.Column width={9}>  
                         <Segment>
-                            <Header as="h3" content="Document"/>
+                            <Header as="h3" content="Documento"/>
+                            <ShowProjects changeProject={this.getPDF}/>
+                            {this.renderSpace()}
                             {this.renderPdf()}
-                            {this.renderSpace()}
-                            <Header as="h3" content="Concept"/>
-                            <Comment sendComment={this.sendComment} project_id={this.state.id_project} />
-                            {this.renderSpace()}
-                            <Header as="h3" content="Questions"/>
-                            <Question sendQuestions={this.sendQuestions} project_id={this.state.id_project} />
                         </Segment>
                     </Grid.Column>
-                    <Grid.Column width={5}>
+                    <Grid.Column width={7}>
                         <Segment raised>
-                            <ShowProjects changeProject={this.getPDF}/>
+                            <Header as="h3" content="Concepto"/>
+                            <Comment sendComment={this.sendComment} project_id={this.state.id_project} />
+                            {this.renderSpace()}
+                            <Header as="h3" content="Proguntas" dividing/>
+                            <Question sendQuestions={this.sendQuestions} project_id={this.state.id_project} />
                         </Segment>
                     </Grid.Column>
                 </Grid.Row>

@@ -26,8 +26,8 @@ Rails.application.routes.draw do
   post 'admin/create_project', to: 'admin#create_project'
   post 'admin/asign_roles', to: 'admin#asign_roles'
 
-  
-  get 'jury/projects', to: 'jury#search_projects'
+  get 'jury/info', to: 'jury#getUserInfo'
+  post 'jury/info', to: 'jury#saveUserInfo'
   post 'jury/comment', to: 'jury#add_comment'
   post 'jury/questions', to: 'jury#add_questions'
   get 'tutor/projects', to: 'tutor#getProjectsForTutor'

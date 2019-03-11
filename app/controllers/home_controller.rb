@@ -29,8 +29,8 @@ class HomeController < ApplicationController
 			body.merge! student
 		when 'jury_tutor'
 			jury_tutor = {
-				:is_jury => (is_rol? :jury),
-				:is_tutor => (is_rol? :tutor),
+				:is_jury => true, #(is_rol? :jury),
+				:is_tutor => true, #(is_rol? :tutor),
 				:name => @current_user.name,
 				:surname => @current_user.surname,
 				:email => @current_user.email

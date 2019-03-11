@@ -5,6 +5,20 @@ class JuryController < ApplicationController
         super User.user_type_ids.slice 'jury_tutor'
     end
 
+    def getUserInfo
+        render json: @current_user.attributes.except("id", "password_digest", "created_at", "updated_at")
+    end
+
+    def saveUserInfo
+        render json: jury_user_params
+        
+        # if @current_user.update! jury_user_params
+        #     render json: true, status: :ok
+        #     return
+        # end
+        # render json: false, status: :unprocessable_entity
+    end
+
     def download_pdf
         thesis_project = @current_user.thesis_projects.find(params[:id])
         
@@ -25,8 +39,10 @@ class JuryController < ApplicationController
         project_users = @current_user.thesis_project_users.where(:thesis_project_roles_id => :jury)
         titles = []
         project_users.each do |project_user|
-            project = ThesisProject.find(project_user.thesis_project_id)
-            titles << { title: project.title, id: project.id }
+            project = ThesisProject.find_by(id: project_user.thesis_project_id, activation_state: true)
+            if !project.nil?
+                titles << { title: project.title, id: project.id }
+            end
         end
         
         render json: titles
@@ -168,5 +184,9 @@ class JuryController < ApplicationController
     def jury_params
         params.require(:jury).permit(:title, :content, :thesis_project_id, :users_id)
     end
+
+    def jury_user_params
+        params.require(:jury).permit(:country, :email, :name, :surname, :institution)
+    end 
 
 end

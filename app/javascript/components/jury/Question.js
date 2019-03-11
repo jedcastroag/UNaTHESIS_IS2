@@ -1,9 +1,13 @@
 import React from "react"
 import PropTypes from "prop-types"
-import {Form, Button, Segment, Icon, Header} from "semantic-ui-react"
+import {Form, Button, Segment, Icon, Header, Message} from "semantic-ui-react"
 import Http from "../../services/RestServices"
 
 const GET_QUESTIONS_PATH = "jury/questions";
+
+String.prototype.trim = function() {
+  return this.replace(/^\s+|\s+$/g,"");
+}
 
 class EditQuestions extends React.Component {
 
@@ -12,8 +16,12 @@ class EditQuestions extends React.Component {
     this.state = {
       showOtherQuestionField: (this.props.questions.length == 2),
       sendButtonContent: (this.props.questions.length == 2) ? "Questions": "Question",
+      completed1: false,
+      completed2: false
     };
-    this.questions = this.props.questions.map(obj => obj.question);
+    this.questions = this.props.questions.length !=0 ? this.props.questions.map(obj => obj.question):["",""];
+    console.log(this.props);
+    
     this.addOrHideQuestion = this.addOrHideQuestion.bind(this);
     this.onChangeQuestion = this.onChangeQuestion.bind(this);
     this.renderAddQuestionButton = this.renderAddQuestionButton.bind(this);
@@ -24,7 +32,7 @@ class EditQuestions extends React.Component {
 
   onChangeQuestion = (num_question) => (e) => {
     this.questions[num_question] = e.target.value;
-    // this.setState()
+    num_question == 0? this.setState({completed1: e.target.value.trim() != ""}) : this.setState({completed2: e.target.value.trim() != ""});
   }
 
   addOrHideQuestion () {
@@ -49,9 +57,15 @@ class EditQuestions extends React.Component {
     if (this.state.showOtherQuestionField) {
       return (
         <Segment>
-          <Form.TextArea label= "Make Other Question" 
+          <Form.TextArea label= "Otra pregunta" 
           onChange={this.onChangeQuestion(1)}
-          defaultValue={this.renderQuestion(2)} />
+          defaultValue={this.renderQuestion(2)} 
+          required
+          />
+          {!this.state.completed2 ? <Message
+                warning
+                header="Este campo no puede estar vacio"
+            /> : null}
           {this.renderHideButton()}          
         </Segment>
       );
@@ -71,20 +85,20 @@ class EditQuestions extends React.Component {
   }
 
   sendQuestions () {
-    if (this.questions.length == 0) {
-      alert("Make a Question");
-    } else {
-      if (this.questions[0] == "" || 
-        (this.state.showOtherQuestionField && (this.questions[1] == null || this.questions[1] == ""))) {
-        alert("Question can't be blank");
-      }else {
-        if (!this.state.showOtherQuestionField) {
-          this.props.sendQuestions(this.questions.slice(0,1));
-        } else {
-          this.props.sendQuestions(this.questions);
-        }
-      }
+    if (!this.state.showOtherQuestionField) {
+      this.setState({
+        completed1: this.questions[0].trim() != "",
+      });
+      if (!this.state.completed1) return;
+      this.props.sendQuestions(this.questions.slice(0,1));
     }
+    this.setState({
+      completed1: this.questions[0].trim() != "",
+      completed2: this.questions[1].trim() != ""
+    });
+
+    if (!this.state.completed1 || !this.state.completed2) return;
+    this.props.sendQuestions(this.questions);      
   }
 
   renderQuestion (num_question) {
@@ -100,19 +114,22 @@ class EditQuestions extends React.Component {
 
   render () {
     return (
-      <Form onSubmit={this.sendQuestions}>
-      <Segment>
+      <Form onSubmit={this.sendQuestions} warning>
         <Segment.Group>
           <Segment>
-            <Form.TextArea label= "Make a Question" 
+            <Form.TextArea label= "Una pregunta" 
             onChange={this.onChangeQuestion(0)}
-            defaultValue={this.renderQuestion(1)} />
+            defaultValue={this.renderQuestion(1)}
+            required />
+            {!this.state.completed1 ? <Message
+                warning
+                header="Este campo no puede estar vacio"
+            /> : null}
           </Segment>
           {this.renderOtherQuestionField()}
         </Segment.Group>  
           {this.renderAddQuestionButton()}
           <Button content={"Send " + this.state.sendButtonContent} type="submit" />
-      </Segment>
       </Form>
     );
   }
@@ -139,7 +156,7 @@ class ShowQuestions extends React.Component {
   }
   render () {
     return (
-      <Segment>
+      <div>
         <Segment.Group>
           <Segment>
             <Header content="First question" as="h5" />
@@ -148,7 +165,7 @@ class ShowQuestions extends React.Component {
           {this.renderShowSecondQuestion()}
         </Segment.Group>
         <Button content="Edit" onClick={this.props.editQuestions} />
-      </Segment>
+      </div>
     );
   }
 }
