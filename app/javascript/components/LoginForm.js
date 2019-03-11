@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types'
 import { Button, Form, Grid, Header, Segment, Message, Container } from 'semantic-ui-react'
 
-import auth from '../services/auth';
+import auth from '../services/Auth';
 
 class OnlyLoginForm extends React.Component {
   constructor(props) {
@@ -20,8 +20,6 @@ class OnlyLoginForm extends React.Component {
   }
 
   render() {
-    //console.log("Render child");
-
     return (
       <Form size="large" error>
       <Segment stacked>
@@ -48,10 +46,10 @@ class OnlyLoginForm extends React.Component {
   login() {
     auth.login(this.state.email, this.state.password)
     .then((response) => {
-      this.setState({passwordError: false, emailError: false});
+      this.setState({ passwordError: false, emailError: false });
       this.props.updateAuth();
     }).catch((error) => {
-      this.setState({passwordError: true, emailError: true});
+      this.setState({ passwordError: true, emailError: true });
     });
   }
 }
@@ -62,31 +60,34 @@ export default class LoginForm extends React.Component {
     this.checkIfIsAuthenticated = this.checkIfIsAuthenticated.bind(this);
   }
 
-  render () {    
+  render () {
     let authenticated = this.checkIfIsAuthenticated();
-
-    //console.log("Render parent");
 
     if(authenticated === false) {
       return (
-      <Container fluid style={{ lineHeight: '32px' }}>
-      <style>{`
-        body > div,
-        body > div > div,
-        body > div > div > div.login-form {
-          height: 100%;
-        }
-        `}</style>
-        <Grid style={{ height: '100%' }} textAlign="center" verticalAlign="middle">
-        <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as="h2" color="green" textAlign="center">
-        Ingresa a tu cuenta
-        </Header>
-        <OnlyLoginForm updateAuth={ this.checkIfIsAuthenticated }/>
-        </Grid.Column>
-        </Grid>
-        </Container>
-        );
+        <div className="login-form">
+        
+        <Container fluid style={{ lineHeight: '32px' }} style={{height: '100%'}}>
+        <style>{`
+          body > div,
+          body > div > div,
+          body > div > div > div.login-form {
+            height: 100%;
+          }
+          `}</style>
+
+          <Grid style={{ height: '100%' }} textAlign="center" verticalAlign="middle">
+          <Grid.Column style={{ maxWidth: 450 }}>
+          <Header as="h2" color="green" textAlign="center">
+          Ingresa a tu cuenta
+          </Header>
+          <OnlyLoginForm updateAuth={ this.checkIfIsAuthenticated }/>
+          </Grid.Column>
+          </Grid>
+
+          </Container>
+          </div>
+          );
     } else {
       return authenticated;
     }
@@ -95,8 +96,8 @@ export default class LoginForm extends React.Component {
   checkIfIsAuthenticated() {
     if(auth.isAuthenticated()) {
       this.props.updateAuth();
-
-      const { referrer } = this.props.location.state || { referrer: { pathname: "/project/view" }};
+      // const { referrer } = this.props.location.state || { referrer: { pathname: "/" }};
+      const { referrer } = { referrer: { pathname: "/" }};
       return <Redirect to={ referrer } />;
     }
 
