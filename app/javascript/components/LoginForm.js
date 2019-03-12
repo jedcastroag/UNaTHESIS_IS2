@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types'
 import { Button, Form, Grid, Header, Segment, Message, Container } from 'semantic-ui-react'
@@ -30,6 +30,8 @@ class OnlyLoginForm extends React.Component {
       { this.state.passwordError === false ? <Message positive header='Autenticación exitosa' content='En breve será redirigido a la página de inicio' /> : null }
 
       <Button color="green" fluid size="large" type='submit' onClick={ this.login.bind(this) }>Login</Button>
+      
+      <Link to="/reset_password">Reestablecer contraseña</Link>
       </Segment>
       </Form>
       );

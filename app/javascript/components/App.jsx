@@ -20,6 +20,7 @@ import ProjectsAdminAsignRoles from './ProjectsAdminAsignRoles';
 import LoadProjectAdmin from './LoadProjectAdmin';
 import ChangePassword from "./ChangePassword";
 import UsersAdminEdit from "./UsersAdminEdit";
+import ResetPassword from "./ResetPassword";
 
 /** 
 * All the application's paths must be declarated this.
@@ -43,7 +44,10 @@ const routes = [
 	{ path: "/admin/projects", exact: null, component: ProjectsAdmin },
 	{ path: "/admin/projects/asign_roles", exact: null, component: ProjectsAdminAsignRoles },
 	{ path: "/admin/projects/create", exact: null, component: LoadProjectAdmin },
-	{ path: "/changepassword", exact: null, component: ChangePassword }
+	{ path: "/change_password", exact: null, component: ChangePassword },
+	{ path: "/reset_password", exact: null, component: ResetPassword, restricted: false },
+	{ path: "/password_resets/:id", component: ResetPassword, restricted: false }
+	// /password_resets/VnLEmcW71oickrYX6A-esg/edit?email=fstovarr%40unal.edu.co
 ];
 
 class App extends React.Component {
