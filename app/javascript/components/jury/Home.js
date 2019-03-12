@@ -105,7 +105,6 @@ class Home extends React.Component {
             };
             Http.post(POST_QUESTIONS_PATH, data).then(response => {
                 alert(response.data.message);
-                console.log(response.data);
             }).catch(error => console.log(error));
         }
     }
@@ -119,7 +118,7 @@ class Home extends React.Component {
         return <Segment placeholder style={{height: "530px"}}>
             <Header icon>
                 <Icon name="pdf file outline" />
-                No Project selected
+                No se ha seleccionado ningún proyecto
             </Header>
         </Segment>
     }

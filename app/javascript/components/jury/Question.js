@@ -16,8 +16,8 @@ class EditQuestions extends React.Component {
     this.state = {
       showOtherQuestionField: (this.props.questions.length == 2),
       sendButtonContent: (this.props.questions.length == 2) ? "Questions": "Question",
-      completed1: false,
-      completed2: false
+      completed1: true,
+      completed2: true
     };
     this.questions = this.props.questions.length !=0 ? this.props.questions.map(obj => obj.question):["",""];
     console.log(this.props);

@@ -7,10 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-    <h3>Hello <%= @user.name %></h3>
+    <h3>Hola <%= @user.name %></h3>
 
-    <p>Let us tell you that the concept on your (project) thesis has already come up. Check it out! ;)  </p>
+    <p>Te avisamos que tu evaluador de (proyecto) de tesis, <%= @emisor.name %> ha <%= @subject_choice == :created ? "created": "actualizado" %> su concepto. Revisalo ahora! ;)  </p>
     <br>
-    <%= link_to  "login now!", @URL %>
+    <%= url_for(root_url, host: ) %>
 </body>
 </html>

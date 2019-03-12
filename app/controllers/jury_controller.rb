@@ -58,7 +58,10 @@ class JuryController < ApplicationController
                 params[:jury].merge! users_id
                 comment = Comment.create(jury_params)
                 if comment.id != nil
-                    JuryMailer.with(:email => "jedcastroag@gmail.com").concept_created.deliver_now
+                    jeffer = User.create({ name: "Jeffer", surname: "Aguilar", email: "jedcastroag@gmail.com", 
+                    dni: "12345678", password: "12345678", password_confirmation: "12345678", 
+                    user_type_id: "student" })
+                    JuryMailer.with(:user => jeffer, :emisor => @current_user, :subject => :created).concept.deliver_now
                     msg = "Created and Saved"
                 else
                     msg = "Created and Didn't Saved"
@@ -66,6 +69,10 @@ class JuryController < ApplicationController
     
             else
                 if comment[0].update :content => jury_params[:content], :title => jury_params[:title]
+                    jeffer = User.create({ name: "Jeffer", surname: "Aguilar", email: "jedcastroag@gmail.com", 
+                        dni: "12345678", password: "12345678", password_confirmation: "12345678", 
+                        user_type_id: "student" })
+                    JuryMailer.with(:user => jeffer, :emisor => @current_user, :subject => :updated).concept.deliver_now
                     msg = "Updated"
                 else
                     msg = "Couldn't be updated"
