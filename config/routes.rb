@@ -28,6 +28,8 @@ Rails.application.routes.draw do
   post 'admin/edit_user', to: 'admin#edit_user'
   post 'admin/create_project', to: 'admin#create_project'
   post 'admin/asign_roles', to: 'admin#asign_roles'
+  post 'admin/deactivate_project', to: 'admin#deactivate_project'
+  post 'admin/activate_project', to: 'admin#activate_project'
 
   get 'jury/info', to: 'jury#getUserInfo'
   post 'jury/info', to: 'jury#saveUserInfo'

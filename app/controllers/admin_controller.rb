@@ -32,6 +32,19 @@ class AdminController < ApplicationController
     render json: 200
   end
 
+  def deactivate_project
+    project = ThesisProject.find(params[:project_id])
+    project.update_attribute(:activation_state, false)
+    
+    render json: 200
+  end
+  def activate_project
+    project = ThesisProject.find(params[:project_id])
+    project.update_attribute(:activation_state, true)
+    
+    render json: 200
+  end
+
   def fetch_user_types
     types = UserType.all
     render json: types.to_json
@@ -87,7 +100,7 @@ class AdminController < ApplicationController
   end
 
   def create_project
-    thesis = ThesisProject.create(title: params[:title])
+    thesis = ThesisProject.create(title: params[:title], activation_state: true)
     for i in (0..(params[:count_users].to_i) - 1)
       ThesisProjectUser.create thesis_project_id: thesis.id, user_id: params[:"user_#{i}"], 
       thesis_project_roles_id: params[:"user_type_#{i}"].to_i

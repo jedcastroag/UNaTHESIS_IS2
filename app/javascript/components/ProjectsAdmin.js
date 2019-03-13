@@ -14,6 +14,24 @@ const deleteProject = props => {
     })
 }
 
+const deactivateProject = props => {
+    Http.post(`/admin/deactivate_project`, {
+        project_id: props.id
+
+    }).then(res => {
+        window.location.reload()
+    })
+}
+
+const activateProject = props => {
+    Http.post(`/admin/activate_project`, {
+        project_id: props.id
+
+    }).then(res => {
+        window.location.reload()
+    })
+}
+
 class RowProject extends React.Component {
     constructor(props) {
         super(props)
@@ -23,10 +41,16 @@ class RowProject extends React.Component {
         return <Table.Row>
             <Table.Cell>{this.props.id}</Table.Cell>
             <Table.Cell>{this.props.title}</Table.Cell>
-            <Table.Cell>{this.props.description}</Table.Cell>
+            <Table.Cell>{this.props.activation_state ? 'Activado' : 'Desactivado'}</Table.Cell>
             <Table.Cell className="centered" selectable positive>
                 <a href="javascript:void(0);" onClick={() => this.props.asignRolesRedirect(this.props.id)}>Editar</a>
                 </Table.Cell>
+            {this.props.activation_state ? <Table.Cell selectable negative>
+                <a href="javascript:void(0);" onClick={() => deactivateProject(this.props)}>Desactivar proyecto</a>
+            </Table.Cell> : <Table.Cell selectable positive>
+                    <a href="javascript:void(0);" onClick={() => activateProject(this.props)}>Activar proyecto</a>
+                </Table.Cell>}
+            
             <Table.Cell selectable negative>
                 <a href="javascript:void(0);" onClick={() => deleteProject(this.props)}>Eliminar</a>
             </Table.Cell>
@@ -61,7 +85,7 @@ class ProjectsAdmin extends React.Component {
                 for (var i = 0; i < res['data'].length; i++) {
                     var project = res['data'][i]
                     this.setState(prevState => ({
-                        project_rows: [...prevState.project_rows, <RowProject asignRolesRedirect={this.asignRolesRedirect} id={project.id} title={project.title} description={project.description} />]
+                        project_rows: [...prevState.project_rows, <RowProject asignRolesRedirect={this.asignRolesRedirect} id={project.id} title={project.title} activation_state={project.activation_state} />]
                     }))
                 }
             })
@@ -97,8 +121,9 @@ class ProjectsAdmin extends React.Component {
                                 <Table.Row>
                                     <Table.HeaderCell>Id</Table.HeaderCell>
                                     <Table.HeaderCell>Titulo</Table.HeaderCell>
-                                    <Table.HeaderCell>Descripción</Table.HeaderCell>
+                                    <Table.HeaderCell>Estado de activación</Table.HeaderCell>
                                     <Table.HeaderCell>Asignar roles</Table.HeaderCell>
+                                    <Table.HeaderCell>Desactivar</Table.HeaderCell>
                                     <Table.HeaderCell>Eliminar</Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>
