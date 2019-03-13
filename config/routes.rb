@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
-			
+  get 'change_password/create'
+  get 'change_password/new'
   root 'users#new'
+
   get '/home', to: 'home#view'
   post '/login', to: 'sessions#create', as: :login
   post 'file/load_post', to: 'file#load_post'
@@ -33,9 +35,11 @@ Rails.application.routes.draw do
   get 'tutor/projects', to: 'tutor#getProjectsForTutor'
   get '/tutor/download/:id', to: 'tutor#downloadPdfTutor'
   post 'tutor/upload_concept', to: 'tutor#save_thesis_concept'
-  get '/getUserInfo', to: 'tutor#getActualUserInfo'		  
+  get '/getUserInfo', to: 'tutor#getActualUserInfo'
+  post '/change_password', to: 'change_password#create'
   
-	resources :users
+  resources :users
+  resources :password_resets, only: [:new, :create, :edit, :update]
 
 	get '*path', to: "users#new"
 end

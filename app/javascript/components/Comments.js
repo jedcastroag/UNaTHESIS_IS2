@@ -21,11 +21,24 @@ class Comment extends React.Component {
 		return colors[colors.length - 1]
 	}
 	
+	getRoleName(role) {
+		switch(role){
+			case 1:
+			return "Autor";
+			case 2:
+			return "Tutor";
+			case 3:
+			return "Jurado";
+			default:
+			return "Rol desconocido";
+		}
+	}
+	
 	render() {
 		return (
 			<Segment raised>
 			<Label as='a' color={ this.selectColor(this.props.role) } ribbon>
-			{ this.props.role }</Label>
+			{ this.getRoleName(this.props.role) }</Label>
 			<span> { this.props.title } </span>
 			<p>{ this.props.content }</p>
 			</Segment>
