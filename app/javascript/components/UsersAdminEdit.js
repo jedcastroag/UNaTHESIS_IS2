@@ -4,7 +4,7 @@ import PropTypes from "prop-types"
 import Http from '../services/RestServices'
 import { Container } from 'react-grid-system';
 
-import { Button, Form, Header, Input } from 'semantic-ui-react'
+import { Button, Form, Header, Input, Segment, Divider } from 'semantic-ui-react'
 
 class UsersAdminEdit extends React.Component {
     constructor(props) {
@@ -79,8 +79,10 @@ class UsersAdminEdit extends React.Component {
         return (
             <div>
                 <Container>
-                    <Header as="h2">Datos usuario</Header>
-                    <div className="datos_usuario">
+                    <Segment>
+
+                        <Header as="h2">Datos usuario</Header>
+                        <Divider section />
 
                         <Form id="formUsuario" onSubmit={this.submitForm}>
                             <input type="hidden" name='id' value={this.state.user_id} />
@@ -91,7 +93,7 @@ class UsersAdminEdit extends React.Component {
                                     <label>Nombre</label>
                                     <input type="text" placeholder='Nombre' name='name' value={this.state.name} onChange={(e,  value ) => this.onChangeValue('name', value)}/>
                                 </Form.Field>
-                                <Form.Field>
+                                <Form.Field required>
                                     <label>Apellido</label>
                                     <input type="text" placeholder='Apellido' name="surname" value={this.state.surname} onChange={(e, value) => this.onChangeValue('surname', value)}/>
                                 </Form.Field>
@@ -99,20 +101,20 @@ class UsersAdminEdit extends React.Component {
                             </Form.Group>
                             <Form.Group widths='equal'>
 
-                                <Form.Field>
+                                <Form.Field required>
                                     <label>Número de identificación</label>
                                     <input type="text" placeholder="Número de identificación" value={this.state.dni} name="dni" onChange={(e, value) => this.onChangeValue('dni', value)}></input>
                                 </Form.Field>
 
-                                <Form.Field>
+                                <Form.Field required>
                                     <label>Email</label>
                                     <input type="text" placeholder='Email' name="email" value={this.state.email} onChange={(e, value) => this.onChangeValue('email', value)}/>
                                 </Form.Field>
-                                <Form.Field>
+                                <Form.Field required>
                                     <label>Tipo usuario</label>
                                     <select name="user_type">
                                         {this.state.types.map((value, index) => {
-                                            if (value.value == this.props.user_type) {
+                                            if (String(value.value) == String(this.state.user_type)) {
                                                 return <option value={value.value} selected>{value.text}</option>
 
                                             }
@@ -125,7 +127,7 @@ class UsersAdminEdit extends React.Component {
                                 <Button type='submit'>Editar usuario</Button>
                             </Form.Field>
                         </Form>
-                    </div>
+                        </Segment>
                 </Container>
             </div>
         );

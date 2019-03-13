@@ -20,7 +20,7 @@ import ProjectsAdminAsignRoles from './ProjectsAdminAsignRoles';
 import LoadProjectAdmin from './LoadProjectAdmin';
 import ChangePassword from "./ChangePassword";
 import UsersAdminEdit from "./UsersAdminEdit";
-
+import Http from '../services/RestServices'
 /** 
 * All the application's paths must be declarated this.
 * 
@@ -32,6 +32,8 @@ import UsersAdminEdit from "./UsersAdminEdit";
 *
 * More properties (https://reacttraining.com/react-router/web/api/Route)
 */
+const HOME_PATH = '/home';
+
 const routes = [
 	{ path: "/", exact: null, component: Home },
 	{ path: "/project/load", exact: null, component: LoadProjectForm },
@@ -47,30 +49,46 @@ const routes = [
 ];
 
 class App extends React.Component {
+
 	constructor() {
 		super();
 		this.routes = routes;
-		this.routes.push({ 
-			path: "/login", 
-			exact: null, 
+		this.routes.push({
+			path: "/login",
+			exact: null,
 			componentProps: {
 				updateAuth: this.updateAuth.bind(this)
 			},
 			component: LoginForm,
 			restricted: false
 		});
-		
-		this.state = { 
+
+		this.state = {
 			isAuthenticated: auth.isAuthenticated(),
-			openModal: false
+			openModal: false,
+			user_type_id: null
 		};
-		
+
+		Http.get(HOME_PATH).then(response => {
+			console.log('alv')
+
+			this.setState({
+				user_type_id: response['data']['user_type_id'],
+			});
+
+		}).catch(error => {
+			this.setState({
+				user_type_id: '',
+			});
+		});
+
+
 		this.logout = this.logout.bind(this);
-		
+
 		let observable = auth.getObservable();
 		observable.subscribe({
 			next: (authenticated) => {
-				if(authenticated == false) {
+				if (authenticated == false) {
 					this.setState({
 						openModal: true,
 						isAuthenticated: false
@@ -79,53 +97,79 @@ class App extends React.Component {
 			}
 		});
 	}
-	
+	componentDidMount(){
+		Http.get(HOME_PATH).then(response => {
+			console.log('alv')
+
+			this.setState({
+				user_type_id: response['data']['user_type_id'],
+			});
+
+		}).catch(error => {
+			this.setState({
+				user_type_id: '',
+			});
+		});
+	}
+
+	reload(){
+		this.componentDidMount
+	}
 	updateAuth() {
 		this.setState({
 			isAuthenticated: auth.isAuthenticated()
 		});
+		this.setState({
+			user_type_id: null
+		});
+		Http.get(HOME_PATH).then(response => {
+			this.setState({
+				user_type_id: response['data']['user_type_id']
+			});
+
+		}).catch(error => console.log("Error " + error));
 	}
-	
+
 	logout(e) {
 		e.preventDefault();
 		auth.logout();
 		this.updateAuth();
 	}
-	
+
 	renderHeader() {
-		if(this.state.isAuthenticated)
-		return <div>
-		<div style={{ height: 80 }} />
-		<MainMenu userType={ this.state.userType } 
-		logout={ this.logout } updateAuth={ this.updateAuth } />
-		</div>;
+		if (this.state.isAuthenticated)
+			return <div>
+				<div style={{ height: 80 }} />
+				<MainMenu userType={this.state.user_type_id}
+					logout={this.logout} updateAuth={this.updateAuth} />
+			</div>;
 		return null;
 	}
-	
-	render () {
-		return (			
-			<BrowserRouter>
-			<div>
 
-			<ModalTokenExpired open={ this.state.openModal }/>
-			
-			{ this.renderHeader() }
-			
-			<Switch>
-			{
-				this.routes.map(function(route, index) {
-					return <ProtectedRoute { ...route } key={ index } />;
-				}, this)
-			}
-			<Route exact render={() => { window.location.href="/404.html" }} />
-			</Switch>
-			
-			<Segment basic />
-			
-			</div>
+	render() {
+		return (
+			<BrowserRouter>
+				<div>
+
+					<ModalTokenExpired open={this.state.openModal} />
+					{this.state.user_type_id != null &&
+						this.renderHeader()
+					}
+					<Switch>
+						{
+							this.routes.map(function (route, index) {
+								return <ProtectedRoute {...route} key={index} />;
+							}, this)
+						}
+						<Route exact render={() => { window.location.href = "/404.html" }} />
+					</Switch>
+
+					<Segment basic />
+
+				</div>
 			</BrowserRouter>
-			);	
-		}
+		);
 	}
-	
-	export default App
+}
+
+export default App
