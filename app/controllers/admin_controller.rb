@@ -17,6 +17,7 @@ class AdminController < ApplicationController
                                                    :name, :surname, :email,
                                                    :institution, :country,
                                                    :dni).first
+    
     render json: user.to_json
   end
 
