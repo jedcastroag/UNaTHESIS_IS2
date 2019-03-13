@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
-			
+  get 'change_password/create'
+  get 'change_password/new'
   root 'users#new'
+
   get '/home', to: 'home#view'
-  post '/login', to: 'sessions#create'
+
+  post '/login', to: 'sessions#create', as: :login
   post 'file/load_post', to: 'file#load_post'
   get '/users/:id', to: 'tutor#find'
   get '/project/find/:userId', to: 'project#getProjectForUser'
@@ -26,16 +29,18 @@ Rails.application.routes.draw do
   post 'admin/create_project', to: 'admin#create_project'
   post 'admin/asign_roles', to: 'admin#asign_roles'
 
-  
-  get 'jury/projects', to: 'jury#search_projects'
+  get 'jury/info', to: 'jury#getUserInfo'
+  post 'jury/info', to: 'jury#saveUserInfo'
   post 'jury/comment', to: 'jury#add_comment'
   post 'jury/questions', to: 'jury#add_questions'
   get 'tutor/projects', to: 'tutor#getProjectsForTutor'
   get '/tutor/download/:id', to: 'tutor#downloadPdfTutor'
   post 'tutor/upload_concept', to: 'tutor#save_thesis_concept'
-  get '/getUserInfo', to: 'tutor#getActualUserInfo'		  
+  get '/getUserInfo', to: 'tutor#getActualUserInfo'
+  post '/change_password', to: 'change_password#create'
   
-	resources :users
+  resources :users
+  resources :password_resets, only: [:new, :create, :edit, :update]
 
 	get '*path', to: "users#new"
 end

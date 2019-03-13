@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
 	def create
 		if user_params[:email].end_with? "unal.edu.c"
 			user_params[:email].slice! "@unal.edu.co"
-			#ans = ldap_validation user_params[:email], user_params[:password]
+			ans = ldap_validation user_params[:email], user_params[:password]
 			if(ans)
 				render json: { error: "Unal email #{ans}"  }
 			else
