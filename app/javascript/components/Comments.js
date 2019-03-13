@@ -38,7 +38,7 @@ class Comment extends React.Component {
 		return (
 			<Segment raised>
 			<Label as='a' color={ this.selectColor(this.props.role) } ribbon>
-			{ this.getRoleName(this.props.role) }</Label>
+			{ this.props.author }</Label>
 			<span> { this.props.title } </span>
 			<p>{ this.props.content }</p>
 			</Segment>
@@ -47,8 +47,9 @@ class Comment extends React.Component {
 	}
 	
 	Comment.defaultProps = {
-		title: "[Comment without title]",
-		role: "Unknown role"
+		title: "[Comentario sin título]",
+		role: "Rol desconocido",
+		author: "Autor desconocido"
 	}
 	
 	class Comments extends React.Component {
@@ -57,13 +58,14 @@ class Comment extends React.Component {
 		}
 		
 		renderComments() {
+
 			if(this.props.comments.length > 0) 
 			return <div>
 			{
 				this.props.comments.map(function(comment, index) {
 					return <Comment key={ "comment_" + index } 
 					content={ comment.content } title={ comment.title } 
-					role={ comment.role } />;
+					role={ comment.role } author={ comment.name + " " + comment.surname }/>;
 				})
 			}
 			</div>;
