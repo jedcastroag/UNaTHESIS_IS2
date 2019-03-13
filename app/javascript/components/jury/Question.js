@@ -15,7 +15,7 @@ class EditQuestions extends React.Component {
     super(props);
     this.state = {
       showOtherQuestionField: (this.props.questions.length == 2),
-      sendButtonContent: (this.props.questions.length == 2) ? "Questions": "Question",
+      sendButtonContent: (this.props.questions.length == 2) ? "Preguntas": "Pregunta",
       completed1: true,
       completed2: true
     };
@@ -40,15 +40,15 @@ class EditQuestions extends React.Component {
       showOtherQuestionField: !state.showOtherQuestionField
     }));
     if (this.state.showOtherQuestionField) {
-      this.setState({sendButtonContent: "Question"});
+      this.setState({sendButtonContent: "Pregunta"});
     }else{
-      this.setState({sendButtonContent: "Questions"});
+      this.setState({sendButtonContent: "Preguntas"});
     }
   }
 
   renderHideButton () {
     if (this.props.questions.length < 2) {
-      return (<Button content="Hide" onClick={this.addOrHideQuestion} />);
+      return (<Button content="Quitar" onClick={this.addOrHideQuestion} />);
     }
     return null;
   }
@@ -129,7 +129,7 @@ class EditQuestions extends React.Component {
           {this.renderOtherQuestionField()}
         </Segment.Group>  
           {this.renderAddQuestionButton()}
-          <Button content={"Send " + this.state.sendButtonContent} type="submit" />
+          <Button content={"Enviar " + this.state.sendButtonContent} type="submit" />
       </Form>
     );
   }

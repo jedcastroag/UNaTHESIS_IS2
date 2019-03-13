@@ -142,7 +142,7 @@ class Home extends React.Component {
                             <Header as="h3" content="Concepto"/>
                             <Comment sendComment={this.sendComment} project_id={this.state.id_project} />
                             {this.renderSpace()}
-                            <Header as="h3" content="Proguntas" dividing/>
+                            <Header as="h3" content="Preguntas" dividing/>
                             <Question sendQuestions={this.sendQuestions} project_id={this.state.id_project} />
                         </Segment>
                     </Grid.Column>
