@@ -97,14 +97,34 @@ class App extends React.Component {
 			}
 		});
 	}
+	componentDidMount(){
+		Http.get(HOME_PATH).then(response => {
+			console.log('alv')
 
+			this.setState({
+				user_type_id: response['data']['user_type_id'],
+			});
+
+		}).catch(error => {
+			this.setState({
+				user_type_id: '',
+			});
+		});
+	}
+
+	reload(){
+		this.componentDidMount
+	}
 	updateAuth() {
 		this.setState({
 			isAuthenticated: auth.isAuthenticated()
 		});
+		this.setState({
+			user_type_id: null
+		});
 		Http.get(HOME_PATH).then(response => {
 			this.setState({
-				user_type_id: response['data']['user_type_id'],
+				user_type_id: response['data']['user_type_id']
 			});
 
 		}).catch(error => console.log("Error " + error));

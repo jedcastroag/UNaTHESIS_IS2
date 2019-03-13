@@ -57,12 +57,13 @@ class MainMenu extends React.Component {
 		
 	}
 	componentDidMount(){
-
+		this.setState(prevState => ({
+			menu: []
+		}))
 		switch (this.userType) {
 			case 'admin':
-				console.log('adminMenu')
 				this.setState(prevState => ({
-					menu: [...prevState.menu, <AdminMenu key="admin" key_1 = 'users' key_2='projects'/>]
+					menu: [<AdminMenu key="admin" key_1 = 'users' key_2='projects'/>]
 				}))
 				break
 			case 'student':
@@ -76,7 +77,9 @@ class MainMenu extends React.Component {
 				break
 		}
 	}
-
+	reload(){
+		this.componentDidMount()
+	}
 
 	render () {
 		return (
