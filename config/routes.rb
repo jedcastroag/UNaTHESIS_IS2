@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root 'users#new'
 
   get '/home', to: 'home#view'
+
   post '/login', to: 'sessions#create', as: :login
   post 'file/load_post', to: 'file#load_post'
   get '/users/:id', to: 'tutor#find'
