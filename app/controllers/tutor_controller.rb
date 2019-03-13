@@ -30,7 +30,7 @@ class TutorController < ApplicationController
 			getProjectForStudent = "SELECT thesis_projects.*, user_id as id_estudiante
 			FROM thesis_project_users
 			INNER JOIN thesis_projects ON thesis_project_users.thesis_project_id = thesis_projects.id
-			WHERE thesis_project_users.user_id = " + studentId +" ORDER BY created_at DESC LIMIT 1;"
+			WHERE thesis_project_users.user_id = " + studentId +" AND thesis_projects.activation_state = true ORDER BY thesis_projects.created_at DESC LIMIT 1;"
 			project = ActiveRecord::Base.connection.exec_query(getProjectForStudent)
 			projectsArray.push(project)			
 		end
@@ -45,13 +45,7 @@ class TutorController < ApplicationController
           "#{Rails.root}/#{thesis_project.document}",
           filename: "#{ thesis_project.title }.pdf",
           type: "application/pdf"
-        )
-      rescue => error
-        if Rails.env.production?
-          render json: { error: "Bad request" }, status: :unauthorized
-        else
-          render json: { error: error }, status: :unauthorized
-        end
+        )      
     end
     
       def save_thesis_concept            
