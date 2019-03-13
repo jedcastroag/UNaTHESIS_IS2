@@ -15,16 +15,16 @@ class ShowProjects extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            projects :[{text: "No tiene proyectos asignados aún"}],
+            projects :[],
             hasProjects: false
         };
         this.getSelectOption = this.getSelectOption.bind(this);
     }  
 
     componentDidMount() {
-        Http.get(GET_PROJECTS_PATH).then( response => {
+        Http.get(GET_PROJECTS_PATH).then( response => { 
             this.setState({
-                projects: response.data.map((obj, idx) => ({
+                projects: response.data.length == 0? [{text: "No tiene proyectos asignados aún"}] : response.data.map((obj, idx) => ({
                     text: obj.title,
                     value: idx,
                     key: obj.id,

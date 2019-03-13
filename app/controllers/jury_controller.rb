@@ -40,7 +40,7 @@ class JuryController < ApplicationController
         titles = []
         project_users.each do |project_user|
             project = ThesisProject.find_by(id: project_user.thesis_project_id, activation_state: true)
-            if !project.nil?
+            if !project.nil? and !project.document.nil?
                 titles << { title: project.title, id: project.id }
             end
         end
