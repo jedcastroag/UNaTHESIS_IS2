@@ -41,10 +41,11 @@ const TutorMenu = () => {
 	</div>
 }
 
-const JuryMenu = () => {
-	<div>
-		
-	</div>
+const JuryTutorMenu = () => {
+	return (<Menu.Menu key="submenu">
+		<Menu.Item as={Link} content="Jurado" key='jury' to="/jury" />
+		<Menu.Item as={Link} content="Tutor" key='tutor' to="/tutor" />
+	</Menu.Menu>)
 }
 class MainMenu extends React.Component {
 	constructor(props) {
@@ -70,7 +71,9 @@ class MainMenu extends React.Component {
 				
 				break
 			case 'jury_tutor':
-				
+				this.setState({
+					menu: [<JuryTutorMenu key="jury_tutor" />]
+				})
 				break
 			case 'jury_tutor':
 				

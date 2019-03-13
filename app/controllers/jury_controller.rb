@@ -5,18 +5,9 @@ class JuryController < ApplicationController
         super User.user_type_ids.slice 'jury_tutor'
     end
 
-    def getUserInfo
-        render json: @current_user.attributes.except("id", "password_digest", "created_at", "updated_at")
-    end
-
-    def saveUserInfo
-        render json: jury_user_params
-        
-        # if @current_user.update! jury_user_params
-        #     render json: true, status: :ok
-        #     return
-        # end
-        # render json: false, status: :unprocessable_entity
+    def getStudentInfo
+        student = ThesisProject.find(params[:thesis_project_id]).thesis_project_users.find_by(:thesis_project_roles_id => :author).attributes["user_id"]
+        render json: User.find(student).attributes.except("id", "password_digest", "created_at", "updated_at")
     end
 
     def download_pdf
@@ -53,7 +44,7 @@ class JuryController < ApplicationController
         if check_user
             comment = Comment.where(users_id: @current_user.id,
                 thesis_project_id: jury_params[:thesis_project_id])
-            student_id = ThesisProject.find(jury_params[:thesis_project_id]).thesis_project_users.where(:thesis_project_roles_id => :author)
+            student_id = ThesisProject.find(jury_params[:thesis_project_id]).thesis_project_users.where(:thesis_project_roles_id => :author).attributes["user_id"]
             if comment.empty?
                 users_id = {:users_id => @current_user.id}
                 params[:jury].merge! users_id
@@ -87,7 +78,7 @@ class JuryController < ApplicationController
         if check_user
             questions = Question.where(user_id: @current_user.id,
                 thesis_project_id: jury_params[:thesis_project_id])
-            student_id = ThesisProject.find(jury_params[:thesis_project_id]).thesis_project_users.where(:thesis_project_roles_id => :author)
+            student_id = ThesisProject.find(jury_params[:thesis_project_id]).thesis_project_users.where(:thesis_project_roles_id => :author).attributes["user_id"]
             if questions.empty?
                 i = 1
                 params[:jury][:questions].each do |question|
@@ -197,7 +188,7 @@ class JuryController < ApplicationController
     
     def jury_params
         params.require(:jury).permit(:title, :content, :thesis_project_id, :users_id)
-    end
+    end    
 
     def jury_user_params
         params.require(:jury).permit(:country, :email, :name, :surname, :institution)

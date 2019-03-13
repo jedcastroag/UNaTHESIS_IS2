@@ -20,7 +20,6 @@ class EditQuestions extends React.Component {
       completed2: true
     };
     this.questions = this.props.questions.length !=0 ? this.props.questions.map(obj => obj.question):["",""];
-    console.log(this.props);
     
     this.addOrHideQuestion = this.addOrHideQuestion.bind(this);
     this.onChangeQuestion = this.onChangeQuestion.bind(this);

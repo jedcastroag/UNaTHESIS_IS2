@@ -4,6 +4,7 @@ import {Container, Header, Select, Grid, Icon, Segment} from "semantic-ui-react"
 import Comment from "./Comment"
 import PdfViewer from "../PdfViewer"
 import Question from "./Question"
+import StudentInfo from "./ShowStudentInfo";
 import Http from "../../services/RestServices"
 
 const GET_PDF_PATH = "jury/download/"
@@ -24,7 +25,7 @@ class ShowProjects extends React.Component {
     componentDidMount() {
         Http.get(GET_PROJECTS_PATH).then( response => { 
             this.setState({
-                projects: response.data.length == 0? [{text: "No tiene proyectos asignados aún"}] : response.data.map((obj, idx) => ({
+                projects: response.data.length == 0? [{text: "No tiene proyectos asignados aún", key:"null"}] : response.data.map((obj, idx) => ({
                     text: obj.title,
                     value: idx,
                     key: obj.id,
@@ -36,6 +37,7 @@ class ShowProjects extends React.Component {
 
     getSelectOption = (e, {name, value}) => {
         const project = this.state.projects[value];
+        if (project == null) return;
         this.props.changeProject(project.key, project.text);
     }
 
@@ -125,6 +127,8 @@ class Home extends React.Component {
 
     render() {
         return (<Container>
+
+            <StudentInfo thesis_project_id={this.state.id_project}/>
             {this.renderSpace()}
             <Header content="Proyectos" dividing />
             <Grid>

@@ -20,7 +20,9 @@ import ProjectsAdminAsignRoles from './ProjectsAdminAsignRoles';
 import LoadProjectAdmin from './LoadProjectAdmin';
 import ChangePassword from "./ChangePassword";
 import UsersAdminEdit from "./UsersAdminEdit";
-import Http from '../services/RestServices'
+import HomeJury from "./HomeJury";
+import HomeTutor from "./HomeTutor";
+import Http from '../services/RestServices';
 /** 
 * All the application's paths must be declarated this.
 * 
@@ -45,7 +47,9 @@ const routes = [
 	{ path: "/admin/projects", exact: null, component: ProjectsAdmin },
 	{ path: "/admin/projects/asign_roles", exact: null, component: ProjectsAdminAsignRoles },
 	{ path: "/admin/projects/create", exact: null, component: LoadProjectAdmin },
-	{ path: "/changepassword", exact: null, component: ChangePassword }
+	{ path: "/changepassword", exact: null, component: ChangePassword },
+	{ path: "/jury", exact: null, component: HomeJury },
+	{ path: "/tutor", exact: null, component: HomeTutor }
 ];
 
 class App extends React.Component {
@@ -70,8 +74,6 @@ class App extends React.Component {
 		};
 
 		Http.get(HOME_PATH).then(response => {
-			console.log('alv')
-
 			this.setState({
 				user_type_id: response['data']['user_type_id'],
 			});
@@ -99,8 +101,6 @@ class App extends React.Component {
 	}
 	componentDidMount(){
 		Http.get(HOME_PATH).then(response => {
-			console.log('alv')
-
 			this.setState({
 				user_type_id: response['data']['user_type_id'],
 			});

@@ -7,10 +7,6 @@ class TutorController < ApplicationController
     super User.user_type_ids.slice 'jury_tutor'
   end
   
-  def getActualUserInfo	        
-		render json: @current_user
-	end
-  
 	def getProjectsForTutor				
 		tutor = @current_user
 		tutorId = tutor.id.to_s		
