@@ -5,6 +5,20 @@ class JuryController < ApplicationController
         super User.user_type_ids.slice 'jury_tutor'
     end
 
+    def getUserInfo
+        render json: @current_user.attributes.except("id", "password_digest", "created_at", "updated_at")
+    end
+
+    def saveUserInfo
+        render json: jury_user_params
+        
+        # if @current_user.update! jury_user_params
+        #     render json: true, status: :ok
+        #     return
+        # end
+        # render json: false, status: :unprocessable_entity
+    end
+
     def download_pdf
         thesis_project = @current_user.thesis_projects.find(params[:id])
         
@@ -25,8 +39,10 @@ class JuryController < ApplicationController
         project_users = @current_user.thesis_project_users.where(:thesis_project_roles_id => :jury)
         titles = []
         project_users.each do |project_user|
-            project = ThesisProject.find(project_user.thesis_project_id)
-            titles << { title: project.title, id: project.id }
+            project = ThesisProject.find_by(id: project_user.thesis_project_id, activation_state: true)
+            if !project.nil?
+                titles << { title: project.title, id: project.id }
+            end
         end
         
         render json: titles
@@ -37,11 +53,13 @@ class JuryController < ApplicationController
         if check_user
             comment = Comment.where(users_id: @current_user.id,
                 thesis_project_id: jury_params[:thesis_project_id])
+            student_id = ThesisProject.find(jury_params[:thesis_project_id]).thesis_project_users.where(:thesis_project_roles_id => :author)
             if comment.empty?
                 users_id = {:users_id => @current_user.id}
                 params[:jury].merge! users_id
                 comment = Comment.create(jury_params)
-                if comment.id != nil
+                if comment.id != nil                    
+                    JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :created).concept.deliver_now
                     msg = "Created and Saved"
                 else
                     msg = "Created and Didn't Saved"
@@ -49,6 +67,7 @@ class JuryController < ApplicationController
     
             else
                 if comment[0].update :content => jury_params[:content], :title => jury_params[:title]
+                    JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).concept.deliver_now
                     msg = "Updated"
                 else
                     msg = "Couldn't be updated"
@@ -64,9 +83,11 @@ class JuryController < ApplicationController
     def add_questions
         message = ""
         create_answer = ""
+        any_quest_created_or_updated = false
         if check_user
             questions = Question.where(user_id: @current_user.id,
                 thesis_project_id: jury_params[:thesis_project_id])
+            student_id = ThesisProject.find(jury_params[:thesis_project_id]).thesis_project_users.where(:thesis_project_roles_id => :author)
             if questions.empty?
                 i = 1
                 params[:jury][:questions].each do |question|
@@ -76,6 +97,7 @@ class JuryController < ApplicationController
                             user_id: @current_user.id,
                             thesis_project_id: jury_params[:thesis_project_id]
                         ) != nil
+                            any_quest_created_or_updated = true
                             message << "Question " + i.to_s + " was created and saved\n"
                         else
                             message << "Question" + i.to_s + " couldn't be created and saved\n"
@@ -83,20 +105,28 @@ class JuryController < ApplicationController
                         i += 1
                     end                    
                 end
+                if any_quest_created_or_updated
+                    JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :created).questions.deliver_now
+                end
             else
                 new_questions = params[:jury][:questions]
                 if new_questions.length == questions.length
                     i = 0                    
                     questions.each do |question|
                         if question.update(question: new_questions[i])
+                            any_quest_created_or_updated = true
                             message << "Question " + (i+1).to_s + " Updated \n"
                             i += 1
                         else
                             message << "Can't Update the question " + (i+1).to_s + "\n"
                         end
                     end
+                    if any_quest_created_or_updated 
+                        JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).questions.deliver_now
+                    end
                 else
                     if questions[0].update question: new_questions[0]
+                        any_quest_created_or_updated = true
                         message << "Question " + 1.to_s + " Updated \n"
                     else
                         message << "Can't Update the question " + 1.to_s + "\n"
@@ -106,6 +136,7 @@ class JuryController < ApplicationController
                         user_id: @current_user.id,
                         thesis_project_id: jury_params[:thesis_project_id]
                     ) != nil
+                        JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).questions.deliver_now
                         message << "Question " + 2.to_s + " Created \n"
                     else
                         message << "Question " + 2.to_s + " Can't be Created\n"
@@ -167,5 +198,9 @@ class JuryController < ApplicationController
     def jury_params
         params.require(:jury).permit(:title, :content, :thesis_project_id, :users_id)
     end
+
+    def jury_user_params
+        params.require(:jury).permit(:country, :email, :name, :surname, :institution)
+    end 
 
 end

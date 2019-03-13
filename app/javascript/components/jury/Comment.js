@@ -1,9 +1,13 @@
 import React from "react"
 import PropTypes from "prop-types"
-import {Form, Button, Segment, Header} from "semantic-ui-react"
+import {Form, Button, Segment, Header, Message} from "semantic-ui-react"
 import Http from "../../services/RestServices"
 
 const GET_COMMENT_PATH = "jury/comment"
+
+String.prototype.trim = function() {
+    return this.replace(/^\s+|\s+$/g,"");
+}
 
 class EditComment extends React.Component {
 
@@ -11,7 +15,8 @@ class EditComment extends React.Component {
         super(props);
         this.state = {
             comment_title: "",
-            comment_content: ""
+            comment_content: "",
+            completed: true
         }
         this.titleOnChange = this.titleOnChange.bind(this);
         this.contentOnChange = this.contentOnChange.bind(this);
@@ -40,41 +45,42 @@ class EditComment extends React.Component {
     }
 
     titleOnChange(e) {
-        this.setState({comment_title: e.target.value});
+        this.setState({
+            comment_title: e.target.value            
+        });
     }
-
+    
     contentOnChange(e) {
-        this.setState({comment_content: e.target.value});
+        this.setState({
+            comment_content: e.target.value,
+            completed: e.target.value.trim() != ""
+        });
     }
 
     sendComment () {
-        if (this.state.comment_title != "" && this.state.comment_content != "") {
+        if (this.state.completed) 
             this.props.sendComment(this.state.comment_content, this.state.comment_title);
-        } else {
-            let msj = "The content of the concept can't be blank";
-            if (this.state.comment_title == null) {
-                msj = "The title can't be blank";
-            }
-            alert(msj);
-        }
-
     }
 
     render() {
 
         return (<Segment >
-            <Form onSubmit={this.sendComment}>
-                <Form.Input label="Concept Title" placeholder="Title" onChange={this.titleOnChange} 
+            <Form warning onSubmit={this.sendComment}>
+                <Form.Input label="Título" onChange={this.titleOnChange} 
                     name="comment_title"
                     value={this.state.comment_title}
+                    required
                 />
-                <Form.TextArea  label="Concept" placeholder="Description" 
+                <Form.TextArea  label="Concepto"
                     style={{
                         height: "100px"
                     }} 
-                    onChange={this.contentOnChange} name="comment_content"
+                    onChange={this.contentOnChange} 
+                    name="comment_content"
                     value={this.state.comment_content}
+                    required
                 />
+                {!this.state.completed? <Message warning header="No puede estar vacio" /> :null}
                 <Button type="submit" >Enviar Concepto</Button>
             </Form>
         </Segment>);
@@ -89,7 +95,7 @@ class ShowComment extends React.Component {
         return ( <Segment>
             <Header content={this.props.comment[0].title} as="h5" />
             <p> {this.props.comment[0].content} </p>
-            <Button content="Edit" onClick={this.props.editOrShow} />
+            <Button content="Editar" onClick={this.props.editOrShow} />
         </Segment> );
     }
 }

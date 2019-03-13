@@ -4,8 +4,9 @@ Rails.application.routes.draw do
   root 'users#new'
 
   get '/home', to: 'home#view'
-  post '/login', to: 'sessions#create'
-  post '/file/load_post', to: 'file#load_post'
+
+  post '/login', to: 'sessions#create', as: :login
+  post 'file/load_post', to: 'file#load_post'
   get '/users/:id', to: 'tutor#find'
   get '/project/find/:userId', to: 'project#getProjectForUser'
 	get '/student/download_project', to: 'student#download_pdf'
@@ -27,8 +28,11 @@ Rails.application.routes.draw do
   post 'admin/edit_user', to: 'admin#edit_user'
   post 'admin/create_project', to: 'admin#create_project'
   post 'admin/asign_roles', to: 'admin#asign_roles'
-  
-  get 'jury/projects', to: 'jury#search_projects'
+  post 'admin/deactivate_project', to: 'admin#deactivate_project'
+  post 'admin/activate_project', to: 'admin#activate_project'
+
+  get 'jury/info', to: 'jury#getUserInfo'
+  post 'jury/info', to: 'jury#saveUserInfo'
   post 'jury/comment', to: 'jury#add_comment'
   post 'jury/questions', to: 'jury#add_questions'
   get 'tutor/projects', to: 'tutor#getProjectsForTutor'
