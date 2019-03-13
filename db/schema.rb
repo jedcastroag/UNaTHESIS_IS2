@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
   end
 
   create_table "questions", force: :cascade do |t|
-    t.string "question"
+    t.text "question"
     t.bigint "user_id"
     t.bigint "thesis_project_id"
     t.index ["thesis_project_id"], name: "index_questions_on_thesis_project_id"
@@ -99,11 +99,13 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
     t.bigint "user_type_id"
     t.string "name", null: false
     t.string "surname", null: false
+    t.string "dni", null: false
     t.string "email", null: false
     t.string "institution", default: "universidad nacional de colombia", null: false
     t.string "country", default: "colombia", null: false
     t.string "password_digest", null: false
-    t.string "dni", null: false
+    t.string "reset_digest"
+    t.datetime "reset_sent_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email"

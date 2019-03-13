@@ -74,11 +74,11 @@ class CheckThesis extends React.Component {
         this.props.redirectToHome()            
     }
 
-    render () {             
+    render () {                 
       return (                   
         <div>
         <div className="ui raised container segment">           
-        <h2 className="ui center aligned header">Subir Concepto</h2>
+        <h2 className="ui center aligned header" style={{display: this.state.thesis_state ? 'none' : 'block'}}>Subir Concepto</h2>
 
         <h3 className="ui header">Información Estudiante</h3>        
         <Grid container columns ={3} stackable>
@@ -144,7 +144,7 @@ class CheckThesis extends React.Component {
             </Grid.Column>   
         </Grid>
 
-        <Form id= "conceptForm" onSubmit={ this.submitForm }>
+        <Form id= "conceptForm" onSubmit={ this.submitForm } style={{display: this.state.thesis_state ? 'none' : 'block'}}>
 
         <Grid container columns = {2} stackable>
             <Grid.Column>                
