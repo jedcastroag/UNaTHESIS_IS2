@@ -16,16 +16,19 @@ class TutorController < ApplicationController
 		tutorId = tutor.id.to_s		
 		sqlGetProjects = "select distinct thesis_project_id from thesis_project_users where user_id = " + tutorId + ";"		
 		res = ActiveRecord::Base.connection.exec_query(sqlGetProjects)
-		studentsArr = []
+    studentsArr = []
+    
 		res.each do |val|
 			projectId = val['thesis_project_id'].to_s			
 			sqlGetStudents = "SELECT distinct user_id FROM thesis_project_users
 			WHERE thesis_project_id = " + projectId + " AND thesis_project_roles_id = 1;"
 			students = ActiveRecord::Base.connection.exec_query(sqlGetStudents)
-			studentsArr.push(students[0]['user_id'])			
-		end		
+      studentsArr.push(students[0]['user_id'])
+    end
+
 		studentsArr = studentsArr.to_set
-		projectsArray = []
+    projectsArray = []
+    
 		studentsArr.each do |val|
 			studentId = val.to_s
 			getProjectForStudent = "SELECT thesis_projects.*, user_id as id_estudiante
@@ -34,8 +37,8 @@ class TutorController < ApplicationController
 			WHERE thesis_project_users.user_id = " + studentId +" AND activation_state = true ORDER BY created_at DESC LIMIT 1;"
 			project = ActiveRecord::Base.connection.exec_query(getProjectForStudent)
 			projectsArray.push(project)			
-		end
-		
+    end
+    
 		render json: projectsArray.to_json
   end
   

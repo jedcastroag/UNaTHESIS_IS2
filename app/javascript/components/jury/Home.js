@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import {Container, Header, Select, Grid, Icon, Segment} from "semantic-ui-react"
 import Comment from "./Comment"
-import PdfViewer from "../PdfViewer"
+import PdfViewer from "../common/PdfViewer"
 import Question from "./Question"
 import Http from "../../services/RestServices"
 

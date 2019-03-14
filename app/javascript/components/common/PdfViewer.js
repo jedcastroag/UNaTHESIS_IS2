@@ -6,7 +6,7 @@ import PDFObject from 'pdfobject';
 
 import { Button } from 'semantic-ui-react';
 
-import Http from '../services/RestServices';
+import Http from '../../services/RestServices';
 
 class PDFRenderizer extends React.Component {
 	constructor(props){

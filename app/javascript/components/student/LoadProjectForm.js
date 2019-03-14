@@ -9,10 +9,10 @@ import {
 
 import { countriesOptions } from '../common/Countries';
 
-import Http from '../services/RestServices'
-import juryIcon from '../../assets/images/jury.png';
-import directorIcon from '../../assets/images/director.png';
-import tutorIcon from '../../assets/images/tutor.png';
+import Http from '../../services/RestServices'
+import juryIcon from '../../../assets/images/jury.png';
+import directorIcon from '../../../assets/images/director.png';
+import tutorIcon from '../../../assets/images/tutor.png';
 
 class FormTutor extends React.Component {
   constructor(props) {
@@ -117,7 +117,7 @@ class LoadFile extends React.Component {
         <Form id="formProject" onSubmit={ this.submitForm }>
         
         <Form.Field required label='Título' placeholder='Título' name='project_title' 
-        value={ this.props.thesis.title } control={ Input }/>
+        value={ this.props.thesis.title } control={ Input } readOnly/>
         
         <Form.Field required>
         <label>Descripción</label>
@@ -161,8 +161,6 @@ class LoadFile extends React.Component {
       }
       
       render () {
-        console.log(this.state.thesis);
-        
         if(this.state.thesis != null) 
         return <LoadFile thesis={ this.state.thesis } returnToHome={ this.returnToHome }/>;
         else
@@ -170,7 +168,8 @@ class LoadFile extends React.Component {
         <Segment stacked>
         <Header as="h3" icon>
         <Icon name="dont"></Icon>
-        No han sido creadas tesis vinculadas con su cuenta. Contáctese con el administrativo encargado.
+        No han sido creadas tesis vinculadas con su cuenta. 
+        Contáctese con el administrativo encargado.
         </Header>
         </Segment>
         </Container>;

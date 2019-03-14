@@ -18,12 +18,12 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     post password_resets_path, params: { email: 'student@test.com' }
     assert_response :success
     assert response.body.empty?
-
+    
     assert_not_equal @user.reset_digest, @user.reload.reset_digest
     assert_equal ActionMailer::Base.deliveries.size, 1
-
+    
     user = assigns :user
-
+    
     # Invalid email
     get edit_password_reset_path user.reset_token, email: ""
     assert_includes response.body, 'error'
@@ -32,7 +32,7 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     # Valid email, invalid token
     get edit_password_reset_path 'token', email: user.email
     assert_includes response.body, 'error'
-    assert_response :bad_request
+    assert_response :unauthorized
     
     # Valid email, valid token
     get edit_password_reset_path user.reset_token, email: user.email
@@ -57,22 +57,21 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     assert_response :bad_request
     
     # Valid password & confirmation
-    patch password_reset_path(user.reset_token), params: { email: user.email,
-      user: {
-        password: "87654321",
-		    password_confirmation: "87654321"
-      } 
+    patch password_reset_path(user.reset_token), params: { 
+      email: user.email,
+      password: "87654321",
+      password_confirmation: "87654321"
     }
     assert_response :success
-
+    
+    assert_nil @user.reload.reset_digest
+    
     @user = { email: "student@test.com", password: "12345678" }
     post login_url, as: :json, params: { session: @user.as_json }
     assert_response :unauthorized
-
+    
     @user = { email: "student@test.com", password: "87654321" }
     post login_url, as: :json, params: { session: @user.as_json }
     assert_response :success
-
-    assert 1 == 1
   end
 end

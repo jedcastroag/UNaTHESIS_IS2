@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
     t.bigint "thesis_project_roles_id", null: false
     t.bigint "thesis_project_id", null: false
     t.bigint "user_id", null: false
-    t.boolean "confirmed", default: false, null: false
+    t.boolean "confirmed", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["thesis_project_id", "user_id"], name: "index_thesis_project_users_on_thesis_project_id_and_user_id", unique: true
@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
     t.string "email", null: false
     t.string "institution", default: "universidad nacional de colombia", null: false
     t.string "country", default: "colombia", null: false
+    t.boolean "activated", default: false, null: false
     t.string "password_digest", null: false
     t.string "reset_digest"
     t.datetime "reset_sent_at"

@@ -7,7 +7,7 @@ import { Segment } from "semantic-ui-react";
 import auth from '../services/Auth'
 import LoginForm from './LoginForm'
 import MainMenu from './MainMenu'
-import LoadProjectForm from './LoadProjectForm'
+import LoadProjectForm from './student/LoadProjectForm'
 import ViewProject from './ViewProject'
 import ProtectedRoute from './ProtectedRoute'
 import Home from './Home'
@@ -18,9 +18,9 @@ import UsersAdminAdd from './UsersAdminAdd';
 import ProjectsAdmin from './ProjectsAdmin';
 import ProjectsAdminAsignRoles from './ProjectsAdminAsignRoles';
 import LoadProjectAdmin from './LoadProjectAdmin';
-import ChangePassword from "./ChangePassword";
+import ChangePassword from "./passwords/ChangePassword";
+import ResetPassword from "./passwords/ResetPassword";
 import UsersAdminEdit from "./UsersAdminEdit";
-import ResetPassword from "./ResetPassword";
 
 import Http from '../services/RestServices'
 /** 
@@ -54,7 +54,6 @@ const routes = [
 ];
 
 class App extends React.Component {
-
 	constructor() {
 		super();
 		this.routes = routes;
@@ -75,18 +74,14 @@ class App extends React.Component {
 		};
 
 		Http.get(HOME_PATH).then(response => {
-			console.log('alv')
-
 			this.setState({
 				user_type_id: response['data']['user_type_id'],
 			});
-
 		}).catch(error => {
 			this.setState({
 				user_type_id: '',
 			});
 		});
-
 
 		this.logout = this.logout.bind(this);
 
@@ -104,8 +99,6 @@ class App extends React.Component {
 	}
 	componentDidMount(){
 		Http.get(HOME_PATH).then(response => {
-			console.log('alv')
-
 			this.setState({
 				user_type_id: response['data']['user_type_id'],
 			});

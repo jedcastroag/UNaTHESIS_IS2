@@ -9,6 +9,7 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string :email, null: false, unique:true
       t.string :institution, null:false, default: "universidad nacional de colombia"
       t.string :country, null: false, default: "colombia"
+      t.boolean :activated, null: false, default: false
       t.string :password_digest, null:false
       t.string :reset_digest
       t.datetime :reset_sent_at

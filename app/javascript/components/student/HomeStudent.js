@@ -8,9 +8,9 @@ import {
 } from 'semantic-ui-react';
 
 import Comments from './Comments';
-import PdfViewer from './PdfViewer';
+import PdfViewer from '../common/PdfViewer';
 
-import defaultIcon from '../../assets/images/jury.jpg';
+import defaultIcon from '../../../assets/images/jury.jpg';
 
 const GET_PDF_PATH = 'student/download_project';
 
