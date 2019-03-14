@@ -90,6 +90,8 @@ class Home extends React.Component {
                 content: comment_content}
             };
             Http.post(POST_COMMENT_PATH, data).then((response) => {
+                console.log(response);
+                
                 alert(response.data.message);
             }).catch(error => console-log(error));
         }

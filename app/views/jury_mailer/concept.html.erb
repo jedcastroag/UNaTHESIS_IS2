@@ -9,7 +9,7 @@
 <body>
     <h3>Hola <%= @user.name %></h3>
 
-    <p>Te avisamos que tu evaluador de (proyecto de) tesis, <%= @emisor.name %> ha <%= @subject_choice == :created ? "emitido": "actualizado" %> su concepto. Revisalo ahora! ;)  </p>
+    <p>Te avisamos que tu evaluador de (proyecto de) tesis, <%= @emisor.name %>, ha <%= @subject_choice == :created ? "emitido": "actualizado" %> su concepto. Revisalo ahora! </p>
     <br>
     <% if Rails.env.development?%>
         <%= link_to "Iniciar Sesión!", login_url(:port => "5000") %>
