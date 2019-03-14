@@ -52,7 +52,7 @@ class TutorController < ApplicationController
       )    
   end
     
-  def save_thesis_concept            
+  def save_thesis_concept
     file_path = process_file params[:file], Time.now.strftime('%Y%m%d_%H%M%S') + '.pdf'   
       
     state = params[:estado] == 'approved' ? true : false            

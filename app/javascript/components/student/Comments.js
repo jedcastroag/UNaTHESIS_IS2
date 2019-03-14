@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 
 import { Label, Segment, Header, Container, Icon } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
 
 const colors = [
 	'red',
@@ -42,7 +43,7 @@ class Comment extends React.Component {
 			<span> { this.props.title } </span>
 			<p>{ this.props.content }</p>
 			</Segment>
-			);
+			); 
 		}
 	}
 	
@@ -58,7 +59,6 @@ class Comment extends React.Component {
 		}
 		
 		renderComments() {
-
 			if(this.props.comments.length > 0) 
 			return <div>
 			{

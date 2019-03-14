@@ -8,42 +8,48 @@ import logo from '../../assets/images/escudounal.png';
 import Auth from '../services/Auth';
 
 const items = [
-{}, //Administrator
-['Mi perfil'], //Student
-{},
-{}
+	{}, //Administrator
+	['Mi perfil'], //Student
+	{},
+	{}
 ]
 
 class AdminMenu extends React.Component {
 	constructor(props) {
 		super(props)
-
+		
 	}
-
+	
 	render() {
 		return <Menu.Menu key="submenu">
-			<Menu.Item as={Link} content="Usuarios" key='users' to="/admin/users" />
-			<Menu.Item as={Link} content="Proyectos" key='projects' to="/admin/projects" />
+		<Menu.Item as={Link} content="Usuarios" key='users' to="/admin/users" />
+		<Menu.Item as={Link} content="Proyectos" key='projects' to="/admin/projects" />
 		</Menu.Menu>
 	}
 }
- 
 
-const StudentMenu = () => {
-	<div>
+
+class StudentMenu extends React.Component {
+	constructor(props) {
+		super(props)
 		
-	</div>
+	}
+	
+	render() {
+		return <Menu.Menu key="submenu">
+		</Menu.Menu>
+	}
 }
 
 const TutorMenu = () => {
 	<div>
-		
+	
 	</div>
 }
 
 const JuryMenu = () => {
 	<div>
-		
+	
 	</div>
 }
 class MainMenu extends React.Component {
@@ -59,48 +65,55 @@ class MainMenu extends React.Component {
 	componentDidMount(){
 		this.setState(prevState => ({
 			menu: []
-		}))
+		}));
+
 		switch (this.userType) {
 			case 'admin':
-				this.setState(prevState => ({
-					menu: [<AdminMenu key="admin" key_1 = 'users' key_2='projects'/>]
-				}))
-				break
+			this.setState(prevState => ({
+				menu: [<AdminMenu key="admin" key_1 = 'users' key_2='projects'/>]
+			}))
+			break
 			case 'student':
-				
-				break
+			this.setState(prevState => ({
+				menu: [<StudentMenu key="student" key_1 = 'change_password'/>]
+			}))
+			break
 			case 'jury_tutor':
-				
-				break
+			
+			break
 			case 'jury_tutor':
-				
-				break
+			
+			break
 		}
 	}
+
 	reload(){
 		this.componentDidMount()
 	}
-
+	
 	render () {
 		return (
 			<Menu fixed="top" key="menu">
 			<Menu.Item key="logo1">
 			<Image size="mini" src={ logo } key="logo_img"/>
 			</Menu.Item>
-
+			
 			<Menu.Item as={ Label } key='logo2' size="large">UnThesis</Menu.Item>
-
-			<Menu.Item as={ Link } content="Home" key="home" to="/"/>
+			
+			<Menu.Item as={ Link } content="Inicio" key="home" to="/"/>
 			{this.state.menu}
+
 			<Menu.Menu key="submenu3" position="right">
 
+			<Menu.Item as={Link} content="Cambiar contraseña" key='change_password' to="/change_password" />
 			
 			<Menu.Item as="a" content="Salir" key="logout" onClick={ this.props.logout } />
-
+			
 			</Menu.Menu>
 			</Menu>
 			);
+		}
 	}
-}
-
-export default MainMenu
+	
+	export default MainMenu
+	
