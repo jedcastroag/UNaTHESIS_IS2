@@ -4,6 +4,7 @@ import {Container, Header, Select, Grid, Icon, Segment} from "semantic-ui-react"
 import Comment from "./Comment"
 import PdfViewer from "../common/PdfViewer"
 import Question from "./Question"
+import StudentInfo from "./ShowStudentInfo";
 import Http from "../../services/RestServices"
 
 const GET_PDF_PATH = "jury/download/"
@@ -15,16 +16,16 @@ class ShowProjects extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            projects :[{text: "No tiene proyectos asignados aún"}],
+            projects :[],
             hasProjects: false
         };
         this.getSelectOption = this.getSelectOption.bind(this);
     }  
 
     componentDidMount() {
-        Http.get(GET_PROJECTS_PATH).then( response => {
+        Http.get(GET_PROJECTS_PATH).then( response => { 
             this.setState({
-                projects: response.data.map((obj, idx) => ({
+                projects: response.data.length == 0? [{text: "No tiene proyectos asignados aún", key:"null"}] : response.data.map((obj, idx) => ({
                     text: obj.title,
                     value: idx,
                     key: obj.id,
@@ -36,6 +37,7 @@ class ShowProjects extends React.Component {
 
     getSelectOption = (e, {name, value}) => {
         const project = this.state.projects[value];
+        if (project == null) return;
         this.props.changeProject(project.key, project.text);
     }
 
@@ -88,6 +90,8 @@ class Home extends React.Component {
                 content: comment_content}
             };
             Http.post(POST_COMMENT_PATH, data).then((response) => {
+                console.log(response);
+                
                 alert(response.data.message);
             }).catch(error => console-log(error));
         }
@@ -125,6 +129,8 @@ class Home extends React.Component {
 
     render() {
         return (<Container>
+
+            <StudentInfo thesis_project_id={this.state.id_project}/>
             {this.renderSpace()}
             <Header content="Proyectos" dividing />
             <Grid>
@@ -142,7 +148,7 @@ class Home extends React.Component {
                             <Header as="h3" content="Concepto"/>
                             <Comment sendComment={this.sendComment} project_id={this.state.id_project} />
                             {this.renderSpace()}
-                            <Header as="h3" content="Proguntas" dividing/>
+                            <Header as="h3" content="Preguntas" dividing/>
                             <Question sendQuestions={this.sendQuestions} project_id={this.state.id_project} />
                         </Segment>
                     </Grid.Column>

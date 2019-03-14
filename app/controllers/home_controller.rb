@@ -20,6 +20,7 @@ class HomeController < ApplicationController
 				:activated => @current_user.activated,
 				:thesis => thesis_project, 
 				:comments => thesis_project&.comments || [],
+				:questions => thesis_project&.questions || [],
 				:users => users || []
 			}
 			body.merge! student

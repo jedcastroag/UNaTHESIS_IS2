@@ -5,18 +5,9 @@ class JuryController < ApplicationController
         super User.user_type_ids.slice 'jury_tutor'
     end
 
-    def getUserInfo
-        render json: @current_user.attributes.except("id", "password_digest", "created_at", "updated_at")
-    end
-
-    def saveUserInfo
-        render json: jury_user_params
-        
-        # if @current_user.update! jury_user_params
-        #     render json: true, status: :ok
-        #     return
-        # end
-        # render json: false, status: :unprocessable_entity
+    def getStudentInfo
+        student = ThesisProject.find(params[:thesis_project_id]).thesis_project_users.find_by(:thesis_project_roles_id => :author).attributes["user_id"]
+        render json: User.find(student).attributes.except("id", "password_digest", "created_at", "updated_at")
     end
 
     def download_pdf
@@ -40,7 +31,7 @@ class JuryController < ApplicationController
         titles = []
         project_users.each do |project_user|
             project = ThesisProject.find_by(id: project_user.thesis_project_id, activation_state: true)
-            if !project.nil?
+            if !project.nil? and !project.document.nil?
                 titles << { title: project.title, id: project.id }
             end
         end
@@ -53,24 +44,24 @@ class JuryController < ApplicationController
         if check_user
             comment = Comment.where(users_id: @current_user.id,
                 thesis_project_id: jury_params[:thesis_project_id])
-            student_id = ThesisProject.find(jury_params[:thesis_project_id]).thesis_project_users.where(:thesis_project_roles_id => :author)
+            student_id = ThesisProject.find(jury_params[:thesis_project_id]).thesis_project_users.find_by(:thesis_project_roles_id => :author).user_id
             if comment.empty?
                 users_id = {:users_id => @current_user.id}
                 params[:jury].merge! users_id
                 comment = Comment.create(jury_params)
                 if comment.id != nil                    
                     JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :created).concept.deliver_now
-                    msg = "Created and Saved"
+                    msg = "Concepto creado y guardado"
                 else
-                    msg = "Created and Didn't Saved"
+                    msg = "No se pudo crear el Concepto"
                 end
     
             else
                 if comment[0].update :content => jury_params[:content], :title => jury_params[:title]
                     JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).concept.deliver_now
-                    msg = "Updated"
+                    msg = "Concepto actualizado"
                 else
-                    msg = "Couldn't be updated"
+                    msg = "No se pudo actualizar el Concepto"
                 end
             end
              
@@ -81,26 +72,28 @@ class JuryController < ApplicationController
     end
 
     def add_questions
+        puts params
+
         message = ""
         create_answer = ""
         any_quest_created_or_updated = false
         if check_user
             questions = Question.where(user_id: @current_user.id,
                 thesis_project_id: jury_params[:thesis_project_id])
-            student_id = ThesisProject.find(jury_params[:thesis_project_id]).thesis_project_users.where(:thesis_project_roles_id => :author)
+            student_id = ThesisProject.find(jury_params[:thesis_project_id]).thesis_project_users.find_by(:thesis_project_roles_id => :author).user_id
             if questions.empty?
                 i = 1
-                params[:jury][:questions].each do |question|
-                    if question != ""
+                params[:jury][:questions].each do |content|
+                    if content != ""
                         if Question.create(
-                            question: question,
+                            content: content,
                             user_id: @current_user.id,
-                            thesis_project_id: jury_params[:thesis_project_id]
-                        ) != nil
+                            thesis_project_id: jury_params[:thesis_project_id]) != nil
+                            
                             any_quest_created_or_updated = true
-                            message << "Question " + i.to_s + " was created and saved\n"
+                            message << "La pregunta " + i.to_s + " fue creada y guardada\n"
                         else
-                            message << "Question" + i.to_s + " couldn't be created and saved\n"
+                            message << "La pregunta " + i.to_s + " no se pudo crear\n"
                         end
                         i += 1
                     end                    
@@ -113,33 +106,33 @@ class JuryController < ApplicationController
                 if new_questions.length == questions.length
                     i = 0                    
                     questions.each do |question|
-                        if question.update(question: new_questions[i])
+                        if question.update(content: new_questions[i])
                             any_quest_created_or_updated = true
-                            message << "Question " + (i+1).to_s + " Updated \n"
+                            message << "La pregunta " + (i+1).to_s + " se ha actualizado \n"
                             i += 1
                         else
-                            message << "Can't Update the question " + (i+1).to_s + "\n"
+                            message << "No se pudo actualizar la pregunta " + (i+1).to_s + "\n"
                         end
                     end
                     if any_quest_created_or_updated 
                         JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).questions.deliver_now
                     end
                 else
-                    if questions[0].update question: new_questions[0]
+                    if questions[0].update content: new_questions[0]
                         any_quest_created_or_updated = true
-                        message << "Question " + 1.to_s + " Updated \n"
+                        message << "La pregunta " + 1.to_s + " fue actualizado \n"
                     else
-                        message << "Can't Update the question " + 1.to_s + "\n"
+                        message << "No se pudo actualizar la pregunta " + 1.to_s + "\n"
                     end
                     if Question.create(
-                        question: new_questions[1],
+                        content: new_questions[1],
                         user_id: @current_user.id,
                         thesis_project_id: jury_params[:thesis_project_id]
                     ) != nil
                         JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).questions.deliver_now
-                        message << "Question " + 2.to_s + " Created \n"
+                        message << "La pregunta " + 2.to_s + " fue creada y guardada\n"
                     else
-                        message << "Question " + 2.to_s + " Can't be Created\n"
+                        message << "La pregunta " + 2.to_s + " No se pudo crear\n"
                     end
                 end
             end
@@ -182,7 +175,7 @@ class JuryController < ApplicationController
             )
             
             questions_aux.each do |question_obj|
-                questions << {:question => question_obj.question}
+                questions << {:content => question_obj.content}
             end
             
         end    
@@ -197,7 +190,7 @@ class JuryController < ApplicationController
     
     def jury_params
         params.require(:jury).permit(:title, :content, :thesis_project_id, :users_id)
-    end
+    end    
 
     def jury_user_params
         params.require(:jury).permit(:country, :email, :name, :surname, :institution)

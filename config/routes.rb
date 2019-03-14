@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 	get 'jury/comment', to: 'jury#get_comment'
   get 'jury/questions', to: 'jury#get_questions'
   get 'jury/download/:id', to: 'jury#download_pdf'
+  get 'jury/:thesis_project_id', to: 'jury#getStudentInfo'
   post 'admin/delete_user', to: 'admin#delete_user'
   post 'admin/delete_project', to: 'admin#delete_project'
   post 'admin/add_user', to: 'admin#add_user'
@@ -31,14 +32,12 @@ Rails.application.routes.draw do
   post 'admin/deactivate_project', to: 'admin#deactivate_project'
   post 'admin/activate_project', to: 'admin#activate_project'
 
-  get 'jury/info', to: 'jury#getUserInfo'
-  post 'jury/info', to: 'jury#saveUserInfo'
+  get '/getUserInfo', to: 'jury_tutor#getUserInfo'
   post 'jury/comment', to: 'jury#add_comment'
   post 'jury/questions', to: 'jury#add_questions'
   get 'tutor/projects', to: 'tutor#getProjectsForTutor'
   get '/tutor/download/:id', to: 'tutor#downloadPdfTutor'
   post 'tutor/upload_concept', to: 'tutor#save_thesis_concept'
-  get '/getUserInfo', to: 'tutor#getActualUserInfo'
   post '/change_password', to: 'change_password#create'
   
   resources :users

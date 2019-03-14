@@ -28,29 +28,16 @@ class AdminMenu extends React.Component {
 	}
 }
 
-
-class StudentMenu extends React.Component {
-	constructor(props) {
-		super(props)
-		
-	}
-	
-	render() {
-		return <Menu.Menu key="submenu">
-		</Menu.Menu>
-	}
+const StudentMenu = () => {
+	return (<Menu.Menu key="submenu">
+	</Menu.Menu>)
 }
 
-const TutorMenu = () => {
-	<div>
-	
-	</div>
-}
-
-const JuryMenu = () => {
-	<div>
-	
-	</div>
+const JuryTutorMenu = () => {
+	return (<Menu.Menu key="submenu">
+	<Menu.Item as={Link} content="Jurado" key='jury' to="/jury" />
+	<Menu.Item as={Link} content="Tutor" key='tutor' to="/tutor" />
+	</Menu.Menu>)
 }
 class MainMenu extends React.Component {
 	constructor(props) {
@@ -66,7 +53,7 @@ class MainMenu extends React.Component {
 		this.setState(prevState => ({
 			menu: []
 		}));
-
+		
 		switch (this.userType) {
 			case 'admin':
 			this.setState(prevState => ({
@@ -79,14 +66,16 @@ class MainMenu extends React.Component {
 			}))
 			break
 			case 'jury_tutor':
-			
+			this.setState({
+				menu: [<JuryTutorMenu key="jury_tutor" />]
+			})
 			break
 			case 'jury_tutor':
 			
 			break
 		}
 	}
-
+	
 	reload(){
 		this.componentDidMount()
 	}
@@ -102,9 +91,9 @@ class MainMenu extends React.Component {
 			
 			<Menu.Item as={ Link } content="Inicio" key="home" to="/"/>
 			{this.state.menu}
-
+			
 			<Menu.Menu key="submenu3" position="right">
-
+			
 			<Menu.Item as={Link} content="Cambiar contraseña" key='change_password' to="/change_password" />
 			
 			<Menu.Item as="a" content="Salir" key="logout" onClick={ this.props.logout } />

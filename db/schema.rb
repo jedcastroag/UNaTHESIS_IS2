@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 2019_03_02_220728) do
   end
 
   create_table "questions", force: :cascade do |t|
-    t.text "question"
+    t.text "content"
     t.bigint "user_id"
     t.bigint "thesis_project_id"
     t.index ["thesis_project_id"], name: "index_questions_on_thesis_project_id"

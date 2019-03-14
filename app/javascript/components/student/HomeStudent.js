@@ -171,7 +171,9 @@ class AdditionalInformation extends React.Component {
 				
 				<PdfViewer url={ GET_PDF_PATH } title={ this.props.data.thesis.title || "[Tesis sin título]" } />
 				
-				<Comments comments={ this.props['data']['comments'] }/>
+				<Comments comments={ this.props['data']['comments'] } title="Comentarios"/>
+
+				{ this.props.data.thesis.approbation_state ? <Comments comments={ this.props['data']['questions'] } title="Preguntas"/> : null }
 				
 				<Segment>
 				<Grid columns='2' stackable>
@@ -197,6 +199,7 @@ class AdditionalInformation extends React.Component {
 				title: "default"
 			},
 			comments: [],
+			questions: [],
 			users: {}
 		}
 	}
