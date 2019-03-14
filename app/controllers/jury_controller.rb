@@ -72,6 +72,8 @@ class JuryController < ApplicationController
     end
 
     def add_questions
+        puts params
+
         message = ""
         create_answer = ""
         any_quest_created_or_updated = false
@@ -81,13 +83,13 @@ class JuryController < ApplicationController
             student_id = ThesisProject.find(jury_params[:thesis_project_id]).thesis_project_users.find_by(:thesis_project_roles_id => :author).user_id
             if questions.empty?
                 i = 1
-                params[:jury][:questions].each do |question|
-                    if question != ""
+                params[:jury][:questions].each do |content|
+                    if content != ""
                         if Question.create(
-                            question: question,
+                            content: content,
                             user_id: @current_user.id,
-                            thesis_project_id: jury_params[:thesis_project_id]
-                        ) != nil
+                            thesis_project_id: jury_params[:thesis_project_id]) != nil
+                            
                             any_quest_created_or_updated = true
                             message << "La pregunta " + i.to_s + " fue creada y guardada\n"
                         else
@@ -104,7 +106,7 @@ class JuryController < ApplicationController
                 if new_questions.length == questions.length
                     i = 0                    
                     questions.each do |question|
-                        if question.update(question: new_questions[i])
+                        if question.update(content: new_questions[i])
                             any_quest_created_or_updated = true
                             message << "La pregunta " + (i+1).to_s + " se ha actualizado \n"
                             i += 1
@@ -116,14 +118,14 @@ class JuryController < ApplicationController
                         JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).questions.deliver_now
                     end
                 else
-                    if questions[0].update question: new_questions[0]
+                    if questions[0].update content: new_questions[0]
                         any_quest_created_or_updated = true
                         message << "La pregunta " + 1.to_s + " fue actualizado \n"
                     else
                         message << "No se pudo actualizar la pregunta " + 1.to_s + "\n"
                     end
                     if Question.create(
-                        question: new_questions[1],
+                        content: new_questions[1],
                         user_id: @current_user.id,
                         thesis_project_id: jury_params[:thesis_project_id]
                     ) != nil
@@ -173,7 +175,7 @@ class JuryController < ApplicationController
             )
             
             questions_aux.each do |question_obj|
-                questions << {:question => question_obj.question}
+                questions << {:content => question_obj.content}
             end
             
         end    

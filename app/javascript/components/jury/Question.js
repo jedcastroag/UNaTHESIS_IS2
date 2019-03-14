@@ -159,7 +159,7 @@ class ShowQuestions extends React.Component {
         <Segment.Group>
           <Segment>
             <Header content="First question" as="h5" />
-            <Segment content={this.props.questions[0].question} />
+            <Segment content={this.props.questions[0].content} />
           </Segment>
           {this.renderShowSecondQuestion()}
         </Segment.Group>

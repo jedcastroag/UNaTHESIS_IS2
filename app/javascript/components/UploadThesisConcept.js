@@ -45,7 +45,6 @@ class CheckThesis extends React.Component {
         }       
         this.savePdf = this.savePdf.bind(this)
         this.submitForm = this.submitForm.bind(this)
-         
     }
 
     savePdf(){
@@ -167,8 +166,7 @@ class CheckThesis extends React.Component {
                 </Form.Field>                 
                 <Form.Field>                    
                     <Button floated="right" type="submit" name ="submitButton" style={{display: this.state.thesis_state ? 'none' : 'block'}}>Subir Revision</Button>
-                </Form.Field>                       
-        
+                </Form.Field>
             </Grid.Column>            
         </Grid>                      
         </Form>
@@ -188,11 +186,8 @@ class UpdloadThesisConcept extends React.Component {
         this.props.history.push('/')        
     }
     render () {        
-        return (
-            <div>            
-            <CheckThesis id = {this.props.match.params.id} redirectToHome={() => this.redirectToHome()}/>            
-            </div>            
-        );
+        return <CheckThesis id = {this.props.match.params.id} 
+        redirectToHome={() => this.redirectToHome()}/>;
     }    
 }
 

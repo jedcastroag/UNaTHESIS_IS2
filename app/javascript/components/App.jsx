@@ -7,7 +7,7 @@ import { Segment } from "semantic-ui-react";
 import auth from '../services/Auth'
 import LoginForm from './LoginForm'
 import MainMenu from './MainMenu'
-import LoadProjectForm from './LoadProjectForm'
+import LoadProjectForm from './student/LoadProjectForm'
 import ViewProject from './ViewProject'
 import ProtectedRoute from './ProtectedRoute'
 import Home from './Home'
@@ -18,11 +18,13 @@ import UsersAdminAdd from './UsersAdminAdd';
 import ProjectsAdmin from './ProjectsAdmin';
 import ProjectsAdminAsignRoles from './ProjectsAdminAsignRoles';
 import LoadProjectAdmin from './LoadProjectAdmin';
-import ChangePassword from "./ChangePassword";
+import ChangePassword from "./passwords/ChangePassword";
+import ResetPassword from "./passwords/ResetPassword";
 import UsersAdminEdit from "./UsersAdminEdit";
+import Http from '../services/RestServices'
 import HomeJury from "./HomeJury";
 import HomeTutor from "./HomeTutor";
-import Http from '../services/RestServices';
+
 /** 
 * All the application's paths must be declarated this.
 * 
@@ -47,13 +49,14 @@ const routes = [
 	{ path: "/admin/projects", exact: null, component: ProjectsAdmin },
 	{ path: "/admin/projects/asign_roles", exact: null, component: ProjectsAdminAsignRoles },
 	{ path: "/admin/projects/create", exact: null, component: LoadProjectAdmin },
-	{ path: "/changepassword", exact: null, component: ChangePassword },
+	{ path: "/change_password", exact: null, component: ChangePassword },
+	{ path: "/reset_password", exact: null, component: ResetPassword, restricted: false },
+	{ path: "/password_resets/:id", component: ResetPassword, restricted: false },
 	{ path: "/jury", exact: null, component: HomeJury },
 	{ path: "/tutor", exact: null, component: HomeTutor }
 ];
 
 class App extends React.Component {
-
 	constructor() {
 		super();
 		this.routes = routes;
@@ -66,27 +69,25 @@ class App extends React.Component {
 			component: LoginForm,
 			restricted: false
 		});
-
+		
 		this.state = {
 			isAuthenticated: auth.isAuthenticated(),
 			openModal: false,
 			user_type_id: null
 		};
-
+		
 		Http.get(HOME_PATH).then(response => {
 			this.setState({
 				user_type_id: response['data']['user_type_id'],
 			});
-
 		}).catch(error => {
 			this.setState({
 				user_type_id: '',
 			});
 		});
-
-
+		
 		this.logout = this.logout.bind(this);
-
+		
 		let observable = auth.getObservable();
 		observable.subscribe({
 			next: (authenticated) => {
@@ -104,14 +105,14 @@ class App extends React.Component {
 			this.setState({
 				user_type_id: response['data']['user_type_id'],
 			});
-
+			
 		}).catch(error => {
 			this.setState({
 				user_type_id: '',
 			});
 		});
 	}
-
+	
 	reload(){
 		this.componentDidMount
 	}
@@ -126,50 +127,51 @@ class App extends React.Component {
 			this.setState({
 				user_type_id: response['data']['user_type_id']
 			});
-
+			
 		}).catch(error => console.log("Error " + error));
 	}
-
+	
 	logout(e) {
 		e.preventDefault();
 		auth.logout();
 		this.updateAuth();
 	}
-
+	
 	renderHeader() {
 		if (this.state.isAuthenticated)
-			return <div>
-				<div style={{ height: 80 }} />
-				<MainMenu userType={this.state.user_type_id}
-					logout={this.logout} updateAuth={this.updateAuth} />
-			</div>;
+		return <div>
+		<div style={{ height: 80 }} />
+		<MainMenu userType={this.state.user_type_id}
+		logout={this.logout} updateAuth={this.updateAuth} />
+		</div>;
 		return null;
 	}
-
+	
 	render() {
 		return (
 			<BrowserRouter>
-				<div>
-
-					<ModalTokenExpired open={this.state.openModal} />
-					{this.state.user_type_id != null &&
-						this.renderHeader()
-					}
-					<Switch>
-						{
-							this.routes.map(function (route, index) {
-								return <ProtectedRoute {...route} key={index} />;
-							}, this)
-						}
-						<Route exact render={() => { window.location.href = "/404.html" }} />
-					</Switch>
-
-					<Segment basic />
-
-				</div>
+			<div>
+			
+			<ModalTokenExpired open={this.state.openModal} />
+			{this.state.user_type_id != null &&
+				this.renderHeader()
+			}
+			<Switch>
+			{
+				this.routes.map(function (route, index) {
+					return <ProtectedRoute {...route} key={index} />;
+				}, this)
+			}
+			<Route exact render={() => { window.location.href = "/404.html" }} />
+			</Switch>
+			
+			<Segment basic />
+			
+			</div>
 			</BrowserRouter>
-		);
+			);
+		}
 	}
-}
-
-export default App
+	
+	export default App
+	

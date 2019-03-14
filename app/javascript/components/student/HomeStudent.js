@@ -8,16 +8,22 @@ import {
 } from 'semantic-ui-react';
 
 import Comments from './Comments';
-import PdfViewer from './PdfViewer';
+import PdfViewer from '../common/PdfViewer';
 
-import defaultIcon from '../../assets/images/jury.jpg';
+import defaultIcon from '../../../assets/images/jury.jpg';
 
 const GET_PDF_PATH = 'student/download_project';
 
 class Details extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
 	render () {
 		return <Segment basic>
 		<Header as="h3">Detalles</Header>
+		<Header as="h5">Fecha de creación del proyecto: { this.props.creation } </Header>
+		<Header as="h5">Ultima actualización: { this.props.update } </Header>
 		</Segment>;
 	}
 }
@@ -165,12 +171,14 @@ class AdditionalInformation extends React.Component {
 				
 				<PdfViewer url={ GET_PDF_PATH } title={ this.props.data.thesis.title || "[Tesis sin título]" } />
 				
-				<Comments comments={ this.props['data']['comments'] }/>
+				<Comments comments={ this.props['data']['comments'] } title="Comentarios"/>
+
+				{ this.props.data.thesis.approbation_state ? <Comments comments={ this.props['data']['questions'] } title="Preguntas"/> : null }
 				
 				<Segment>
 				<Grid columns='2' stackable>
 				<Divider vertical><Icon name='university' size="big" /></Divider>
-				<Grid.Column><Details /></Grid.Column>
+				<Grid.Column><Details creation={this.props.data.thesis.created_at} update={this.props.data.thesis.updated_at}/></Grid.Column>
 				<Grid.Column verticalAlign="middle">
 				<AdditionalInformation relatedUsers={ this.props.data.users }/>
 				</Grid.Column>
@@ -191,6 +199,7 @@ class AdditionalInformation extends React.Component {
 				title: "default"
 			},
 			comments: [],
+			questions: [],
 			users: {}
 		}
 	}

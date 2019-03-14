@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-	attr_accessor :remember_token, :activation_token, :reset_token
+	attr_accessor :reset_token
 	
 	before_save { email.downcase! }
 	before_save { institution.downcase! }
@@ -23,9 +23,42 @@ class User < ApplicationRecord
 	
 	def change_password(new_password, new_password_confirmation)
 		if new_password == new_password_confirmation
-			update_attribute(:password_digest, BCrypt::Password.create(new_password))
+			update_attributes({
+				password: new_password, 
+				password_confirmation: new_password_confirmation
+			})
 		else
 			raise "The password does not match"
+		end
+	end
+
+	def validate_reset_token(token)
+		BCrypt::Password.new(self.reset_digest).is_password?(token)
+	end
+	
+	def create_reset_digest
+		self.reset_token = User.new_token
+		update_attribute :reset_digest, User.digest(reset_token)
+		update_attribute :reset_sent_at, Time.zone.now
+	end
+	
+	def send_password_reset_email
+		UserMailer.password_reset(self).deliver_now
+	end
+
+	def password_reset_expired?
+		reset_sent_at < 2.hours.ago
+	end
+
+	class << self
+		def new_token
+			SecureRandom.urlsafe_base64
+		end
+		
+		def digest(string)
+			cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : 
+			BCrypt::Engine.cost
+			BCrypt::Password.create(string, cost: cost)
 		end
 	end
 end

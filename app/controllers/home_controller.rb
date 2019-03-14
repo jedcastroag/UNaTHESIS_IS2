@@ -12,13 +12,15 @@ class HomeController < ApplicationController
 		when 'admin'
 			
 		when 'student'
-			thesis_project = @current_user.thesis_projects.last
+			thesis_project = @current_user.thesis_projects.where(activation_state: true).last
 
 			users = thesis_project.related_users(@current_user).as_json if thesis_project
 
-			student = { 
+			student = {
+				:activated => @current_user.activated,
 				:thesis => thesis_project, 
 				:comments => thesis_project&.comments || [],
+				:questions => thesis_project&.questions || [],
 				:users => users || []
 			}
 			body.merge! student

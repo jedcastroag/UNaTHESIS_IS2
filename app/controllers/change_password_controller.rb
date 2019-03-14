@@ -8,14 +8,11 @@ class ChangePasswordController < ApplicationController
   def create
     if @current_user.authenticate params[:current_password]
       @current_user.change_password params[:new_password], params[:new_password_confirmation]
+      @current_user.update_attribute :activated, true
     else
-      raise "Authentication failed"
+      render json: { error: "Authentication failed" }, status: :bad_request
     end
   rescue => error
     render json: { error: error }, status: :bad_request
-  end
-
-  def new
-
   end
 end

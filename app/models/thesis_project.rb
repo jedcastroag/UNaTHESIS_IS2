@@ -19,4 +19,12 @@ class ThesisProject < ApplicationRecord
 			.joins('inner join users on users.id = "comments".users_id')
 			.where('"comments".thesis_project_id = ?', self.id)
 	end
+
+	def questions
+		Question.select('users."name", users.surname, users.email, 
+			thesis_project_users.thesis_project_roles_id as role, questions.*')
+			.joins('inner join thesis_project_users on thesis_project_users.user_id = questions.user_id')
+			.joins('inner join users on users.id = questions.user_id')
+			.where('questions.thesis_project_id = ?', self.id)
+	end
 end
