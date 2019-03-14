@@ -17,8 +17,6 @@ class ShowStudentInfo extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.thesis_project_id != prevProps.thesis_project_id) {
       Http.get(STUDENT_INFO+this.props.thesis_project_id).then(response => {
-        console.log(response);
-        
         this.setState({userInfo: response.data});
       }).catch(error => 
         console.error()
