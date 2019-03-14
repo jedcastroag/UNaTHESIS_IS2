@@ -79,57 +79,6 @@ class ProjectRow extends React.Component {
 
 }
 
-class TutorInfo extends React.Component {
-    componentDidMount() {  
-        Http.get('/getUserInfo')        
-        .then(res => {
-            this.setState({
-                nombres: res.data.name,
-                apellidos: res.data.surname,
-                correo: res.data.email
-            })            
-        })
-    }
-
-    constructor(props) {        
-        super(props)
-        this.state = {
-            nombres: '',
-            apellidos: '',
-            correo: ''
-        }            
-    }
-
-    render() {
-        return (
-            <div>
-            <h3 className="ui header">Tu Información Personal</h3>
-            <Grid container columns ={3} stackable>
-                <Grid.Column>                
-                    <label>Nombre</label>                
-                    <Segment>
-                        <p>{this.state.nombres}</p>
-                    </Segment>   
-                </Grid.Column>
-                <Grid.Column>
-                    <label>Apellidos</label>                
-                    <Segment>
-                        <p >{this.state.apellidos}</p>
-                    </Segment>
-                </Grid.Column>
-                <Grid.Column>
-                    <label>Correo</label>  
-                    <Segment>
-                        <p>{this.state.correo}</p>    
-                    </Segment>              
-                </Grid.Column>
-            </Grid>
-            </div>
-        )
-    }
-    
-}
-
 class TutorHomeView extends React.Component {
     constructor(props) {        
         super(props)        
@@ -143,8 +92,6 @@ class TutorHomeView extends React.Component {
         return (
             <div>
                 <div className="ui raised container segment"> 
-                    <h2 className="ui center aligned header">Bienvenido </h2>
-                    <TutorInfo />
                     <h3>Proyectos actuales</h3>
                     
                     <ProjectRow redirectToProject={this.redirectToProject}/>                    

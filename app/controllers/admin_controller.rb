@@ -17,6 +17,7 @@ class AdminController < ApplicationController
                                                    :name, :surname, :email,
                                                    :institution, :country,
                                                    :dni).first
+    
     render json: user.to_json
   end
 
@@ -28,6 +29,19 @@ class AdminController < ApplicationController
     user.update_attribute(:dni, params[:dni])
     user.update_attribute(:user_type_id, params[:user_type].to_i)
 
+    render json: 200
+  end
+
+  def deactivate_project
+    project = ThesisProject.find(params[:project_id])
+    project.update_attribute(:activation_state, false)
+    
+    render json: 200
+  end
+  def activate_project
+    project = ThesisProject.find(params[:project_id])
+    project.update_attribute(:activation_state, true)
+    
     render json: 200
   end
 
@@ -86,10 +100,14 @@ class AdminController < ApplicationController
   end
 
   def create_project
-    thesis = ThesisProject.create(title: params[:title])
+    thesis = ThesisProject.create(title: params[:title], activation_state: true)
     for i in (0..(params[:count_users].to_i) - 1)
       ThesisProjectUser.create thesis_project_id: thesis.id, user_id: params[:"user_#{i}"], 
       thesis_project_roles_id: params[:"user_type_#{i}"].to_i
+
+      user = User.find(params[:"user_#{i}"])
+      rol = ThesisProjectRole.find(params[:"user_type_#{i}"])
+    AdminMailer.notify_assignation(user, thesis, rol).deliver_now
     end
     render json: 200
   end
@@ -105,6 +123,11 @@ class AdminController < ApplicationController
       ThesisProjectUser.create(thesis_project_id: params[:id_project],
                                user_id: params[:"user_#{i}"],
                                thesis_project_roles_id: params[:"rol_#{i}"].to_i)
+      user = User.find(params[:"user_#{i}"])
+      project = ThesisProject.find(params[:id_project])
+      rol = ThesisProjectRole.find(params[:"rol_#{i}"])
+    AdminMailer.notify_assignation(user, project, rol).deliver_now
+
     end
     render json: 200
   end
