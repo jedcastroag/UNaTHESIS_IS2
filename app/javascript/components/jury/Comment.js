@@ -1,128 +1,112 @@
-import React from "react"
+import React, {Component} from "react"
 import PropTypes from "prop-types"
 import {Form, Button, Segment, Header, Message} from "semantic-ui-react"
+import Field from "./Field";
 import Http from "../../services/RestServices"
 
 const GET_COMMENT_PATH = "jury/comment"
 
-String.prototype.trim = function() {
-    return this.replace(/^\s+|\s+$/g,"");
-}
-
-class EditComment extends React.Component {
+class EditComment extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            comment_title: "",
-            comment_content: "",
-            completed: true
+            title_fulfilled: true,
+            content_fulfilled: true   
         }
-        this.titleOnChange = this.titleOnChange.bind(this);
-        this.contentOnChange = this.contentOnChange.bind(this);
-        this.sendComment = this.sendComment.bind(this);
+        this.title = this.content = "";
     }
 
-    componentDidUpdate (prevProps) {
-        if (this.props.comment[0] != prevProps.comment[0]) {
-            if (this.props.comment[0] != undefined)
-            {
-                this.setState((state, props) => ({
-                    comment_title: props.comment[0].title,
-                    comment_content: props.comment[0].content
-                }));
-            } else {
-                this.setState({comment_title: "", comment_content: ""});
-            }
-        }
+    is_empty = (str) => {
+        return str.trim() != "";
     }
 
-    componentDidMount () {
-        const comment = this.props.comment;
-        if (comment.length != 0) {
-            this.setState({comment_title: comment[0].title, comment_content: comment[0].content})
+    getTitle = (title) => {
+        this.title = title;
+        if (!this.state.title_fulfilled) {
+            this.setState({
+                title_fulfilled:true
+            })
+        }
+    }
+    getContent = (content) => {
+        this.content = content;
+        if (!this.state.content_fulfilled) {
+            this.setState({
+                content_fulfilled:true
+            })
         }
     }
 
-    titleOnChange(e) {
+    sendComment = () => {
+        const title_empty = this.is_empty(this.title);
+        const content_empty = this.is_empty(this.content);
         this.setState({
-            comment_title: e.target.value            
+            title_fulfilled: title_empty,
+            content_fulfilled: content_empty,
         });
-    }
-    
-    contentOnChange(e) {
-        this.setState({
-            comment_content: e.target.value,
-            completed: e.target.value.trim() != ""
-        });
-    }
-
-    sendComment () {
-        if (this.state.completed) 
-            this.props.sendComment(this.state.comment_content, this.state.comment_title);
+        if (!title_empty|| !content_empty) return;
+        this.props.sendComment(this.content, this.title);
     }
 
     render() {
 
+        const {comment} = this.props;
         return (<Segment >
             <Form warning onSubmit={this.sendComment}>
-                <Form.Input label="Título" onChange={this.titleOnChange} 
-                    name="comment_title"
-                    value={this.state.comment_title}
-                    required
+                <Field as="TextInput" label="Título"
+                    retrieveContent={this.getTitle} 
+                    name="title"
+                    content={comment.title == undefined?"":comment.title}
                 />
-                <Form.TextArea  label="Concepto"
-                    style={{
-                        height: "100px"
-                    }} 
-                    onChange={this.contentOnChange} 
-                    name="comment_content"
-                    value={this.state.comment_content}
-                    required
+                {!this.state.title_fulfilled? 
+                    <Message warning header="No puede estar vacio" /> :
+                    null}
+                <Field as="TextArea"  label="Concepto"
+                    retrieveContent={this.getContent} 
+                    name="content"
+                    content={comment.content == undefined?"":comment.content}
                 />
-                {!this.state.completed? <Message warning header="No puede estar vacio" /> :null}
+                {!this.state.content_fulfilled? 
+                    <Message warning header="No puede estar vacio" /> :
+                    null}
                 <Button type="submit" >Enviar Concepto</Button>
             </Form>
         </Segment>);
     }
 }
 
-class ShowComment extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() { 
-        return ( <Segment>
-            <Header content={this.props.comment[0].title} as="h5" />
-            <p> {this.props.comment[0].content} </p>
-            <Button content="Editar" onClick={this.props.editOrShow} />
-        </Segment> );
-    }
+const ShowComment = (props) => {
+    return ( <Segment>
+        <Header content={props.comment.title} as="h5" />
+        <p> { props.comment.content} </p>
+        <Button content="Editar" onClick={props.editOrShow} />
+    </Segment> );
 }
 
-class Comment extends React.Component {
+class Comment extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            comment: [],
+            comment: {},
             EditComment: true
         }
-        this.editOrShow = this.editOrShow.bind(this);
     }
 
-    editOrShow () {
+    editOrShow = () => {
         this.setState(state => ({EditComment: !state.EditComment}));
     }
 
-    componentDidUpdate (prevProps) {        
+    componentDidUpdate = (prevProps) => {        
         if (this.props.project_id != prevProps.project_id) {
             const params = {
             params: {
                 thesis_project_id: this.props.project_id
             }
             };
-            Http.get(GET_COMMENT_PATH, params).then(response => {                
-                if (response.data.length == 0) {
+            Http.get(GET_COMMENT_PATH, params).then(response => {  
+                console.log(response);              
+                if (Object.keys(response.data).length == 0) {
                     this.setState({
                     comment: response.data,
                     EditComment: true
@@ -136,18 +120,12 @@ class Comment extends React.Component {
             }).catch(error => console.error(error));
         }
     }
-
-    renderEditOrShowComment () {
-        if (this.state.EditComment) {
-            return (<EditComment sendComment={this.props.sendComment} comment={this.state.comment} />);
-        }
-        return (<ShowComment comment={this.state.comment} editOrShow={this.editOrShow} />);
-    }
-
     render() { 
         return ( 
             <React.Fragment>
-                {this.renderEditOrShowComment()}
+                {this.state.EditComment ? 
+                    <EditComment sendComment={this.props.sendComment} comment={this.state.comment} />:
+                    <ShowComment comment={this.state.comment} editOrShow={this.editOrShow} />}
             </React.Fragment>
          );
     }

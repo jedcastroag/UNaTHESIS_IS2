@@ -145,16 +145,16 @@ class JuryController < ApplicationController
 
     def get_comment
 
-        comment = []
+        comment = {}
         if check_user
-            comment_aux = Comment.where(
+            comment_aux = Comment.find_by(
                 users_id: @current_user.id,
                 thesis_project_id: params[:thesis_project_id]
             )
-            if !comment_aux.empty?
-                comment << {
-                    :title => comment_aux[0].title,
-                    :content => comment_aux[0].content
+            if !comment_aux.nil?
+                comment = {
+                    :title => comment_aux.title,
+                    :content => comment_aux.content
                 }
             end
             
@@ -172,12 +172,10 @@ class JuryController < ApplicationController
             questions_aux = Question.where(
                 user_id: @current_user.id,
                 thesis_project_id: params[:thesis_project_id]
-            )
-            
+            )            
             questions_aux.each do |question_obj|
                 questions << {:content => question_obj.content}
             end
-            
         end    
         render json: questions
     end    
