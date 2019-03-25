@@ -1,13 +1,10 @@
 import React from "react"
 import PropTypes from "prop-types"
+import { Field } from "./Field";
 import {Form, Button, Segment, Icon, Header, Message} from "semantic-ui-react"
 import Http from "../../services/RestServices"
 
 const GET_QUESTIONS_PATH = "jury/questions";
-
-String.prototype.trim = function() {
-  return this.replace(/^\s+|\s+$/g,"");
-}
 
 class EditQuestions extends React.Component {
 
@@ -16,11 +13,10 @@ class EditQuestions extends React.Component {
     this.state = {
       showOtherQuestionField: (this.props.questions.length == 2),
       sendButtonContent: (this.props.questions.length == 2) ? "Preguntas": "Pregunta",
-      completed1: true,
-      completed2: true
+      q1Fulfilled: true,
+      q2Fulfilled: true
     };
-    this.questions = this.props.questions.length !=0 ? this.props.questions.map(obj => obj.question):["",""];
-    
+    this.questions = ["",""]
     this.addOrHideQuestion = this.addOrHideQuestion.bind(this);
     this.onChangeQuestion = this.onChangeQuestion.bind(this);
     this.renderAddQuestionButton = this.renderAddQuestionButton.bind(this);
@@ -31,7 +27,12 @@ class EditQuestions extends React.Component {
 
   onChangeQuestion = (num_question) => (e) => {
     this.questions[num_question] = e.target.value;
-    num_question == 0? this.setState({completed1: e.target.value.trim() != ""}) : this.setState({completed2: e.target.value.trim() != ""});
+    num_question == 0 ? ( !this.state.q1Fulfilled ? 
+      this.setState({q1Fulfilled:true}): null
+      ) : (
+        !this.state.q2Fulfilled ? 
+        this.setState({q2Fulfilled: true}): null
+      )
   }
 
   addOrHideQuestion () {
@@ -58,10 +59,9 @@ class EditQuestions extends React.Component {
         <Segment>
           <Form.TextArea label= "Otra pregunta" 
           onChange={this.onChangeQuestion(1)}
-          defaultValue={this.renderQuestion(2)} 
-          required
+          defaultValue={this.renderQuestion(2)}
           />
-          {!this.state.completed2 ? <Message
+          {!this.state.q2Fulfilled ? <Message
                 warning
                 header="Este campo no puede estar vacio"
             /> : null}
@@ -83,21 +83,29 @@ class EditQuestions extends React.Component {
     return null;
   }
 
-  sendQuestions () {
-    if (!this.state.showOtherQuestionField) {
-      this.setState({
-        completed1: this.questions[0].trim() != "",
-      });
-      if (!this.state.completed1) return;
-      this.props.sendQuestions(this.questions.slice(0,1));
-    }
-    this.setState({
-      completed1: this.questions[0].trim() != "",
-      completed2: this.questions[1].trim() != ""
-    });
+  is_empty = (str) => {
+    return str.trim() == "";
+  }
 
-    if (!this.state.completed1 || !this.state.completed2) return;
-    this.props.sendQuestions(this.questions);      
+  sendQuestions () {
+    
+    const is_empty_q1 = this.is_empty(this.questions[0])
+    const is_empty_q2 = this.is_empty(this.questions[1])
+    this.setState((state) => ({
+      q1Fulfilled: !is_empty_q1,
+      q2Fulfilled: !state.showOtherQuestionField ? true: !is_empty_q2 
+    }));
+
+    if(!is_empty_q1 && !this.state.showOtherQuestionField ) {
+      this.props.sendQuestions(this.questions.slice(0,1));
+      return;
+    }
+
+    if(!is_empty_q1 && !is_empty_q2) {
+      this.props.sendQuestions(this.questions);
+      return;
+    }
+    
   }
 
   renderQuestion (num_question) {
@@ -118,9 +126,8 @@ class EditQuestions extends React.Component {
           <Segment>
             <Form.TextArea label= "Una pregunta" 
             onChange={this.onChangeQuestion(0)}
-            defaultValue={this.renderQuestion(1)}
-            required />
-            {!this.state.completed1 ? <Message
+            defaultValue={this.renderQuestion(1)} />
+            {!this.state.q1Fulfilled ? <Message
                 warning
                 header="Este campo no puede estar vacio"
             /> : null}
