@@ -57,4 +57,8 @@ Field.propTypes = {
   as: PropTypes.string
 }
 
+Field.defaultProps = {
+  as: "TextInput"
+}
+
 export default Field

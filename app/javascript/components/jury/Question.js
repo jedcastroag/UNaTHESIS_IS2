@@ -1,10 +1,10 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Field } from "./Field";
+import Field from "./Field";
 import {Form, Button, Segment, Icon, Header, Message} from "semantic-ui-react"
 import Http from "../../services/RestServices"
 
-const GET_QUESTIONS_PATH = "jury/questions";
+const QUESTIONS_PATH = "jury/questions";
 
 class EditQuestions extends React.Component {
 
@@ -17,77 +17,49 @@ class EditQuestions extends React.Component {
       q2Fulfilled: true
     };
     this.questions = ["",""]
-    this.addOrHideQuestion = this.addOrHideQuestion.bind(this);
-    this.onChangeQuestion = this.onChangeQuestion.bind(this);
-    this.renderAddQuestionButton = this.renderAddQuestionButton.bind(this);
-    this.renderOtherQuestionField = this.renderOtherQuestionField.bind(this);
-    this.sendQuestions = this.sendQuestions.bind(this);
-    this.renderQuestion = this.renderQuestion.bind(this);
   }
 
-  onChangeQuestion = (num_question) => (e) => {
-    this.questions[num_question] = e.target.value;
+  componentDidUpdate (prevProps) {
+    const contents =this.props.questions.map(question => question.content);
+    const prevContents = prevProps.questions.map(question => question.content);
+    contents[0] != prevContents[0] && (
+      this.questions[0] = contents[0] == undefined ? "" : contents[0],
+      this.setState({q1Fulfilled:true})
+    )
+    contents[1] != prevContents[1] && (
+      this.questions[1] = contents[1] == undefined ? "" : contents[1],
+      this.setState({q1Fulfilled:true})
+    )
+  }
+
+  componentDidMount () {
+    const {questions} = this.props;
+    this.questions[0] = questions[0] == undefined ? "" : questions[0].content
+    this.questions[1] = questions[1] == undefined ? "" : questions[1].content
+  }
+
+  onChangeQuestion = num_question => content =>{
+    this.questions[num_question] = content;
     num_question == 0 ? ( !this.state.q1Fulfilled ? 
-      this.setState({q1Fulfilled:true}): null
-      ) : (
-        !this.state.q2Fulfilled ? 
-        this.setState({q2Fulfilled: true}): null
-      )
+    this.setState({q1Fulfilled:true}): null
+    ) : (
+      !this.state.q2Fulfilled ? 
+      this.setState({q2Fulfilled: true}): null
+    )
   }
 
-  addOrHideQuestion () {
+  addOrHideQuestion = () => {
     this.setState(state => ({
-      showOtherQuestionField: !state.showOtherQuestionField
+      showOtherQuestionField: !state.showOtherQuestionField,
+      sendButtonContent: !state.showOtherQuestionField? "Preguntas" : "Pregunta"
     }));
-    if (this.state.showOtherQuestionField) {
-      this.setState({sendButtonContent: "Pregunta"});
-    }else{
-      this.setState({sendButtonContent: "Preguntas"});
-    }
-  }
-
-  renderHideButton () {
-    if (this.props.questions.length < 2) {
-      return (<Button content="Quitar" onClick={this.addOrHideQuestion} />);
-    }
-    return null;
-  }
-
-  renderOtherQuestionField () {
-    if (this.state.showOtherQuestionField) {
-      return (
-        <Segment>
-          <Form.TextArea label= "Otra pregunta" 
-          onChange={this.onChangeQuestion(1)}
-          defaultValue={this.renderQuestion(2)}
-          />
-          {!this.state.q2Fulfilled ? <Message
-                warning
-                header="Este campo no puede estar vacio"
-            /> : null}
-          {this.renderHideButton()}          
-        </Segment>
-      );
-    }
-    return null;
-  }
-
-  renderAddQuestionButton () {
-    if (!this.state.showOtherQuestionField) {
-      return (
-        <Button icon onClick={this.addOrHideQuestion} >
-          <Icon name="plus circle"/>
-        </Button>
-      );
-    }
-    return null;
   }
 
   is_empty = (str) => {
     return str.trim() == "";
   }
 
-  sendQuestions () {
+  sendQuestions = () => {
     
     const is_empty_q1 = this.is_empty(this.questions[0])
     const is_empty_q2 = this.is_empty(this.questions[1])
@@ -103,80 +75,68 @@ class EditQuestions extends React.Component {
 
     if(!is_empty_q1 && !is_empty_q2) {
       this.props.sendQuestions(this.questions);
-      return;
     }
     
   }
 
-  renderQuestion (num_question) {
-    if (this.questions.length != 0) {
-      if (this.questions.length >= num_question) {
-        return (
-          this.questions[num_question-1]
-        );
-      }
-    }
-    return "";
-  }
-
   render () {
+    const {questions} = this.props;
     return (
       <Form onSubmit={this.sendQuestions} warning>
         <Segment.Group>
           <Segment>
-            <Form.TextArea label= "Una pregunta" 
-            onChange={this.onChangeQuestion(0)}
-            defaultValue={this.renderQuestion(1)} />
-            {!this.state.q1Fulfilled ? <Message
-                warning
-                header="Este campo no puede estar vacio"
-            /> : null}
+            <Field as="TextArea" label= "Primera pregunta" retrieveContent={this.onChangeQuestion(0)}
+            content={questions.length == 0 ? "" : questions[0].content} />
+            {!this.state.q1Fulfilled && <Message warning
+            header="Este campo no puede estar vacio" />}
           </Segment>
-          {this.renderOtherQuestionField()}
+
+          {this.state.showOtherQuestionField && 
+            <Segment>
+              <Field as="TextArea" label= "Segunda Pregunta" retrieveContent={this.onChangeQuestion(1)}
+              content={questions.length != 2 ? "" : questions[1].content} />
+              {!this.state.q2Fulfilled && <Message warning
+              header="Este campo no puede estar vacio" />}
+              <Button content="Ocultar" onClick={this.addOrHideQuestion} />           
+            </Segment>
+          }
         </Segment.Group>  
-          {this.renderAddQuestionButton()}
-          <Button content={"Enviar " + this.state.sendButtonContent} type="submit" />
+
+        {!this.state.showOtherQuestionField &&
+          <Button icon onClick={this.addOrHideQuestion} >
+            <Icon name="plus circle"/>
+          </Button>
+        }
+
+        <Button content={"Enviar " + this.state.sendButtonContent} type="submit" />
       </Form>
     );
   }
 }
 
-//------------------------------------------------------------
+//========================================================================================
 
-class ShowQuestions extends React.Component {
-
-  constructor (props) {
-    super(props);
-  }
-
-  renderShowSecondQuestion () {
-    if (this.props.questions.length == 2) {
-      return (
-        <Segment>
-          <Header content="Second question" as="h5" />
-          <Segment content={this.props.questions[1].question} />
-        </Segment>
-      );
-    }
-    return null;
-  }
-  render () {
-    return (
-      <div>
-        <Segment.Group>
-          <Segment>
-            <Header content="First question" as="h5" />
-            <Segment content={this.props.questions[0].content} />
-          </Segment>
-          {this.renderShowSecondQuestion()}
-        </Segment.Group>
-        <Button content="Edit" onClick={this.props.editQuestions} />
-      </div>
-    );
-  }
+const ShowQuestions = (props) => {
+  return (
+    <div>
+      <Segment>
+        <React.Fragment>
+          <Header content="Primera Pregunta" as="h5" dividing />
+          <p>{props.questions[0].content}</p>
+        </React.Fragment>
+        {props.questions.length == 2 &&
+          <React.Fragment>
+            <Header content="Segunda Pregunta" as="h5" dividing />
+            <p>{props.questions[1].content}</p>
+          </React.Fragment>
+        }
+      </Segment>
+      <Button content="Editar" onClick={props.editQuestions} />
+    </div>
+  );
 }
 
-//-------------------------------------------------------------------------------------
+//========================================================================================
 
 class Question extends React.Component {
 
@@ -186,50 +146,55 @@ class Question extends React.Component {
       EditQuestions: true,
       questions: []
     };
-    this.renderQuestionsOrEditQuestions = this.renderQuestionsOrEditQuestions.bind(this);
-    this.editOrNot = this.editOrNot.bind(this);
   }
 
-  componentDidUpdate (prevProps) {
+  sendQuestions = questions => {
+    if (this.props.project_id == null) {
+        alert("Debe Seleccionar un Proyecto");
+    } else {
+      const data = {
+          jury: {
+              questions: questions,
+              thesis_project_id: this.props.project_id
+          }
+      };
+      Http.post(QUESTIONS_PATH, data).then(response => {
+        alert(response.data.message);
+        this.setState({
+          questions: questions.map(question => ({content: question})),
+          EditQuestions: false
+        });
+      }).catch(error => console.error(error));
+    }
+}
+
+  componentDidUpdate = (prevProps) => {
     if (this.props.project_id != prevProps.project_id) {
       const params = {
         params: {
           thesis_project_id: this.props.project_id
         }
       };
-      Http.get(GET_QUESTIONS_PATH, params).then(response => {
-        if (response.data.length == 0) {
-          this.setState({
-            questions: response.data,
-            EditQuestions: true
-          });
-        } else {
-          this.setState({
-            questions: response.data,
-            EditQuestions:false
-          });
-        }
+      Http.get(QUESTIONS_PATH, params).then(response => {
+        const {data} = response;
+        this.setState({
+          questions: data.length == 0 ? [] : data,
+          EditQuestions: data.length == 0
+        })
       }).catch(error => console.error(error));
     }
   }
 
-  renderQuestionsOrEditQuestions () {
-    if (this.state.EditQuestions) {      
-      return <EditQuestions sendQuestions={this.props.sendQuestions} questions={this.state.questions} />
-    }
-    return (
-      <ShowQuestions questions={this.state.questions} editQuestions={this.editOrNot} />
-    );
-  }
-
-  editOrNot () {
+  editOrNot = () => {
     this.setState((state) => ({EditQuestions: !state.EditQuestions}));
   }
 
   render () {
     return (
       <React.Fragment>
-        {this.renderQuestionsOrEditQuestions()}
+        {this.state.EditQuestions?
+        <EditQuestions sendQuestions={this.sendQuestions} questions={this.state.questions} />:
+        <ShowQuestions questions={this.state.questions} editQuestions={this.editOrNot} />}
       </React.Fragment>
     );
   }

@@ -9,8 +9,6 @@ import Http from "../../services/RestServices"
 
 const GET_PDF_PATH = "jury/download/"
 const GET_PROJECTS_PATH = "jury/projects";
-const POST_COMMENT_PATH = "jury/comment";
-const POST_QUESTIONS_PATH = "jury/questions";
 
 class ShowProjects extends React.Component {
     constructor(props) {
@@ -62,56 +60,20 @@ class Home extends React.Component {
             id_project: null,
             title_project: null
         };
-        this.getPDF = this.getPDF.bind(this);
-        this.sendComment = this.sendComment.bind(this);
-        this.sendQuestions = this.sendQuestions.bind(this);
-        this.renderSpace = this.renderSpace.bind(this);
-        this.renderPdf = this.renderPdf.bind(this);
     }
 
-    renderSpace () {
+    renderSpace = () => {
         return <div style={{height: "10px"}}></div>;
     }
 
-    getPDF(id_project_pdf, title) {
+    getPDF = (id_project_pdf, title) => {
         this.setState({
             id_project: id_project_pdf,
             title_project: title
         });
     }
 
-    sendComment (comment_content, comment_title, e) {        
-        if (this.state.id_project == null) {
-            alert("Choose a Project");
-        } else {
-            const data = {
-            jury: {title: comment_title, 
-                thesis_project_id: this.state.id_project,
-                content: comment_content}
-            };
-            Http.post(POST_COMMENT_PATH, data).then((response) => {
-                alert(response.data.message);
-            }).catch(error => console-log(error));
-        }
-    }
-
-    sendQuestions (questions) {
-        if (this.state.id_project == null) {
-            alert("Choose a Project");
-        } else {
-            const data = {
-                jury: {
-                    questions: questions,
-                    thesis_project_id: this.state.id_project
-                }
-            };
-            Http.post(POST_QUESTIONS_PATH, data).then(response => {
-                alert(response.data.message);
-            }).catch(error => console.log(error));
-        }
-    }
-
-    renderPdf () {
+    renderPdf = () => {
         if (this.state.title_project != null && this.state.id_project != null) {
             return <PdfViewer title={this.state.title_project} 
                 url={GET_PDF_PATH + this.state.id_project}
@@ -144,10 +106,10 @@ class Home extends React.Component {
                     <Grid.Column width={7}>
                         <Segment raised>
                             <Header as="h3" content="Concepto"/>
-                            <Comment sendComment={this.sendComment} project_id={this.state.id_project} />
+                            <Comment project_id={this.state.id_project} />
                             {this.renderSpace()}
                             <Header as="h3" content="Preguntas" dividing/>
-                            <Question sendQuestions={this.sendQuestions} project_id={this.state.id_project} />
+                            <Question project_id={this.state.id_project} />
                         </Segment>
                     </Grid.Column>
                 </Grid.Row>
