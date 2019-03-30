@@ -51,29 +51,24 @@ class JuryController < ApplicationController
                 comment = Comment.create(jury_params)
                 if comment.id != nil                    
                     JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :created).concept.deliver_now
-                    msg = "Concepto creado y guardado"
-                else
-                    msg = "No se pudo crear el Concepto"
+                    render json: {message: "Concepto creado y guardado"}, status: :ok
+                    return
                 end
-    
-            else
-                if comment[0].update :content => jury_params[:content], :title => jury_params[:title]
-                    JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).concept.deliver_now
-                    msg = "Concepto actualizado"
-                else
-                    msg = "No se pudo actualizar el Concepto"
-                end
+                render json: {message: "No se pudo crear el Concepto"}, status: :unprocessable_entity
+                return
             end
-             
-            render json: {message: msg}
-        else
-            render json: {:message => "Invalid Request"}, status: :unauthorized
+            if comment[0].update :content => jury_params[:content], :title => jury_params[:title]
+                JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).concept.deliver_now
+                render json: {message: "Concepto actualizado"}, status: :ok
+                return
+            end
+            render json: {message: "No se pudo actualizar el Concepto"}, status: :unprocessable_entity
+            return
         end
+        render json: {:message => "Invalid Request"}, status: :unauthorized
     end
 
     def add_questions
-        puts params
-
         message = ""
         create_answer = ""
         any_quest_created_or_updated = false
@@ -82,65 +77,64 @@ class JuryController < ApplicationController
                 thesis_project_id: jury_params[:thesis_project_id])
             student_id = ThesisProject.find(jury_params[:thesis_project_id]).thesis_project_users.find_by(:thesis_project_roles_id => :author).user_id
             if questions.empty?
-                i = 1
-                params[:jury][:questions].each do |content|
+                params[:jury][:questions].each_with_index do |content, i|
                     if content != ""
-                        if Question.create(
-                            content: content,
-                            user_id: @current_user.id,
-                            thesis_project_id: jury_params[:thesis_project_id]) != nil
-                            
+                        question = Question.create(content: content, user_id: @current_user.id, thesis_project_id: jury_params[:thesis_project_id])
+                        if question != nil                            
                             any_quest_created_or_updated = true
-                            message << "La pregunta " + i.to_s + " fue creada y guardada\n"
-                        else
-                            message << "La pregunta " + i.to_s + " no se pudo crear\n"
+                            message << "La pregunta " + (i+1).to_s + " fue creada y guardada\n"
+                            next
                         end
-                        i += 1
+                        message << "La pregunta " + (i+1).to_s + " no se pudo crear\n"
                     end                    
                 end
                 if any_quest_created_or_updated
                     JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :created).questions.deliver_now
                 end
-            else
-                new_questions = params[:jury][:questions]
-                if new_questions.length == questions.length
-                    i = 0                    
-                    questions.each do |question|
-                        if question.update(content: new_questions[i])
-                            any_quest_created_or_updated = true
-                            message << "La pregunta " + (i+1).to_s + " se ha actualizado \n"
-                            i += 1
-                        else
-                            message << "No se pudo actualizar la pregunta " + (i+1).to_s + "\n"
-                        end
-                    end
-                    if any_quest_created_or_updated 
-                        JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).questions.deliver_now
-                    end
-                else
-                    if questions[0].update content: new_questions[0]
-                        any_quest_created_or_updated = true
-                        message << "La pregunta " + 1.to_s + " fue actualizado \n"
-                    else
-                        message << "No se pudo actualizar la pregunta " + 1.to_s + "\n"
-                    end
-                    if Question.create(
-                        content: new_questions[1],
-                        user_id: @current_user.id,
-                        thesis_project_id: jury_params[:thesis_project_id]
-                    ) != nil
-                        JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).questions.deliver_now
-                        message << "La pregunta " + 2.to_s + " fue creada y guardada\n"
-                    else
-                        message << "La pregunta " + 2.to_s + " No se pudo crear\n"
-                    end
-                end
+                render json: {:message => message}, status: :ok
+                return
             end
-        else
-            render json: {:message => :jury_tutor}, status: :unauthorized
+
+            new_questions = params[:jury][:questions]
+            if new_questions.length == questions.length    
+                questions.each_with_index do |question, i|
+                    if question.update(content: new_questions[i])
+                        any_quest_created_or_updated = true
+                        message << "La pregunta " + (i+1).to_s + " se ha actualizado \n"
+                        next
+                    end
+                    message << "No se pudo actualizar la pregunta " + (i+1).to_s + "\n"
+                end
+                if any_quest_created_or_updated 
+                    JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).questions.deliver_now
+                end
+                render json: {:message => message}, status: :ok
+                return
+            end
+
+            if questions[0].update content: new_questions[0]
+                any_quest_created_or_updated = true
+                message << "La pregunta " + 1.to_s + " se ha actualizado \n"
+            else
+                message << "No se pudo actualizar la pregunta " + 1.to_s + "\n"
+            end
+            if Question.create(
+                    content: new_questions[1],
+                    user_id: @current_user.id,
+                    thesis_project_id: jury_params[:thesis_project_id]
+                ) != nil
+                message << "La pregunta " + 2.to_s + " fue creada y guardada\n"
+                any_quest_created_or_updated = true
+            else
+                message << "La pregunta " + 2.to_s + " No se pudo crear\n"
+            end 
+            if any_quest_created_or_updated
+                JuryMailer.with(:user => User.find(student_id), :emisor => @current_user, :subject => :updated).questions.deliver_now
+            end
+            render json: {:message => message}, status: :ok
             return
         end
-        render json: {:message => message}
+        render json: {:message => "No está autorizado/a para realizar esta acción."}, status: :unauthorized
     end
 
     def get_comment
@@ -157,12 +151,10 @@ class JuryController < ApplicationController
                     :content => comment_aux.content
                 }
             end
-            
-        else
-            render json: comment, status: :unauthorized
+            render json: comment, status: :ok
             return
-        end    
-        render json: comment
+        end
+        render json: comment, status: :unauthorized    
     end
     
     def get_questions
@@ -176,8 +168,10 @@ class JuryController < ApplicationController
             questions_aux.each do |question_obj|
                 questions << {:content => question_obj.content}
             end
+            render json: questions, status: :ok
+            return
         end    
-        render json: questions
+        render json: questions, status: :unauthorized
     end    
     
     private
