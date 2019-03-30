@@ -83,24 +83,23 @@ class EditQuestions extends React.Component {
     const {questions} = this.props;
     return (
       <Form onSubmit={this.sendQuestions} warning>
-        <Segment.Group>
-          <Segment>
-            <Field as="TextArea" label= "Primera pregunta" retrieveContent={this.onChangeQuestion(0)}
-            content={questions.length == 0 ? "" : questions[0].content} />
-            {!this.state.q1Fulfilled && <Message warning
-            header="Este campo no puede estar vacio" />}
-          </Segment>
+        <Segment>
+          <Field as="TextArea" label= "Primera pregunta" retrieveContent={this.onChangeQuestion(0)}
+          content={questions.length == 0 ? "" : questions[0].content} />
+          {!this.state.q1Fulfilled && <Message warning
+          header="Este campo no puede estar vacio" />}
 
           {this.state.showOtherQuestionField && 
-            <Segment>
-              <Field as="TextArea" label= "Segunda Pregunta" retrieveContent={this.onChangeQuestion(1)}
-              content={questions.length != 2 ? "" : questions[1].content} />
-              {!this.state.q2Fulfilled && <Message warning
-              header="Este campo no puede estar vacio" />}
-              <Button content="Ocultar" onClick={this.addOrHideQuestion} />           
-            </Segment>
+            <React.Fragment>
+            <Header dividing />
+            <Field as="TextArea" label= "Segunda Pregunta" retrieveContent={this.onChangeQuestion(1)}
+            content={questions.length != 2 ? "" : questions[1].content} />
+            {!this.state.q2Fulfilled && <Message warning
+            header="Este campo no puede estar vacio" />}
+            <Button content="Ocultar" onClick={this.addOrHideQuestion} />        
+            </React.Fragment>   
           }
-        </Segment.Group>  
+        </Segment>  
 
         {!this.state.showOtherQuestionField &&
           <Button icon onClick={this.addOrHideQuestion} >
